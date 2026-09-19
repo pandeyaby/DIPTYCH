@@ -89,7 +89,8 @@ Product emitters are **not** vendored here. Pin and grade:
 | **ZeroDay** | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | **AOMB** | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
-Details: [`adapters/PINS.md`](adapters/PINS.md).
+**Pins frozen as of main `84930b24`.** Unchanged unless the matrix requires a
+bump. Details: [`adapters/PINS.md`](adapters/PINS.md).
 
 ## Layout
 
