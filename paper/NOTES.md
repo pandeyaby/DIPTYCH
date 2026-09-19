@@ -1,13 +1,16 @@
 # Paper notes — open items
 
 Living source: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)  
-Artifact checklist: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)
+Artifact checklist: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
+Submission package: [`SUBMISSION.md`](SUBMISSION.md)
 
 ## Status
 
 - Methods, audit, harness, operators, metrics **definitions**: complete.
 - Section VII = evaluation **protocol** + offline harness facts only.
+- Section IX threats: concrete DIPTYCH limits (pin drift, inconclusive, control bias, open-loop vs CRN).
 - Model study: **in progress** — no scores claimed; Table `tab:placeholder` stays `---`.
+- Camera-ready packaging notes live in `SUBMISSION.md` (venue TBD; HOLD for Abhinav merge yes).
 - Stranger PoC: `./scripts/run_poc.sh` prints green×8×3 and checks
   `examples/poc/expected_matrix_snippet.json` (CI + local).
 
@@ -26,6 +29,7 @@ Current pins: ZeroDay@`fb5b39da` · AOMB@`667e475`.
 
 - [ ] Fill Table `tab:placeholder` only after model-study completion (power / sep.).
 - [ ] Measure RQ1–RQ5 on held-out scenarios; report uncertainty over artifact + scenario sampling only.
+- [ ] Fill venue name + page limit in `SUBMISSION.md`.
 - [ ] Verify bibliography DOIs / page numbers for camera-ready.
 
 ## Authorship

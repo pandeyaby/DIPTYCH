@@ -15,6 +15,10 @@ Exactly one of: `pass` | `fail` | `inconclusive`
 
 ## Operator table
 
+Paper Table `tab:ops` must keep **coupling** and **primary graded channels** in
+lockstep with this table and `ops/*/spec.yaml` / `diptych.COUPLINGS` (enforced by
+`tests/test_operator_table.py`). Probe-intent prose may differ; enums may not.
+
 | Op | coupling | Primary graded channels / fields | Conforming (→ pass) | Violating (→ fail) | ZeroDay cassette notes | AOMB channel sketch |
 |---|---|---|---|---|---|---|
 | FREEZEDRY | open_loop | `meta.decision_fingerprint`, `channels.sarif_fingerprint.keys`, `meta.freeze_channels` | serialize→restore (or frozen rng/clock) → **identical** fingerprints | omit freeze / leak clock|rng → fingerprints **differ** | format `serialize_restore`; path `…/FREEZEDRY/{conforming,violating}/cassette.*`; freeze_channels e.g. `["rng","clock"]` on conforming only | `channels.stability` unused; emit twin sessions with freeze mask vs without |

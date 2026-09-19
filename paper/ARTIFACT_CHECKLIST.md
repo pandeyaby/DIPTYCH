@@ -1,6 +1,7 @@
 # IEEE artifact checklist — DIPTYCH
 
 Living paper: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)  
+Submission package: [`SUBMISSION.md`](SUBMISSION.md) (venue placeholder, zip contents, anonymization, corresponding author)  
 Repo: https://github.com/pandeyaby/DIPTYCH · schema `0.2`
 
 This checklist is for reviewers and for keeping the IEEEtran draft honest.
@@ -85,6 +86,7 @@ the pins above—never invented model scores.
 | Authoritative IEEEtran | `paper/one-trace-is-not-enough.tex` |
 | Bibliography (BibTeX) | `paper/refs.bib` |
 | Compile notes | `paper/README.md` |
+| Submission / camera-ready package | `paper/SUBMISSION.md` |
 | Open items | `paper/NOTES.md` |
 | Diagram: one film vs diptych | `docs/images/diptych-vs-single-trace.{png,svg}` |
 | Diagram: adapters → graders | `docs/images/stack.{png,svg}` |
@@ -94,13 +96,15 @@ the pins above—never invented model scores.
 PNG files are what `\includegraphics` and the root README use. SVG files are the
 editable sources (keep text glyphs in sync with PNGs).
 
-Compile (from `paper/`, TeX with `IEEEtran.cls` + BibTeX):
+Compile (TeX with `IEEEtran.cls` + BibTeX):
 
 ```bash
-latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
+make paper   # from repo root; requires latexmk
+# or: cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 ```
 
-Figures resolve via `\graphicspath` to `../docs/images/`.
+Figures resolve via `\graphicspath` to `../docs/images/`. Zip contents, page
+budget, anonymization, corresponding author: [`SUBMISSION.md`](SUBMISSION.md).
 
 ### Download the CI PDF artifact
 
@@ -139,5 +143,7 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 2. Confirm Table `tab:coverage` matches `coverage/matrix.json`.
 3. Confirm pins match `adapters/PINS.md` / README.
 4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK`.
-5. Confirm Table `tab:placeholder` has no numeric model scores.
-6. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf`.
+6. Confirm Table `tab:placeholder` has no numeric model scores.
+7. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
+8. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf` or `make paper`.
+9. (Optional) Read `paper/SUBMISSION.md` for artifact-zip / camera-ready notes.

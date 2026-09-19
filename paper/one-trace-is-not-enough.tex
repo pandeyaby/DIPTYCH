@@ -4,8 +4,9 @@
 %% Artifact: https://github.com/pandeyaby/DIPTYCH
 %% Adapter pins (read-only): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
-%% Checklist: paper/ARTIFACT_CHECKLIST.md · Notes: paper/NOTES.md
+%% Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md · Notes: paper/NOTES.md
 %% Figures: ../docs/images/{diptych-vs-single-trace,stack}.{png,svg}
+%% Build: make paper (latexmk) · CI fallback: workflow job paper-pdf
 
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -573,28 +574,29 @@
 	eight operators in \sys{}.
 	
 	\begin{table*}[t]
-		\caption{Perturbation operators. Each varies one dimension while holding the rest exogenously identical. \emph{Coupling} matches the live harness enum in \texttt{ops/*/spec.yaml} and \texttt{docs/adapters/OPERATOR\_TABLE.md} (not a probe-semantics gloss).}
+		\caption{Perturbation operators. \emph{Coupling} and \emph{graded channels} match the live harness enums in \texttt{ops/*/spec.yaml}, \texttt{diptych.OPERATORS}/\texttt{COUPLINGS}, and \texttt{docs/adapters/OPERATOR\_TABLE.md} (not a probe-semantics gloss). Row order matches the harness \texttt{OPERATORS} tuple.}
 		\label{tab:ops}
 		\centering
-		\small
+		\scriptsize
 		\begin{tabular}{@{}lllll@{}}
 			\toprule
-			Operator & Preserves & Varies & Probes & Coupling \\
+			Operator & Coupling & Primary graded channels & Varies & Probe \\
 			\midrule
-			\textsc{SignFlip} & deviation magnitude, timing, topology & sign of deviation & asymmetric response & \texttt{open\_loop} \\
-			\textsc{TrajSwap} & multiset of window samples, mean, variance & recent ordering & trend recency & \texttt{crn\_closed\_loop} \\
-			\textsc{VarScale} & mean load, endpoint count, topology & workload variance & volatility suppression & \texttt{crn\_closed\_loop} \\
-			\textsc{SatExtend} & immediate pre-release error, ceiling value & saturation duration & anti-windup & \texttt{open\_loop} \\
-			\textsc{HistSwap} & step magnitude, step timing & pre-step history & setpoint-change quiet & \texttt{open\_loop} \\
-			\textsc{FreezeDry} & entire input sequence & freeze mask / serialize-restore & round-trip stability & \texttt{open\_loop} \\
-			\textsc{Reseed} & entire input sequence & process / hash seed & determinism under reseed & \texttt{open\_loop} \\
-			\textsc{SchemaX} & n/a, cross-scenario comparison & scenario identity / key set & telemetry schema stability & \texttt{open\_loop} \\
+			\textsc{SignFlip} & \texttt{open\_loop} & \texttt{channels.<target>.values}, \texttt{meta.signflip\_channel} & sign of target channel & asymmetric response \\
+			\textsc{TrajSwap} & \texttt{crn\_closed\_loop} & \texttt{channels.trajectory.*}, \texttt{channels.closed\_loop\_residual.values} & recent trajectory ordering & trend / closed-loop residual \\
+			\textsc{VarScale} & \texttt{crn\_closed\_loop} & \texttt{channels.variance\_proxy.values}, \texttt{meta.var\_scale} & variance / noise scale & volatility ordering \\
+			\textsc{SatExtend} & \texttt{open\_loop} & \texttt{channels.<target>.values}, \texttt{meta.sat\_lo}/\texttt{sat\_hi} & saturation bounds & anti-windup \\
+			\textsc{HistSwap} & \texttt{open\_loop} & \texttt{channels.history.values}, \texttt{meta.hist\_splice\_at} & pre-step history splice & history dependence \\
+			\textsc{FreezeDry} & \texttt{open\_loop} & \texttt{meta.decision\_fingerprint}, \texttt{meta.freeze\_channels} & freeze mask / serialize-restore & round-trip stability \\
+			\textsc{Reseed} & \texttt{open\_loop} & \texttt{meta.seed}, \texttt{channels.stability.values} & process / hash seed & stability under reseed \\
+			\textsc{SchemaX} & \texttt{open\_loop} & \texttt{channels.schema.keys}, \texttt{meta.required\_schema\_keys} & scenario / key set & schema stability \\
 			\bottomrule
 		\end{tabular}
 	\end{table*}
 	
-	Two operators deserve comment because their preservation conditions are
-	subtle.
+	Preservation intent (exogenous identity except the varied axis) is enforced by
+	the coupling enum and graded fields above; two operators deserve comment
+	because their construction is subtle.
 	
 	\textsc{TrajSwap} must hold aggregate statistics fixed while changing the
 	recent trajectory. We construct the twin by permuting the samples inside a
@@ -896,26 +898,56 @@
 	\textbf{Construct.} Our operators encode one reading of each invariant's
 	intent. A different reading yields a different twin and possibly a different
 	verdict. We mitigate by publishing operators as executable code alongside the
-	prose, so disagreement about intent becomes disagreement about a specific
-	artifact rather than about an interpretation. ``Green'' means twin contrast
-	plus \texttt{gate\_axis\_mutate} under schema~\texttt{0.2}
+	prose (Table~\ref{tab:ops}), so disagreement about intent becomes disagreement
+	about a specific artifact rather than about an interpretation. ``Green'' means
+	twin contrast plus \texttt{gate\_axis\_mutate} under schema~\texttt{0.2}
 	(Figure~\ref{fig:diptych}), not exploitability, deployment certification, or
-	model quality.
+	model quality. Graded channels are contract fields, not AUROC or
+	\texttt{model\_grade} scores (rejected by the envelope contract).
 	
-	\textbf{Internal.} Closed-loop probes can drift out of comparability, and
-	the drift rate may correlate with artifact quality, which would bias
-	comparisons. RQ5 measures this explicitly rather than assuming it away.
-	Handwritten conforming/violating controls establish probe power before any
-	model is scored; grader bugs would systematically mislabel cells.
+	\textbf{Adapter pin drift.} ZeroDay and AOMB columns are greens at pinned SHAs
+	only (Section~\ref{sec:adapters}, Figure~\ref{fig:stack},
+	\texttt{adapters/PINS.md}). A silent pin move, emitter schema skew, or
+	cassette-format change without a matching QC can flip adapter cells while
+	\texttt{diptych\_core} stays green. We treat pin/SHA mismatch as a
+	reproducibility threat: product trees are not vendored here, so reviewers
+	must re-resolve pins rather than assume floating \texttt{main}.
+	
+	\textbf{Inconclusive verdicts.} Schema~\texttt{0.2} admits
+	\texttt{inconclusive} with \texttt{meta.inconclusive\_reason} when twins are
+	incomparable (horizon / shared-prefix failure, missing twin role). That
+	verdict is \emph{not} green and does not count toward coverage. Over-use of
+	inconclusive can hide weak probes; under-use can force spurious pass/fail on
+	incomparable pairs. Gating docs make the counting rule explicit; we do not
+	convert inconclusive rates into model scores.
+	
+	\textbf{Handwritten-control bias.} Conforming and violating controls establish
+	probe power before any model is scored. Controls can overfit the grader
+	(passing only the handwritten shape) or understate difficulty for agent-authored
+	artifacts. Mitigations are public control sources under \texttt{controls/},
+	axis mutation that must flip pass$\rightarrow$fail, and a held-out model study
+	that is still in progress---so Table~\ref{tab:placeholder} stays blank rather
+	than imputing power from controls alone.
+	
+	\textbf{Open-loop vs.\ CRN coupling limits.} Six operators use
+	\texttt{open\_loop} exogenous coupling; \textsc{TrajSwap} and \textsc{VarScale}
+	require \texttt{crn\_closed\_loop}. Open-loop twins do not exercise feedback
+	confounding; CRN closed-loop twins can still drift out of comparability, and
+	drift rate may correlate with artifact quality. RQ5 is designed to measure
+	that explicitly rather than assuming it away. We do not claim that open-loop
+	greens transfer to closed-loop deployments, nor that CRN residuals are a
+	universal coupling for every simulator.
+	
+	\textbf{Internal.} Beyond coupling drift, grader bugs would systematically
+	mislabel cells; the full-8 offline gate and matrix check against
+	\texttt{examples/poc/expected\_matrix\_snippet.json} are the regression net
+	for harness logic, not for model quality.
 	
 	\textbf{External.} Findings are drawn from one task family, a fleet traffic
 	controller. The taxonomy should transfer to any agentic task whose
 	requirements include calibration, but the specific operators will not. We
 	claim generality for the classification and the harness architecture, not
-	for the operator set. Adapter greens for ZeroDay and AOMB are pinned case
-	placements (Section~\ref{sec:adapters}, Figure~\ref{fig:stack}); a pin move
-	without a matching QC drops those columns out of green. Product trees are
-	not vendored or edited in this artifact.
+	for the operator set.
 	
 	\textbf{Conclusion / non-claims.} Twin construction is deterministic, so
 	classical significance testing over probe outcomes is inappropriate.
