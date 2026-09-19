@@ -6,9 +6,15 @@
 4. **Stub detectors:** reject strings/markers `TODO`, `NotImplemented`, `stub`, empty traces, `expected_verdict` hardcoded without running grader.
 5. **PR policy:** DIPTYCH flags product PRs that only smoke 1–2 operators; GRAX informed; coverage matrix stays non-green.
 
-Contract paths on DIPTYCH box (canonical until landed in repo):
-- `/workspace/diptych-spec/adapters/CONTRACT.md`
-- `/workspace/diptych-spec/adapters/GATING.md`
-- `/workspace/diptych-spec/adapters/zeroday.md`
-- `/workspace/diptych-spec/adapters/aomb.md`
-- `/workspace/diptych-spec/OPERATORS.md`
+Canonical contract paths in this harness repo:
+- `docs/adapters/CONTRACT.md`
+- `docs/adapters/GATING.md` (this file)
+- `docs/adapters/zeroday.md`
+- `docs/adapters/aomb.md`
+- `docs/adapters/OPERATOR_TABLE.md` / `ONEPAGER.md`
+- `docs/OPERATORS.md`
+
+**Non-claims for paper / matrix reporting:** no fabricated LLM or AUROC scores;
+protocol + handwritten controls first; model study in progress;
+`inconclusive` ≠ green; adapter greens only at pinned SHAs
+(`adapters/PINS.md`: ZeroDay@fb5b39da, AOMB@667e475).

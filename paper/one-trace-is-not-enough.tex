@@ -3,7 +3,9 @@
 %% STATUS: complete methods; Section VII is an evaluation PROTOCOL, not model results.
 %% Artifact: https://github.com/pandeyaby/DIPTYCH
 %% Adapter pins (read-only): ZeroDay@fb5b39da · AOMB@667e475
-%% See NOTES.md for open items and citation verification list.
+%% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
+%% Checklist: paper/ARTIFACT_CHECKLIST.md · Notes: paper/NOTES.md
+%% Figures: ../docs/images/{diptych-vs-single-trace,stack}.{png,svg}
 
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -15,6 +17,9 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{balance}
+
+% Compile from paper/: figures live under docs/images/
+\graphicspath{{../docs/images/}{docs/images/}}
 
 \newtheorem{proposition}{Proposition}
 \newtheorem{definition}{Definition}
@@ -236,6 +241,16 @@
 	Proposition \ref{prop:confound} formalizes this. The only construction that
 	identifies the sign effect holds the state fixed, which means branching two
 	executions from a common prefix.
+	
+	\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{diptych-vs-single-trace.png}
+		\caption{One film versus the diptych. A single execution can look legal
+			under local invariants; calibration is graded only on a coupled pair that
+			shares a prefix and differs on one controlled axis
+			(\texttt{gate\_axis\_mutate}). Source: \texttt{docs/images/diptych-vs-single-trace.png}.}
+		\label{fig:diptych}
+	\end{figure}
 	
 	\section{A Property Taxonomy for Agentic Evaluation}
 	\label{sec:taxonomy}
@@ -555,22 +570,22 @@
 	eight operators in \sys{}.
 	
 	\begin{table*}[t]
-		\caption{Perturbation operators. Each varies one dimension while holding the rest exogenously identical.}
+		\caption{Perturbation operators. Each varies one dimension while holding the rest exogenously identical. \emph{Coupling} matches the live harness enum in \texttt{ops/*/spec.yaml} and \texttt{docs/adapters/OPERATOR\_TABLE.md} (not a probe-semantics gloss).}
 		\label{tab:ops}
 		\centering
 		\small
 		\begin{tabular}{@{}lllll@{}}
 			\toprule
-			Operator & Preserves & Varies & Probes & Mode \\
+			Operator & Preserves & Varies & Probes & Coupling \\
 			\midrule
-			\textsc{SignFlip} & deviation magnitude, timing, topology & sign of deviation & asymmetric response & open \\
-			\textsc{TrajSwap} & multiset of window samples, mean, variance & recent ordering & trend recency & closed \\
-			\textsc{VarScale} & mean load, endpoint count, topology & workload variance & volatility suppression & closed \\
-			\textsc{SatExtend} & immediate pre-release error, ceiling value & saturation duration & anti-windup & open \\
-			\textsc{HistSwap} & step magnitude, step timing & pre-step history & setpoint-change quiet & open \\
-			\textsc{FreezeDry} & entire input sequence & serialization point & round-trip stability & closed \\
-			\textsc{Reseed} & entire input sequence & process, hash seed, iteration order & determinism & closed \\
-			\textsc{SchemaX} & n/a, cross-scenario comparison & scenario identity & telemetry schema stability & either \\
+			\textsc{SignFlip} & deviation magnitude, timing, topology & sign of deviation & asymmetric response & \texttt{open\_loop} \\
+			\textsc{TrajSwap} & multiset of window samples, mean, variance & recent ordering & trend recency & \texttt{crn\_closed\_loop} \\
+			\textsc{VarScale} & mean load, endpoint count, topology & workload variance & volatility suppression & \texttt{crn\_closed\_loop} \\
+			\textsc{SatExtend} & immediate pre-release error, ceiling value & saturation duration & anti-windup & \texttt{open\_loop} \\
+			\textsc{HistSwap} & step magnitude, step timing & pre-step history & setpoint-change quiet & \texttt{open\_loop} \\
+			\textsc{FreezeDry} & entire input sequence & freeze mask / serialize-restore & round-trip stability & \texttt{open\_loop} \\
+			\textsc{Reseed} & entire input sequence & process / hash seed & determinism under reseed & \texttt{open\_loop} \\
+			\textsc{SchemaX} & n/a, cross-scenario comparison & scenario identity / key set & telemetry schema stability & \texttt{open\_loop} \\
 			\bottomrule
 		\end{tabular}
 	\end{table*}
@@ -685,8 +700,9 @@
 	\texttt{axis\_power} only.
 	
 	\textbf{Adapter case placements.} Product emitters are not vendored into the
-	harness repository. They emit schema-\texttt{0.2} conforming/violating twins
-	at pinned SHAs; \sys{} grades. Current pins (read-only):
+	harness repository (Figure~\ref{fig:stack}). They emit schema-\texttt{0.2}
+	conforming/violating twins at pinned SHAs; \sys{} grades. Current pins
+	(read-only; same as \texttt{README.md} / \texttt{adapters/PINS.md}):
 	\begin{itemize}
 		\item \textbf{ZeroDay} @\,\texttt{fb5b39da}
 		(\texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341}): full-8 product probes
@@ -698,18 +714,55 @@
 		fixtures for ranking/session domains; lab AUROC stays unpublished and is
 		never accepted as a hyperproperty grade.
 	\end{itemize}
-	Source of truth: \texttt{adapters/PINS.md}. Adapter columns in the coverage
-	matrix turn green only under the same twin-contrast +
-	\texttt{gate\_axis\_mutate} rule, attributed to those pins---not to invented
-	model studies.
+	Adapter columns in the coverage matrix turn green only under the same
+	twin-contrast + \texttt{gate\_axis\_mutate} rule, attributed to those
+	pins---not to invented model studies.
 	
-	\textbf{Current offline facts (protocol evidence only).} At the tip of the
-	artifact repository, \texttt{coverage/matrix.json} records green$\times$8 for
-	\texttt{diptych\_core} with \texttt{axis\_power=true} on every operator after
-	\texttt{gate\_axis\_mutate}, and green$\times$8 for the \texttt{zeroday} and
-	\texttt{aomb} columns at the pins above. Table~\ref{tab:placeholder} remains
-	blank for model-study power and separation metrics; those cells stay
-	unreported until the study completes.
+	\begin{figure}[t]
+		\centering
+		\includegraphics[width=\columnwidth]{stack.png}
+		\caption{Product adapters feed \sys{} graders. ZeroDay and AOMB emit
+			schema-\texttt{0.2} twins at pinned SHAs; this repository grades and does
+			not vendor those product trees. Source: \texttt{docs/images/stack.png}.}
+		\label{fig:stack}
+	\end{figure}
+	
+	\textbf{Current offline facts (protocol evidence only).}
+	Table~\ref{tab:coverage} mirrors the live
+	\texttt{coverage/matrix.json} at the artifact tip cited in this draft:
+	green$\times$8$\times$3 across \texttt{diptych\_core}, \texttt{zeroday}, and
+	\texttt{aomb}, with \texttt{axis\_power=true} on every operator. Adapter greens
+	cite the pins above (ZeroDay merge facts \#41+\#42; AOMB merge \#18) plus
+	prior adapter QC---never fabricated LLM scores.
+	Table~\ref{tab:placeholder} remains blank for model-study power and
+	separation metrics; those cells stay unreported until the study completes.
+	Non-claims follow the gating contract (\texttt{docs/adapters/GATING.md}):
+	protocol and handwritten controls first; stub/TODO/hardcoded-pass rejected;
+	\texttt{inconclusive}$\neq$green; no AUROC / exploit fields.
+	
+	\begin{table}[t]
+		\caption{Live offline coverage matrix (\texttt{coverage/matrix.json}).
+			Every cell is categorical \texttt{green} with boolean
+			\texttt{axis\_power}; no AUROC or model-score columns. Adapter columns
+			are attributed to ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475}.}
+		\label{tab:coverage}
+		\centering
+		\small
+		\begin{tabular}{@{}lcccc@{}}
+			\toprule
+			Operator & \texttt{diptych\_core} & \texttt{zeroday} & \texttt{aomb} & \texttt{axis\_power} \\
+			\midrule
+			\textsc{FreezeDry} & green & green & green & true \\
+			\textsc{Reseed}    & green & green & green & true \\
+			\textsc{SchemaX}   & green & green & green & true \\
+			\textsc{SignFlip}  & green & green & green & true \\
+			\textsc{SatExtend} & green & green & green & true \\
+			\textsc{HistSwap}  & green & green & green & true \\
+			\textsc{TrajSwap}  & green & green & green & true \\
+			\textsc{VarScale}  & green & green & green & true \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
 	
 	\subsection{Research questions}
 	
@@ -817,24 +870,33 @@
 	intent. A different reading yields a different twin and possibly a different
 	verdict. We mitigate by publishing operators as executable code alongside the
 	prose, so disagreement about intent becomes disagreement about a specific
-	artifact rather than about an interpretation.
+	artifact rather than about an interpretation. ``Green'' means twin contrast
+	plus \texttt{gate\_axis\_mutate} under schema~\texttt{0.2}
+	(Figure~\ref{fig:diptych}), not exploitability, deployment certification, or
+	model quality.
 	
 	\textbf{Internal.} Closed-loop probes can drift out of comparability, and
 	the drift rate may correlate with artifact quality, which would bias
 	comparisons. RQ5 measures this explicitly rather than assuming it away.
+	Handwritten conforming/violating controls establish probe power before any
+	model is scored; grader bugs would systematically mislabel cells.
 	
 	\textbf{External.} Findings are drawn from one task family, a fleet traffic
 	controller. The taxonomy should transfer to any agentic task whose
 	requirements include calibration, but the specific operators will not. We
 	claim generality for the classification and the harness architecture, not
 	for the operator set. Adapter greens for ZeroDay and AOMB are pinned case
-	placements (Section~\ref{sec:adapters}); a pin move without a matching QC
-	drops those columns out of green.
+	placements (Section~\ref{sec:adapters}, Figure~\ref{fig:stack}); a pin move
+	without a matching QC drops those columns out of green. Product trees are
+	not vendored or edited in this artifact.
 	
-	\textbf{Conclusion.} Twin construction is deterministic, so classical
-	significance testing over probe outcomes is inappropriate. Variation enters
-	through scenario sampling and artifact sampling, and our uncertainty
-	statements will be over those two populations only.
+	\textbf{Conclusion / non-claims.} Twin construction is deterministic, so
+	classical significance testing over probe outcomes is inappropriate.
+	Variation for the forthcoming model study enters through scenario sampling
+	and artifact sampling only. We do not claim AUROC improvements, ranking
+	lifts, or security exploit findings; Table~\ref{tab:placeholder} stays blank
+	until that study completes. Localization $\neq$ exploitability;
+	\texttt{inconclusive}$\neq$green (gating contract).
 	
 	\section{Conclusion}
 	

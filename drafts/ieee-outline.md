@@ -58,14 +58,21 @@ CRN closed-loop regimes. Product adapters emit probe twins; the harness grades.
 - Offline PoC (`./scripts/run_poc.sh`)
 - Green rule: twin contrast + `gate_axis_mutate` (no AUROC / invented model scores)
 - Adapter columns attributed via pins ZeroDay@fb5b39da / AOMB@667e475 only
-- Live coverage matrix from `coverage/matrix.json` (cite repo/CI facts only)
+- Live coverage matrix from `coverage/matrix.json` (green×8×3; cite repo/CI facts only)
+- Model-study results table stays blank (`---`) until study completes
+- Figs: `docs/images/diptych-vs-single-trace.png`, `docs/images/stack.png`
 
-## VIII. Threats to validity / limitations
+## VIII. Threats to validity / limitations (GATING-aligned)
 
-- No exploitability claims
-- No AUROC as hyperproperty grade
+- No exploitability claims; localization ≠ exploitability
+- No AUROC / fabricated LLM scores as hyperproperty grade
+- Protocol + handwritten controls first; model study in progress
+- `inconclusive` ≠ green
 - Adapter columns green at pins (ZeroDay #41+#42, AOMB #18) — no invented scores
+- Product trees not vendored into this harness
 
 ## IX. Conclusion
 
-See full prose in [`ieee-draft.md`](ieee-draft.md).
+See full prose in [`ieee-draft.md`](ieee-draft.md) and living
+[`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex).
+Checklist: [`paper/ARTIFACT_CHECKLIST.md`](../paper/ARTIFACT_CHECKLIST.md).

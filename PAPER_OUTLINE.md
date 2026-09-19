@@ -6,6 +6,7 @@
 
 **Living IEEEtran source (authoritative):** [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)  
 **Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)  
+**Artifact checklist:** [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md)  
 **Markdown draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
 **IEEE skeleton:** [`drafts/ieee-outline.md`](drafts/ieee-outline.md)
 
@@ -23,10 +24,12 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 3. **Adapter contract** — product emitters (ZeroDay, AOMB) produce conforming/violating twins; DIPTYCH grades.
 4. **Coverage matrix** — Operator × {diptych_core, zeroday, aomb}; green iff twin contrast + axis power.
 
-## Non-claims
+## Non-claims (GATING-aligned)
 
 - Localization ≠ exploitability. No PoC/exploit payloads.
-- No AUROC / model-score fields in graded envelopes.
+- No AUROC / model-score fields in graded envelopes; no fabricated LLM scores.
+- Protocol + handwritten controls first; model study in progress (blank results table).
+- `inconclusive` ≠ green.
 - Adapters do not fork product trees into this repo; they pin SHAs.
 
 ## Outline → IEEEtran map (`paper/one-trace-is-not-enough.tex`)
@@ -40,10 +43,11 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 | Harness + `gate_axis_mutate` | §V `sec:harness` |
 | Eight operators | §VI `sec:operators` |
 | Metrics (defs only) | `sec:metrics` |
-| **Evaluation protocol** + ZeroDay/AOMB pins | **§VII `sec:protocol`** |
+| **Evaluation protocol** + pins + Table `tab:coverage` | **§VII `sec:protocol`** |
 | Related work | `sec:related` |
-| Threats | `sec:threats` |
+| Threats / non-claims | `sec:threats` |
 | Conclusion | final § |
+| Figs | `fig:diptych`, `fig:stack` → `docs/images/` |
 
 ## Artifact
 
@@ -51,5 +55,6 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 ./scripts/run_poc.sh   # exit 0
 ```
 
-Pins: **ZeroDay@fb5b39da** · **AOMB@667e475**  
-Live matrix: [`coverage/matrix.json`](coverage/matrix.json) (green×8×3: `diptych_core` / `zeroday` / `aomb`; ZeroDay@fb5b39da = merged #41+#42; AOMB@667e475 = merged #18).
+Pins: **ZeroDay@fb5b39da** (`fb5b39daf88e37521aaee8526ae9d286cf74f341`) · **AOMB@667e475** (`667e47538ae5b9c504187b7a73220d22aa8fb96f`)  
+Live matrix: [`coverage/matrix.json`](coverage/matrix.json) (green×8×3: `diptych_core` / `zeroday` / `aomb`; ZeroDay@fb5b39da = merged #41+#42; AOMB@667e475 = merged #18).  
+Checklist: [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md).
