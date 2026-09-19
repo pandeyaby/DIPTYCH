@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="ZeroDay and AOMB products feeding DIPTYCH graders">
   <rect width="1200" height="700" fill="#f8fafc"/>
-  <text x="40" y="48" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">Product adapters ’ DIPTYCH graders</text>
+  <text x="40" y="48" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">Product adapters -> DIPTYCH graders</text>
   <text x="40" y="78" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">ZeroDay &amp; AOMB emit schema-0.2 twins at pinned SHAs; DIPTYCH grades (trees not vendored).</text>
 
   <rect x="60" y="140" width="360" height="180" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
@@ -24,14 +24,14 @@
   <text x="780" y="355" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">schema 0.2 envelopes</text>
 
   <rect x="300" y="410" width="600" height="90" rx="14" fill="#e0f2fe" stroke="#0e7490" stroke-width="2"/>
-  <text x="360" y="450" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0e7490">Adapter contract · conforming + violating twins</text>
-  <text x="400" y="480" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">Operator × {diptych_core, zeroday, aomb}</text>
+  <text x="360" y="450" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0e7490">Adapter contract / conforming + violating twins</text>
+  <text x="400" y="480" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">Operator Ã— {diptych_core, zeroday, aomb}</text>
 
   <line x1="600" y1="500" x2="600" y2="545" stroke="#64748b" stroke-width="3"/>
   <polygon points="600,555 590,540 610,540" fill="#64748b"/>
 
   <rect x="200" y="560" width="800" height="110" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
   <text x="230" y="595" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#0f172a">DIPTYCH harness (this repo)</text>
-  <text x="230" y="625" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#0e7490">grade · gate_axis_mutate · coverage/matrix.json</text>
-  <text x="230" y="650" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">No AUROC / model scores · pins only · no product-tree edits</text>
+  <text x="230" y="625" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#0e7490">grade Â· gate_axis_mutate Â· coverage/matrix.json</text>
+  <text x="230" y="650" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">No AUROC / model scores Â· pins only Â· no product-tree edits</text>
 </svg>

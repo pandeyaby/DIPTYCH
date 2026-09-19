@@ -8,6 +8,8 @@ Artifact checklist: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)
 - Methods, audit, harness, operators, metrics **definitions**: complete.
 - Section VII = evaluation **protocol** + offline harness facts only.
 - Model study: **in progress** — no scores claimed; Table `tab:placeholder` stays `---`.
+- Stranger PoC: `./scripts/run_poc.sh` prints green×8×3 and checks
+  `examples/poc/expected_matrix_snippet.json` (CI + local).
 
 ## Citation / pin verification (do not invent)
 

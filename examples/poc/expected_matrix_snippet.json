@@ -2,13 +2,54 @@
   "diptych_schema": "0.2",
   "source_row": "diptych_core",
   "operators": {
-    "FREEZEDRY": { "diptych_core": "green", "axis_power": true },
-    "RESEED": { "diptych_core": "green", "axis_power": true },
-    "SCHEMAX": { "diptych_core": "green", "axis_power": true },
-    "SIGNFLIP": { "diptych_core": "green", "axis_power": true },
-    "SATEXTEND": { "diptych_core": "green", "axis_power": true },
-    "HISTSWAP": { "diptych_core": "green", "axis_power": true },
-    "TRAJSWAP": { "diptych_core": "green", "axis_power": true },
-    "VARSCALE": { "diptych_core": "green", "axis_power": true }
-  }
+    "FREEZEDRY": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "RESEED": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "SCHEMAX": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "SIGNFLIP": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "SATEXTEND": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "HISTSWAP": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "TRAJSWAP": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    },
+    "VARSCALE": {
+      "diptych_core": "green",
+      "zeroday": "green",
+      "aomb": "green",
+      "axis_power": true
+    }
+  },
+  "notes": "Expected live offline matrix after ./scripts/run_poc.sh. green×8×3 = twin contrast + gate_axis_mutate axis power at pins ZeroDay@fb5b39da / AOMB@667e475 — not AUROC, accuracy, or vuln-finding."
 }

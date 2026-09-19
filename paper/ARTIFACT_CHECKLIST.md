@@ -34,9 +34,10 @@ Controls establish **probe power** before any model is scored (paper §VII).
 | Item | Path / command |
 |------|----------------|
 | Live matrix (authoritative cells) | `coverage/matrix.json` |
-| Expected PoC snippet | `examples/poc/expected_matrix_snippet.json` |
-| Refresh matrix + full-8 gate | `./scripts/run_poc.sh` (or `make poc`) |
-| Unit tests | `PYTHONPATH=. python -m pytest -q` |
+| Expected PoC snippet (green×8×3) | `examples/poc/expected_matrix_snippet.json` |
+| Refresh matrix + full-8 gate + matrix check | `./scripts/run_poc.sh` (or `make poc`) |
+| Print matrix only | `make matrix` |
+| Unit tests | `PYTHONPATH=. python -m pytest -q` (or `make test`) |
 
 **Green rule (same as paper Table `tab:coverage`):** conforming→`pass`,
 violating→`fail`, and `gate_axis_mutate` reports axis power.
@@ -50,19 +51,32 @@ violating→`fail`, and `gate_axis_mutate` reports axis power.
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
 Source of truth: `adapters/PINS.md` (mirrored in root `README.md`).
+Record the git commit you graded against (paper cites these shorts; full SHAs above).
 
 ### Reproduce offline (no GPU, no network for core PoC)
 
 ```bash
-# from repository root
+git clone https://github.com/pandeyaby/DIPTYCH.git
+cd DIPTYCH
+# Python ≥ 3.10; stdlib-only core
 ./scripts/run_poc.sh
-# expect exit 0; refreshes coverage/matrix.json
-PYTHONPATH=. python -m pytest -q
+# expect exit 0; refreshes coverage/matrix.json; prints green×8×3; MATRIX CHECK OK
+PYTHONPATH=. python -m pytest -q   # optional CI parity (pip install pytest)
 ```
 
-Exit `0` means full-8 `diptych_core` cells are green (twin contrast + axis power).
-Adapter columns (`zeroday`, `aomb`) are green at the pins above when the live
-matrix says so—attributed to pin/merge facts, not invented model scores.
+Exit `0` means full-8 cells are green on `diptych_core` / `zeroday` / `aomb`
+(twin contrast + axis power) and the live matrix matches
+`examples/poc/expected_matrix_snippet.json`. Adapter columns are attributed to
+the pins above—never invented model scores.
+
+### What green×8×3 does and does **not** claim
+
+| Does claim | Does **not** claim |
+|------------|--------------------|
+| Every operator has conforming→pass / violating→fail twins | Vulnerability finding / exploit success |
+| `gate_axis_mutate` flips pass→fail on that axis | Accuracy, AUROC, F1, or model ranking |
+| Adapter columns green at the pinned SHAs above | That product trees are vendored here |
+| Protocol / QC readiness of the grader | That the model study is complete |
 
 ## 4. Paper + figures
 
@@ -77,15 +91,35 @@ matrix says so—attributed to pin/merge facts, not invented model scores.
 | Markdown prose draft | `drafts/ieee-draft.md` |
 | Outline | `PAPER_OUTLINE.md`, `drafts/ieee-outline.md` |
 
+PNG files are what `\includegraphics` and the root README use. SVG files are the
+editable sources (keep text glyphs in sync with PNGs).
+
 Compile (from `paper/`, TeX with `IEEEtran.cls` + BibTeX):
 
 ```bash
 latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 ```
 
-Figures resolve via `\graphicspath` to `../docs/images/`. CI job **Build paper PDF**
-uploads `one-trace-is-not-enough.pdf` as workflow artifact
-`one-trace-is-not-enough-pdf`.
+Figures resolve via `\graphicspath` to `../docs/images/`.
+
+### Download the CI PDF artifact
+
+Job **Build paper PDF** uploads `one-trace-is-not-enough.pdf` as workflow
+artifact **`one-trace-is-not-enough-pdf`**.
+
+**GitHub UI**
+
+1. Open https://github.com/pandeyaby/DIPTYCH/actions
+2. Select a green run on `main` or your PR
+3. Job **Build paper PDF** → Artifacts → **`one-trace-is-not-enough-pdf`**
+4. Download and unzip → `one-trace-is-not-enough.pdf`
+
+**CLI (optional)**
+
+```bash
+gh run list --workflow=ci.yml --branch main --limit 5
+gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
+```
 
 ## 5. Non-claims (must match GATING + paper §threats)
 
@@ -104,5 +138,6 @@ uploads `one-trace-is-not-enough.pdf` as workflow artifact
 1. Read abstract + §VII (evaluation **protocol**, not results).
 2. Confirm Table `tab:coverage` matches `coverage/matrix.json`.
 3. Confirm pins match `adapters/PINS.md` / README.
-4. Run `./scripts/run_poc.sh` → exit 0.
+4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK`.
 5. Confirm Table `tab:placeholder` has no numeric model scores.
+6. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf`.

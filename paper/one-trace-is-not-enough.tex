@@ -49,29 +49,29 @@
 		Agentic coding benchmarks grade a candidate artifact by executing it and
 		scoring the resulting trace: tests pass or fail, a task succeeds or does
 		not, a judge reads a trajectory. We show that this evaluation model is
-		structurally unable to express a large and important class of the
-		requirements we actually place on agent-authored systems. Properties such
-		as calibrated conservatism under volatility, recency sensitivity,
-		anti-windup, reproducibility across process restarts, and telemetry schema
-		stability are \emph{hyperproperties}: predicates over sets of traces rather
-		than over individual traces. No single execution can falsify them.
+		structurally unable to express a large class of requirements we actually
+		place on agent-authored systems. Properties such as calibrated
+		conservatism under volatility, recency sensitivity, anti-windup,
+		reproducibility across process restarts, and telemetry schema stability
+		are \emph{hyperproperties}: predicates over sets of traces rather than
+		over individual traces. No single execution can falsify them.
 		
-		We make three contributions. First, we give a property taxonomy for agentic
-		evaluation grounded in the hyperproperty framework, and apply it to audit a
-		long-horizon control-system specification with twenty-two stated invariants.
-		The audit finds that seven invariants written in single-trace prose are in
-		fact only falsifiable as $2$-safety hyperproperties, so a conforming
-		single-trace harness would silently pass artifacts that violate them. We
-		prove the underlying obstruction: for a stateful deterministic artifact, any
-		asymmetry estimate drawn from one trace confounds the effect under test with
+		We make three contributions. First, we give a property taxonomy for
+		agentic evaluation grounded in the hyperproperty framework and audit a
+		long-horizon control-system specification with twenty-two stated
+		invariants. Seven invariants written in single-trace prose are only
+		falsifiable as $2$-safety hyperproperties, so a conforming single-trace
+		harness would silently pass artifacts that violate them. We prove the
+		obstruction: for a stateful deterministic artifact, any asymmetry
+		estimate drawn from one trace confounds the effect under test with
 		internal state drift between the compared ticks.
 		
 		Second, we present \sys{}, a grading harness that renders every
-		hyperproperty judgment on a coupled pair of executions. \sys{} contributes
-		eight perturbation operators that vary one semantic dimension while holding
-		the exogenous input bit-identical, a coupling discipline that keeps
+		hyperproperty judgment on a coupled pair of executions: eight
+		perturbation operators that vary one semantic dimension while holding
+		exogenous input bit-identical, a coupling discipline that keeps
 		closed-loop pairs comparable, and a \emph{probe tree} execution strategy
-		that amortizes a shared trace prefix across many branching perturbations.
+		that amortizes a shared prefix across branching perturbations.
 		
 		Third, we give a full evaluation protocol with synthetic positive and
 		negative controls, a separation metric for distinguishing artifacts that
@@ -167,8 +167,9 @@
 		hyperproperty by construction, used to establish probe power before any
 		model is scored. The same section places product adapters ZeroDay and
 		AOMB at pinned SHAs and records offline harness facts
-		(\texttt{gate\_axis\_mutate}, green$\times$8 coverage cells) without
-		claiming model scores.
+		(\texttt{gate\_axis\_mutate}, green$\times$8$\times$3 coverage cells) as
+		protocol / QC evidence only---not model scores, accuracy, or
+		vulnerability findings.
 	\end{enumerate}
 	
 	We are explicit about scope. This paper delivers the formalism, the audit,
@@ -246,10 +247,11 @@
 	\begin{figure}[t]
 		\centering
 		\includegraphics[width=\columnwidth]{diptych-vs-single-trace.png}
-		\caption{One film versus the diptych. A single execution can look legal
-			under local invariants; calibration is graded only on a coupled pair that
-			shares a prefix and differs on one controlled axis
-			(\texttt{gate\_axis\_mutate}). Source: \texttt{docs/images/diptych-vs-single-trace.png}.}
+		\caption{One film versus the diptych. A single execution can satisfy local
+			invariants and still fail to establish calibration; calibration is graded
+			only on a coupled pair that shares a prefix and differs on one controlled
+			axis (\texttt{gate\_axis\_mutate}). Figure path:
+			\texttt{docs/images/diptych-vs-single-trace.png}.}
 		\label{fig:diptych}
 	\end{figure}
 	
@@ -729,9 +731,9 @@
 		\includegraphics[width=\columnwidth]{stack.png}
 		\caption{Product adapters feed \sys{} graders. ZeroDay@\texttt{fb5b39da}
 			and AOMB@\texttt{667e475} emit schema-\texttt{0.2} twins; this repository
-			grades and does not vendor those product trees. Green cells measure
-			harness coverage / axis power, not exploit findings. Source:
-			\texttt{docs/images/stack.png}.}
+			grades those envelopes and does not vendor the product trees. Green cells
+			record harness coverage and axis power, not exploit findings or model
+			scores. Figure path: \texttt{docs/images/stack.png}.}
 		\label{fig:stack}
 	\end{figure}
 	
