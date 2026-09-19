@@ -28,6 +28,10 @@ Local Markdown copies in this directory are offline mirrors for CI/review. When 
 
 ## Coverage note
 
-DIPTYCH reports `diptych_core` green for all 8 operators. The **aomb** column turns green when this AOMB full-8 adapter PR lands and CI passes (`coverage/matrix.json`).
+Live `coverage/matrix.json` is **green×8×3** (`diptych_core` / `zeroday` /
+`aomb`) with `axis_power: true` on every operator, attributed to pins
+ZeroDay@`fb5b39da` and AOMB@`667e475` (see `adapters/PINS.md`). No AUROC /
+invented model scores. Reproduce: `./scripts/run_poc.sh`.
 
-AOMB emit path: `diptych-probes/<OP>/{conforming,violating}/probe.json` · validator: `adapters/aomb.py` · gate: `./scripts/run_diptych_full8.sh`.
+Product trees are **not** vendored here; adapters emit schema-`0.2` twins and
+DIPTYCH grades. IEEE checklist: `paper/ARTIFACT_CHECKLIST.md`.
