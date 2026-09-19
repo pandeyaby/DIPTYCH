@@ -4,52 +4,52 @@
   "operators": {
     "SIGNFLIP": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "TRAJSWAP": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "VARSCALE": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "SATEXTEND": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "HISTSWAP": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "FREEZEDRY": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "RESEED": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     },
     "SCHEMAX": {
       "diptych_core": "green",
-      "zeroday": "pending",
-      "aomb": "pending",
+      "zeroday": "green",
+      "aomb": "green",
       "axis_power": true
     }
   },
-  "notes": "diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; adapter columns turn green when ZeroDay@fb5b39da / AOMB@667e475 emitters pass"
+  "notes": "diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; zeroday=green and aomb=green at pins ZeroDay@fb5b39daf88e37521aaee8526ae9d286cf74f341 (merged #41+#42) and AOMB@667e47538ae5b9c504187b7a73220d22aa8fb96f (merged #18); no AUROC / invented model scores"
 }

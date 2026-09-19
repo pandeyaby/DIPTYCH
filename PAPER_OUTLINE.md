@@ -2,7 +2,10 @@
 
 **Working title:** *One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems*
 
-**Venue target:** IEEE (artifact-friendly). See also [`drafts/ieee-outline.md`](drafts/ieee-outline.md).
+**Venue target:** IEEE (artifact-friendly).
+
+**Full draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
+**IEEE skeleton:** [`drafts/ieee-outline.md`](drafts/ieee-outline.md)
 
 ## Thesis
 
@@ -24,17 +27,18 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 - No AUROC / model-score fields in graded envelopes.
 - Adapters do not fork product trees into this repo; they pin SHAs.
 
-## Outline
+## Outline → draft map
 
-1. Introduction — single-trace insufficiency
-2. Hyperproperty framing (2-safety) and coupling discipline
-3. Operator semantics (open-loop vs CRN closed-loop)
-4. Harness: schema, gates, axis mutate
-5. Adapters: ZeroDay@fb5b39da, AOMB@667e475
-6. Artifact evaluation (full-8 PoC)
-7. Limitations & ethics
-8. Related work
-9. Conclusion
+| Section | Draft |
+|---------|--------|
+| 1. Introduction | §I in [`drafts/ieee-draft.md`](drafts/ieee-draft.md) |
+| 2. Hyperproperty framing + related work | §II |
+| 3. Operator semantics | §IV |
+| 4. Harness: schema, gates, axis mutate | §III |
+| 5. Adapters: ZeroDay@fb5b39da, AOMB@667e475 | §V.C |
+| 6. Artifact evaluation (live matrix) | §VI |
+| 7. Limitations & ethics / threats | §VII–VIII |
+| 8–9. Related work / conclusion | §II, §IX |
 
 ## Artifact
 
@@ -42,4 +46,5 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 ./scripts/run_poc.sh   # exit 0
 ```
 
-Pins: **ZeroDay@fb5b39da** · **AOMB@667e475**
+Pins: **ZeroDay@fb5b39da** · **AOMB@667e475**  
+Live matrix: [`coverage/matrix.json`](coverage/matrix.json) (green×8×3: `diptych_core` / `zeroday` / `aomb`; ZeroDay@fb5b39da = merged #41+#42; AOMB@667e475 = merged #18).

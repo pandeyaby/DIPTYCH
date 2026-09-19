@@ -1,5 +1,7 @@
 # DIPTYCH
 
+[![CI](https://github.com/pandeyaby/DIPTYCH/actions/workflows/ci.yml/badge.svg)](https://github.com/pandeyaby/DIPTYCH/actions/workflows/ci.yml)
+
 **DIPTYCH** grades calibration as **2-safety hyperproperties**: not one run, but a
 coupled pair sharing all exogenous inputs except one controlled perturbation. It
 forks a shared prefix (open-loop shape / CRN closed-loop point), discards
@@ -21,6 +23,7 @@ See [`examples/poc/`](examples/poc/) and [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md).
 
 ## Paper
 
+- [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — full IEEE draft (preferred)
 - [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis, contributions, section plan
 - [`drafts/ieee-outline.md`](drafts/ieee-outline.md) — IEEE draft skeleton
 
@@ -57,7 +60,9 @@ docs/adapters/     # CONTRACT, GATING, ONEPAGER, zeroday, aomb
 examples/poc/
 scripts/run_poc.sh
 PAPER_OUTLINE.md
+drafts/ieee-draft.md
 drafts/ieee-outline.md
+.github/workflows/ci.yml
 ```
 
 ## Non-claims
