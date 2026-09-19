@@ -32,6 +32,12 @@ jobs:
         run: ./scripts/run_poc.sh
         # Fail the job on any non-zero exit (default shell behavior).
 
+      - name: Artifact pack dry-run
+        run: |
+          make artifact
+          test -n "$(ls dist/DIPTYCH-*.zip dist/DIPTYCH-*.tar.gz 2>/dev/null | head -1)"
+          ls -la dist/DIPTYCH-*
+
   paper-pdf:
     name: Build paper PDF
     runs-on: ubuntu-latest

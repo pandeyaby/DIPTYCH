@@ -13,7 +13,7 @@ CI must fail on TODO/stub/hardcoded pass/missing violating twin.
 
 ## Deferred → green witness recipes (ZERODAY#41 uplift)
 
-Canonical detail: [`WITNESSES_ZERODAY.md`](./WITNESSES_ZERODAY.md)
+Canonical detail: [`WITNESSES.md`](./WITNESSES.md) (ZeroDay deferred-uplift section)
 
 | Op | Valid witness (ZeroDay domain) | Not allowed |
 |---|---|---|

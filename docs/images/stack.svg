@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="ZeroDay and AOMB products feeding DIPTYCH graders">
-  <rect width="1200" height="700" fill="#f8fafc"/>
-  <text x="40" y="48" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">Product adapters -> DIPTYCH graders</text>
-  <text x="40" y="78" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">ZeroDay &amp; AOMB emit schema-0.2 twins at pinned SHAs; DIPTYCH grades (trees not vendored).</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780" role="img" aria-label="ZeroDay and AOMB products feeding DIPTYCH graders">
+  <defs>
+    <marker id="down" markerWidth="12" markerHeight="12" refX="6" refY="10" orient="auto">
+      <path d="M0,0 L6,10 L12,0 Z" fill="#475569"/>
+    </marker>
+    <style type="text/css"><![CDATA[
+      .title { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 700; fill: #0f172a; }
+      .sub { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 16px; fill: #334155; }
+      .h { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 700; }
+      .body { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 16px; fill: #334155; }
+      .small { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 14px; fill: #475569; }
+      .accent { font-family: DejaVu Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #0e7490; }
+    ]]></style>
+  </defs>
 
-  <rect x="60" y="140" width="360" height="180" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="90" y="180" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#0e7490">ZeroDay</text>
-  <text x="90" y="220" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">pin fb5b39da</text>
-  <text x="90" y="250" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">full-8 probe twins</text>
-  <text x="90" y="280" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">cassettes / SARIF fingerprints</text>
+  <rect width="1400" height="780" fill="#f1f5f9"/>
+  <text x="48" y="52" class="title">Product adapters → DIPTYCH graders</text>
+  <text x="48" y="82" class="sub">ZeroDay &amp; AOMB emit schema-0.2 twins at pinned SHAs; this repo grades only (trees not vendored).</text>
 
-  <rect x="780" y="140" width="360" height="180" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="810" y="180" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#0e7490">AOMB</text>
-  <text x="810" y="220" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">pin 667e475</text>
-  <text x="810" y="250" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">full-8 probe twins</text>
-  <text x="810" y="280" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">fixtures / ranking smoke</text>
+  <!-- ZeroDay box -->
+  <rect x="72" y="130" width="420" height="200" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="100" y="175" class="h" fill="#0e7490">ZeroDay</text>
+  <text x="100" y="215" class="body">pin fb5b39da</text>
+  <text x="100" y="250" class="body">full-8 probe twins</text>
+  <text x="100" y="285" class="small">cassettes / SARIF fingerprints</text>
 
-  <line x1="240" y1="320" x2="240" y2="390" stroke="#64748b" stroke-width="3"/>
-  <polygon points="240,400 230,385 250,385" fill="#64748b"/>
-  <line x1="960" y1="320" x2="960" y2="390" stroke="#64748b" stroke-width="3"/>
-  <polygon points="960,400 950,385 970,385" fill="#64748b"/>
-  <text x="250" y="355" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">schema 0.2 envelopes</text>
-  <text x="780" y="355" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">schema 0.2 envelopes</text>
+  <!-- AOMB box -->
+  <rect x="908" y="130" width="420" height="200" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="936" y="175" class="h" fill="#0e7490">AOMB</text>
+  <text x="936" y="215" class="body">pin 667e475</text>
+  <text x="936" y="250" class="body">full-8 probe twins</text>
+  <text x="936" y="285" class="small">fixtures / ranking smoke</text>
 
-  <rect x="300" y="410" width="600" height="90" rx="14" fill="#e0f2fe" stroke="#0e7490" stroke-width="2"/>
-  <text x="360" y="450" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#0e7490">Adapter contract / conforming + violating twins</text>
-  <text x="400" y="480" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">Operator × {diptych_core, zeroday, aomb}</text>
+  <!-- arrows down -->
+  <line x1="282" y1="330" x2="282" y2="400" stroke="#475569" stroke-width="3.5" marker-end="url(#down)"/>
+  <line x1="1118" y1="330" x2="1118" y2="400" stroke="#475569" stroke-width="3.5" marker-end="url(#down)"/>
+  <text x="300" y="370" class="small">schema 0.2 envelopes</text>
+  <text x="920" y="370" class="small">schema 0.2 envelopes</text>
 
-  <line x1="600" y1="500" x2="600" y2="545" stroke="#64748b" stroke-width="3"/>
-  <polygon points="600,555 590,540 610,540" fill="#64748b"/>
+  <!-- contract band -->
+  <rect x="280" y="420" width="840" height="100" rx="8" fill="#e0f2fe" stroke="#0e7490" stroke-width="2.5"/>
+  <text x="340" y="465" class="accent">Adapter contract / conforming + violating twins</text>
+  <text x="400" y="500" class="body">Operator × {diptych_core, zeroday, aomb}</text>
 
-  <rect x="200" y="560" width="800" height="110" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-  <text x="230" y="595" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#0f172a">DIPTYCH harness (this repo)</text>
-  <text x="230" y="625" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#0e7490">grade · gate_axis_mutate · coverage/matrix.json</text>
-  <text x="230" y="650" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">No AUROC / model scores · pins only · no product-tree edits</text>
+  <line x1="700" y1="520" x2="700" y2="575" stroke="#475569" stroke-width="3.5" marker-end="url(#down)"/>
+
+  <!-- harness box -->
+  <rect x="180" y="590" width="1040" height="140" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2.5"/>
+  <text x="220" y="640" class="h" fill="#0f172a">DIPTYCH harness (this repo)</text>
+  <text x="220" y="678" class="accent">grade · gate_axis_mutate · coverage/matrix.json</text>
+  <text x="220" y="710" class="small">No AUROC / model scores · pins only · no product-tree edits · green = coverage + axis power</text>
 </svg>

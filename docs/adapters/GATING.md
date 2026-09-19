@@ -9,6 +9,7 @@
 Canonical contract paths in this harness repo:
 - `docs/adapters/CONTRACT.md`
 - `docs/adapters/GATING.md` (this file)
+- `docs/adapters/WITNESSES.md` (`gate_axis_mutate` / deferred-uplift recipes)
 - `docs/adapters/zeroday.md`
 - `docs/adapters/aomb.md`
 - `docs/adapters/OPERATOR_TABLE.md` / `ONEPAGER.md`
@@ -18,3 +19,5 @@ Canonical contract paths in this harness repo:
 protocol + handwritten controls first; model study in progress;
 `inconclusive` ≠ green; adapter greens only at pinned SHAs
 (`adapters/PINS.md`: ZeroDay@fb5b39da, AOMB@667e475).
+green×8×3 = coverage + axis power only — not RQ1–RQ5 answers
+(`paper/RQ_PROTOCOL.md` stays N/A).

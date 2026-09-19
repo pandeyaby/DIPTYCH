@@ -1,78 +1,27 @@
 # IEEE draft outline — DIPTYCH
 
-**Expanded draft:** [`drafts/ieee-draft.md`](ieee-draft.md)  
-**Living IEEEtran:** [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)  
-**Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)
+**Authoritative IEEEtran (source of truth):**
+[`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)
 
-## Abstract (stub → expanded in ieee-draft.md)
+**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
+**Companion stubs:** [`ieee-draft.md`](ieee-draft.md) (non-authoritative; trimmed)
 
-We grade agent-authored control systems with paired-trace hyperproperties. DIPTYCH
-couples executions that share a prefix, applies one controlled operator axis, and
-requires asymmetric verdicts plus power-on-axis. Eight operators cover open-loop and
-CRN closed-loop regimes. Product adapters emit probe twins; the harness grades.
+Do not invent AUROC / model scores. Do not edit ZeroDay / AOMB product trees.
 
-## I. Introduction
+| § | Topic (living `.tex`) |
+|---|------------------------|
+| I | Introduction / film metaphor |
+| II–IV | Taxonomy, audit, obstruction |
+| V–VI | Harness + operators + `gate_axis_mutate` |
+| VII | Evaluation **protocol** + green×8×3 coverage (not RQ answers) |
+| — | Related work |
+| — | **Discussion** — what green×8×3 proves vs does not; RQ N/A |
+| — | Threats to validity |
+| — | Conclusion |
+| App. | Witness / adapter audit trail → `docs/adapters/WITNESSES.md` |
 
-- Single-run demos overclaim calibration
-- 2-safety: bad thing is a *pair*
-- Film metaphor: one reel legal; calibration is the diptych
+**Offline fact:** green×8×3 = coverage + axis power at pins
+ZeroDay@`fb5b39da` / AOMB@`667e475` (`coverage/matrix.json`).
 
-## II. Background / related work / hyperproperty taxonomy
-
-- Hyperproperties / k-safety
-- CRN closed-loop coupling
-- Related: relational verification, RV for hyperproperties
-- Taxonomy table (trace vs 2-safety vs power-on-axis)
-
-## III. DIPTYCH model
-
-- Shared prefix, suffix probes, incomparability discard
-- Schema 0.2 envelope
-- Verdicts: pass / fail / inconclusive (inconclusive ≠ green)
-- Harness + `gate_axis_mutate`
-
-## IV. Operators (8-operator table)
-
-| Wave | Ops |
-|------|-----|
-| A | FREEZEDRY, RESEED, SCHEMAX |
-| B | SIGNFLIP, SATEXTEND, HISTSWAP |
-| C (CRN) | TRAJSWAP, VARSCALE |
-
-## V. Gates / methods
-
-- Manifest (8×{conforming,violating})
-- Contrast (asymmetric expected verdicts)
-- `gate_axis_mutate` power-on-axis
-- Stub rejection (TODO / hardcoded pass / empty traces)
-- Offline PoC: `./scripts/run_poc.sh`
-
-## VI. Adapters & pins
-
-- ZeroDay@`fb5b39daf88e37521aaee8526ae9d286cf74f341` (fb5b39da)
-- AOMB@`667e47538ae5b9c504187b7a73220d22aa8fb96f` (667e475)
-- See `adapters/PINS.md` (read-only; no product-tree edits)
-
-## VII. Evaluation protocol
-
-- Offline PoC (`./scripts/run_poc.sh`)
-- Green rule: twin contrast + `gate_axis_mutate` (no AUROC / invented model scores)
-- Adapter columns attributed via pins ZeroDay@fb5b39da / AOMB@667e475 only
-- Live coverage matrix from `coverage/matrix.json` (green×8×3; cite repo/CI facts only)
-- Model-study results table stays blank (`---`) until study completes
-- Figs: `docs/images/diptych-vs-single-trace.png`, `docs/images/stack.png`
-
-## VIII. Threats to validity / limitations (GATING-aligned)
-
-- No exploitability claims; localization ≠ exploitability
-- No AUROC / fabricated LLM scores as hyperproperty grade
-- Protocol + handwritten controls first; model study in progress
-- `inconclusive` ≠ green
-- Adapter columns green at pins (ZeroDay #41+#42, AOMB #18) — no invented scores
-- Product trees not vendored into this harness
-
-## IX. Conclusion
-
-See full prose in [`ieee-draft.md`](ieee-draft.md) and living
-[`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex).
-Checklist: [`paper/ARTIFACT_CHECKLIST.md`](../paper/ARTIFACT_CHECKLIST.md).
+**RQ1–RQ5:** harness scaffolding with **N/A** result cells
+(`paper/RQ_PROTOCOL.md`). Checklist: `paper/ARTIFACT_CHECKLIST.md`.

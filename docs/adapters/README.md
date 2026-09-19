@@ -21,7 +21,9 @@ Local Markdown copies in this directory are offline mirrors for CI/review. When 
 |-----|------|
 | CONTRACT | [`CONTRACT.md`](CONTRACT.md) |
 | GATING | [`GATING.md`](GATING.md) |
+| WITNESSES | [`WITNESSES.md`](WITNESSES.md) |
 | AOMB | [`aomb.md`](aomb.md) |
+| ZeroDay | [`zeroday.md`](zeroday.md) |
 | OPERATORS | [`OPERATORS.md`](OPERATORS.md) |
 | OPERATOR_TABLE | [`OPERATOR_TABLE.md`](OPERATOR_TABLE.md) |
 | ONEPAGER | [`ONEPAGER.md`](ONEPAGER.md) |
