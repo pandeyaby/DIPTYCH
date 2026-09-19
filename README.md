@@ -15,25 +15,49 @@ IEEE artifact harness. Schema `0.2`. Eight operators + `gate_axis_mutate`.
 
 ![ZeroDay and AOMB feed DIPTYCH graders](docs/images/stack.png)
 
-## Quick PoC
+## Quick PoC (≈5 minutes, first clone)
+
+**Need:** Git + **Python ≥ 3.10**. Core is stdlib-only (no `pip install` for the
+gate). Optional: `pip install pytest` for CI-parity tests.
 
 ```bash
+git clone https://github.com/pandeyaby/DIPTYCH.git
+cd DIPTYCH
 ./scripts/run_poc.sh
 # or: make poc
 ```
 
-Exit `0` means full-8 `diptych_core` cells are green (twin contrast + axis power).
-See [`examples/poc/`](examples/poc/).
+**Success = exit 0** and a printed **green×8×3** matrix: every operator’s
+`diptych_core` / `zeroday` / `aomb` cells are `green` with `axis_power=true`,
+plus `MATRIX CHECK OK` against [`examples/poc/expected_matrix_snippet.json`](examples/poc/expected_matrix_snippet.json).
+Also: `GATE PASS` and unit tests `OK`.
+
+```
+SIGNFLIP     green    green    green    True
+TRAJSWAP     green    green    green    True
+… (eight operators) …
+MATRIX CHECK OK (green×8×3; axis_power=true; matches examples/poc snippet)
+PoC OK
+```
+
+Details: [`examples/poc/`](examples/poc/). Refresh/print only: `make matrix`.
+
+**green×8×3 does not claim** accuracy, AUROC, model quality, or vulnerability
+finding — only harness coverage + `gate_axis_mutate` axis power at the adapter
+pins below.
 
 ## Paper
 
 Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
-- [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce)
-- [`paper/README.md`](paper/README.md) — compile notes + figure paths
+- [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce, CI PDF download)
+- [`paper/README.md`](paper/README.md) — compile notes + figure paths + CI artifact
 - [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft (must not contradict `.tex`)
 - [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan
+
+Figures: PNGs referenced in README/tex; editable SVG sources alongside under
+[`docs/images/`](docs/images/).
 
 ## Why no AUROC
 
@@ -75,7 +99,7 @@ ops/<op>/          # spec.yaml + operator.py
 controls/<op>/     # conforming.py + violating.py
 diptych-probes/    # full-8 fixture twins (source=diptych_core)
 coverage/matrix.json
-docs/images/       # diptych-vs-single-trace + stack diagrams
+docs/images/       # diptych-vs-single-trace + stack (PNG + SVG)
 docs/adapters/     # CONTRACT, GATING, ONEPAGER, zeroday, aomb
 examples/poc/
 scripts/run_poc.sh
@@ -90,6 +114,7 @@ drafts/ieee-draft.md
 - No exploit / PoC payloads
 - Localization ≠ exploitability
 - `inconclusive` ≠ green
+- green×8×3 = coverage / axis power only (not vuln-finding or accuracy)
 
 ## License
 

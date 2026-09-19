@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run full-8 DIPTYCH probe gates for AOMB and emit coverage matrix."""
+"""Run full-8 DIPTYCH probe gates (diptych_core) and emit coverage matrix."""
 
 from __future__ import annotations
 

@@ -10,7 +10,7 @@ full8:
 	PYTHONPATH=. python3 -m diptych.run_full8
 
 matrix: full8
-	@python3 -c 'import json;print(json.load(open("coverage/matrix.json"))["source_row"])'
+	@python3 scripts/print_matrix.py
 
 clean:
 	rm -rf reports/paired-probes __pycache__ diptych/__pycache__ tests/__pycache__

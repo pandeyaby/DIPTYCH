@@ -188,6 +188,27 @@ class TestDiptychFull8(unittest.TestCase):
             # Envelope cosmetics may change, but traces channels+meta must not.
             self.assertEqual(conf["traces"], after["traces"], name)
 
+    def test_live_matrix_matches_poc_snippet(self):
+        """Stranger PoC contract: coverage/matrix.json matches expected green×8×3."""
+        from diptych.gates import run_gates, write_matrix
+
+        report = run_gates()
+        self.assertTrue(report.ok, [f.__dict__ for f in report.failures])
+        write_matrix(report.matrix, ROOT / "coverage" / "matrix.json")
+
+        live = json.loads((ROOT / "coverage" / "matrix.json").read_text(encoding="utf-8"))
+        snippet = json.loads(
+            (ROOT / "examples" / "poc" / "expected_matrix_snippet.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(live["diptych_schema"], snippet["diptych_schema"])
+        self.assertEqual(live["source_row"], snippet["source_row"])
+        for op, expect in snippet["operators"].items():
+            cell = live["operators"][op]
+            for key, want in expect.items():
+                self.assertEqual(cell[key], want, f"{op}.{key}")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -34,11 +34,37 @@ pdflatex -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 pdflatex -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 ```
 
-### CI artifact
+## CI PDF artifact (download)
 
 GitHub Actions job **Build paper PDF** (`.github/workflows/ci.yml`) installs the
 same TeX packages, builds the PDF, and uploads workflow artifact
-`one-trace-is-not-enough-pdf`. Download it from the Actions run → Artifacts.
+**`one-trace-is-not-enough-pdf`**.
+
+1. https://github.com/pandeyaby/DIPTYCH/actions → pick a green run
+2. Artifacts → **`one-trace-is-not-enough-pdf`** → download zip
+3. Or: `gh run download <RUN_ID> -n one-trace-is-not-enough-pdf`
+
+## Reproduce the coverage matrix (pin SHAs)
+
+From repository root (Python ≥ 3.10, stdlib-only):
+
+```bash
+./scripts/run_poc.sh    # exit 0 → GATE PASS + MATRIX CHECK OK
+make matrix             # print green×8×3 table only
+```
+
+Live cells: `coverage/matrix.json`. Expected stranger contract:
+`examples/poc/expected_matrix_snippet.json`.
+
+| Adapter | Short | Full SHA |
+|---------|-------|----------|
+| ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
+| AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
+
+**green×8×3** = twin contrast + `gate_axis_mutate` axis power across
+`diptych_core` × `zeroday` × `aomb` for eight operators. It is **not** an
+accuracy, AUROC, or vulnerability-finding claim. Model-study Table
+`tab:placeholder` stays blank (`---`) until real data exists.
 
 ## Section map (authoritative)
 
@@ -58,12 +84,13 @@ same TeX packages, builds the PDF, and uploads workflow artifact
 
 ## Figures (repo paths)
 
-| Caption role | Path |
-|--------------|------|
-| One film vs coupled diptych | `docs/images/diptych-vs-single-trace.png` |
-| Adapters feed DIPTYCH graders | `docs/images/stack.png` |
+| Caption role | Path (PNG used by tex/README) | Editable source |
+|--------------|-------------------------------|-----------------|
+| One film vs coupled diptych | `docs/images/diptych-vs-single-trace.png` | `.svg` sibling |
+| Adapters feed DIPTYCH graders | `docs/images/stack.png` | `.svg` sibling |
 
 Do **not** invent new results figures; these are architecture / protocol diagrams only.
+Captions must not imply model scores or exploit findings.
 
 ## Provenance
 

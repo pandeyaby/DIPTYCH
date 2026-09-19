@@ -1,6 +1,6 @@
 # One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems
 
-**Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)  
+**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
 **Artifact:** https://github.com/pandeyaby/DIPTYCH · schema `0.2`  
 **Authoritative IEEEtran:** [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)  
 **Artifact checklist:** [`paper/ARTIFACT_CHECKLIST.md`](../paper/ARTIFACT_CHECKLIST.md)  
