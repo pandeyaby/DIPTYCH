@@ -4,7 +4,9 @@
 
 **Venue target:** IEEE (artifact-friendly).
 
-**Full draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
+**Living IEEEtran source (authoritative):** [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)  
+**Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)  
+**Markdown draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
 **IEEE skeleton:** [`drafts/ieee-outline.md`](drafts/ieee-outline.md)
 
 ## Thesis
@@ -27,18 +29,21 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 - No AUROC / model-score fields in graded envelopes.
 - Adapters do not fork product trees into this repo; they pin SHAs.
 
-## Outline → draft map
+## Outline → IEEEtran map (`paper/one-trace-is-not-enough.tex`)
 
-| Section | Draft |
-|---------|--------|
-| 1. Introduction | §I in [`drafts/ieee-draft.md`](drafts/ieee-draft.md) |
-| 2. Hyperproperty framing + related work | §II |
-| 3. Operator semantics | §IV |
-| 4. Harness: schema, gates, axis mutate | §III |
-| 5. Adapters: ZeroDay@fb5b39da, AOMB@667e475 | §V.C |
-| 6. Artifact evaluation (live matrix) | §VI |
-| 7. Limitations & ethics / threats | §VII–VIII |
-| 8–9. Related work / conclusion | §II, §IX |
+| Topic | TeX |
+|-------|-----|
+| Introduction | §I |
+| Motivating example | §II `sec:motivating` |
+| Property taxonomy | §III `sec:taxonomy` |
+| Spec audit + confound | §IV `sec:audit` |
+| Harness + `gate_axis_mutate` | §V `sec:harness` |
+| Eight operators | §VI `sec:operators` |
+| Metrics (defs only) | `sec:metrics` |
+| **Evaluation protocol** + ZeroDay/AOMB pins | **§VII `sec:protocol`** |
+| Related work | `sec:related` |
+| Threats | `sec:threats` |
+| Conclusion | final § |
 
 ## Artifact
 

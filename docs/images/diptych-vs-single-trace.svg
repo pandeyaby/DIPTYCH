@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="One film versus coupled diptych">
+  <rect width="1200" height="640" fill="#f8fafc"/>
+  <text x="40" y="48" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">One film vs. the diptych</text>
+  <text x="40" y="78" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">Single-trace demos look legal; calibration is graded only on a coupled pair.</text>
+
+  <rect x="40" y="120" width="520" height="460" rx="16" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="64" y="158" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#b45309">Single trace (insufficient)</text>
+  <g font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#b45309">
+    <rect x="90" y="220" width="70" height="100" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="112" y="275">t0</text>
+    <rect x="175" y="220" width="70" height="100" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="197" y="275">t1</text>
+    <rect x="260" y="220" width="70" height="100" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="282" y="275">t2</text>
+    <rect x="345" y="220" width="70" height="100" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="367" y="275">t3</text>
+    <rect x="430" y="220" width="70" height="100" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="450" y="275">tn</text>
+  </g>
+  <line x1="90" y1="360" x2="470" y2="360" stroke="#b45309" stroke-width="3"/>
+  <text x="90" y="395" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">One execution / one seed / one cassette</text>
+  <text x="90" y="425" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#475569">Local invariants may hold.</text>
+  <rect x="90" y="460" width="380" height="70" rx="10" fill="#fff7ed" stroke="#b45309" stroke-width="2"/>
+  <text x="155" y="505" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#b45309">Looks legal ` calibrated</text>
+
+  <rect x="640" y="120" width="520" height="460" rx="16" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="664" y="158" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#0e7490">Coupled pair (DIPTYCH)</text>
+  <rect x="680" y="200" width="440" height="80" rx="10" fill="#e0f2fe" stroke="#0e7490" stroke-width="2"/>
+  <text x="720" y="248" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="15" fill="#0e7490">Shared prefix (open-loop shape / CRN point)</text>
+  <rect x="680" y="310" width="200" height="110" rx="10" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
+  <text x="735" y="355" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#15803d">Trace A</text>
+  <text x="705" y="385" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">conforming ’ pass</text>
+  <rect x="920" y="310" width="200" height="110" rx="10" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="975" y="355" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#b91c1c">Trace B</text>
+  <text x="950" y="385" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#475569">violating ’ fail</text>
+  <line x1="880" y1="365" x2="920" y2="365" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0f172a"/></marker></defs>
+  <text x="845" y="445" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" fill="#0f172a">one controlled axis</text>
+  <rect x="680" y="470" width="440" height="70" rx="10" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
+  <text x="720" y="515" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#15803d">Only the pair = calibrated (+ gate_axis_mutate)</text>
+</svg>

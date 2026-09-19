@@ -1,7 +1,8 @@
 # IEEE draft outline — DIPTYCH
 
 **Expanded draft:** [`drafts/ieee-draft.md`](ieee-draft.md)  
-**Authors:** Abhinav Pandey, Abhishek Pandey (affiliation placeholders)
+**Living IEEEtran:** [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)  
+**Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)
 
 ## Abstract (stub → expanded in ieee-draft.md)
 
@@ -52,11 +53,12 @@ CRN closed-loop regimes. Product adapters emit probe twins; the harness grades.
 - AOMB@`667e47538ae5b9c504187b7a73220d22aa8fb96f` (667e475)
 - See `adapters/PINS.md` (read-only; no product-tree edits)
 
-## VII. Evaluation
+## VII. Evaluation protocol
 
 - Offline PoC (`./scripts/run_poc.sh`)
-- Live coverage matrix from `coverage/matrix.json`
-- Cite only repo/CI facts — no AUROC, no invented model scores
+- Green rule: twin contrast + `gate_axis_mutate` (no AUROC / invented model scores)
+- Adapter columns attributed via pins ZeroDay@fb5b39da / AOMB@667e475 only
+- Live coverage matrix from `coverage/matrix.json` (cite repo/CI facts only)
 
 ## VIII. Threats to validity / limitations
 
