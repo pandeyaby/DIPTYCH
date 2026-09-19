@@ -321,8 +321,11 @@ def run_gates() -> Report:
         "operators": matrix_ops,
         "notes": (
             "diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; "
-            "zeroday=green and aomb=green at pins ZeroDay@fb5b39daf88e37521aaee8526ae9d286cf74f341 "
-            "(merged #41+#42) and AOMB@667e47538ae5b9c504187b7a73220d22aa8fb96f (merged #18); "
+            "zeroday=green and aomb=green from product CI at pins "
+            "ZeroDay@fb5b39daf88e37521aaee8526ae9d286cf74f341 "
+            "(PR #42 paired-probe + gate_axis_mutate green on main; also #41) and "
+            "AOMB@667e47538ae5b9c504187b7a73220d22aa8fb96f "
+            "(PR #18 diptych-adapter-gate + gate_axis_mutate green on main); "
             "no AUROC / invented model scores"
         ),
     }
