@@ -31,14 +31,17 @@ Typical IEEE conference limits (confirm against the chosen CFP):
 
 | Item | Usual budget | DIPTYCH note |
 |------|--------------|--------------|
-| Main body | **6 pages** (+1 refs often allowed) | Living draft; trim related-work / protocol prose first if over |
+| Main body | **6 pages** (+1 refs often allowed) | Living draft; trim related-work density and duplicate pin prose first if over; Discussion owns green×8×3 vs RQ N/A |
 | References | Often excluded or +1 page | `\bibliographystyle{IEEEtran}` + `refs.bib` |
-| Figures | Count toward body | Two architecture figures only (`diptych-vs-single-trace`, `stack`) |
+| Figures | Count toward body | Two architecture figures only (`diptych-vs-single-trace`, `stack`) — SVG+PNG refreshed for print clarity |
 | Tables | Count toward body | `tab:ops`, `tab:coverage`, blank `tab:placeholder`, audit/taxonomy |
+| Appendix | Often counts toward body | Short witness pointer (`sec:witnesses`); recipes live in `docs/adapters/WITNESSES.md` |
 
 **Trim order if over length (do not invent results):** (1) related-work density,
-(2) protocol command blocks → cite `ARTIFACT_CHECKLIST.md`, (3) duplicate
-pin/SHA prose, (4) never fill `tab:placeholder` with placeholder numbers.
+(2) duplicate pin/SHA prose (Discussion already states the green rule),
+(3) protocol command blocks → cite `ARTIFACT_CHECKLIST.md`,
+(4) never fill `tab:placeholder` with placeholder numbers.
+**Markdown drafts** under `drafts/` are stubs; do not re-expand them past the `.tex`.
 
 **Build PDF locally:** `make paper` (requires `latexmk` + TeX Live with
 `IEEEtran`). **CI fallback:** job `paper-pdf` in `.github/workflows/ci.yml`
@@ -78,7 +81,7 @@ Package a reviewer-facing zip (or GitHub release tarball) that reproduces
 | PoC notes | `ARTIFACT_NOTES.txt` + optional `artifact/matrix_snapshot.txt` |
 | Paper PDF | `paper/one-trace-is-not-enough.pdf` (from `make paper` or CI artifact) |
 | Paper source | `paper/*.tex`, `paper/refs.bib`, `docs/images/*` |
-| RQ / anon docs | `paper/RQ_PROTOCOL.md`, `paper/ANON.md` |
+| RQ / anon / witnesses | `paper/RQ_PROTOCOL.md`, `paper/ANON.md`, `paper/WITNESSES.md` |
 | Checklists | `paper/ARTIFACT_CHECKLIST.md`, this file (`SUBMISSION.md`) |
 | License | `LICENSE` |
 
@@ -121,12 +124,14 @@ pip install pytest && PYTHONPATH=. python -m pytest -q
 
 - [ ] PDF builds (`make paper` or CI `paper-pdf`)
 - [ ] `./scripts/run_poc.sh` exit 0; matrix matches snippet
-- [ ] `make artifact` / `./scripts/pack_artifact.sh` produces zip with CODE_SHA + matrix
+- [ ] `make artifact` / `./scripts/pack_artifact.sh` produces zip with CODE_SHA + matrix (CI dry-runs)
 - [ ] Pins in PDF / checklist match `adapters/PINS.md`
 - [ ] Table `tab:ops` coupling + graded channels match
       `docs/adapters/OPERATOR_TABLE.md` / `ops/*/spec.yaml`
 - [ ] Table `tab:placeholder` has **no** numeric model scores
 - [ ] RQ1–RQ5 result cells stay N/A (`paper/RQ_PROTOCOL.md`)
+- [ ] Discussion states green×8×3 proves coverage+axis power only; not RQ answers
+- [ ] Witness appendix / `docs/adapters/WITNESSES.md` present for reviewer audit
 - [ ] Threats § lists concrete DIPTYCH limits (pins, inconclusive, controls, coupling)
 - [ ] Venue name + page limit filled in this file
 - [ ] Anonymization path ready if needed (`paper/ANON.md`)
@@ -167,5 +172,6 @@ author block in the `.tex`.
 - ZeroDay / AOMB are **pins**, not in-repo product edits.
 
 See also: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md), [`NOTES.md`](NOTES.md),
-[`RQ_PROTOCOL.md`](RQ_PROTOCOL.md), [`ANON.md`](ANON.md),
-[`docs/adapters/GATING.md`](../docs/adapters/GATING.md).
+[`RQ_PROTOCOL.md`](RQ_PROTOCOL.md), [`ANON.md`](ANON.md), [`WITNESSES.md`](WITNESSES.md),
+[`docs/adapters/GATING.md`](../docs/adapters/GATING.md),
+[`docs/adapters/WITNESSES.md`](../docs/adapters/WITNESSES.md).

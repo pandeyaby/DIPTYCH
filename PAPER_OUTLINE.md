@@ -45,8 +45,10 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 | Metrics (defs only) | `sec:metrics` |
 | **Evaluation protocol** + pins + Table `tab:coverage` | **§VII `sec:protocol`** |
 | Related work | `sec:related` |
-| Threats / non-claims | `sec:threats` |
+| Discussion (green×8×3 vs RQ N/A) | `sec:discussion` |
+| Threats | `sec:threats` |
 | Conclusion | final § |
+| Witness appendix | `sec:witnesses` → `docs/adapters/WITNESSES.md` |
 | Figs | `fig:diptych`, `fig:stack` → `docs/images/` |
 
 ## Artifact

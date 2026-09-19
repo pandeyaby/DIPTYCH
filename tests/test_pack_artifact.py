@@ -54,6 +54,9 @@ class TestPackArtifact(unittest.TestCase):
                 "paper/SUBMISSION.md",
                 "paper/RQ_PROTOCOL.md",
                 "paper/ANON.md",
+                "paper/WITNESSES.md",
+                "docs/adapters/WITNESSES.md",
+                "docs/adapters/GATING.md",
                 "scripts/run_poc.sh",
                 "LICENSE",
             )

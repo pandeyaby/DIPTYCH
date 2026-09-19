@@ -65,7 +65,7 @@ cp -a "$ROOT/scripts/pack_artifact.sh" "$DEST/scripts/"
 
 # Key paper / protocol docs (no fabricated scores)
 for f in SUBMISSION.md ARTIFACT_CHECKLIST.md NOTES.md README.md RQ_PROTOCOL.md ANON.md \
-         one-trace-is-not-enough.tex refs.bib; do
+         WITNESSES.md one-trace-is-not-enough.tex refs.bib; do
   if [[ -f "$ROOT/paper/$f" ]]; then
     cp -a "$ROOT/paper/$f" "$DEST/paper/"
   fi

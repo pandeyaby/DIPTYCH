@@ -10,6 +10,7 @@
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 **Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
 **RQ scaffolding:** [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) (RQ1–RQ5; results N/A)  
+**Witnesses:** [`WITNESSES.md`](WITNESSES.md) · [`docs/adapters/WITNESSES.md`](../docs/adapters/WITNESSES.md)  
 **Anonymization switch:** [`ANON.md`](ANON.md)  
 **Open items:** [`NOTES.md`](NOTES.md)
 
@@ -92,8 +93,10 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 | — | `sec:metrics` | Metrics (definitions only) |
 | **VII** | **`sec:protocol`** / **`sec:rqs`** | **Evaluation protocol** + RQ1–RQ5 scaffolding (N/A cells) + ZeroDay/AOMB pins + Table `tab:coverage`; **no model scores** |
 | VIII | `sec:related` | Related work (real BibTeX citations) |
-| IX | `sec:threats` | Threats (pin drift, inconclusive, control bias, coupling limits) + non-claims |
-| X | — | Conclusion |
+| — | `sec:discussion` | What green×8×3 proves vs does not; RQ N/A cross-link |
+| — | `sec:threats` | Threats (pin drift, inconclusive, control bias, coupling) |
+| — | — | Conclusion |
+| App. | `sec:witnesses` | Witness / adapter audit trail → `docs/adapters/WITNESSES.md` |
 
 ## Figures (repo paths)
 
@@ -113,4 +116,4 @@ Authoritative author IEEEtran source, kept consistent with:
 - Offline green×8×3 = harness coverage + `gate_axis_mutate` axis power from `coverage/matrix.json` (not vulnerability / accuracy claims)
 - Explicit non-claims (no invented AUROC / F1 / model scores; protocol + controls first)
 
-Markdown drafts under `drafts/` remain for prose iteration; they must not contradict the `.tex`.
+Markdown drafts under `drafts/` are **stubs**; the `.tex` is source of truth.

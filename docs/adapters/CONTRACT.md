@@ -91,7 +91,7 @@ Cell is **green** only when: conforming control → `pass`, violating → `fail`
 
 ## ZeroDay deferred-uplift witnesses (SIGNFLIP / TRAJSWAP / VARSCALE)
 
-See `WITNESSES_ZERODAY.md` + `zeroday.md`. Summary:
+See `WITNESSES.md` + `zeroday.md`. Summary:
 
 - **SIGNFLIP:** signed continuous `score_margin` (top1−top2), not SARIF level renames.
 - **TRAJSWAP:** locate→verify CRN with nonempty `closed_loop_residual`; segment swap power.
