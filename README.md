@@ -51,8 +51,9 @@ pins below.
 Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
+- [`paper/SUBMISSION.md`](paper/SUBMISSION.md) — camera-ready / artifact zip package (venue TBD; corresponding author Abhinav)
 - [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce, CI PDF download)
-- [`paper/README.md`](paper/README.md) — compile notes + figure paths + CI artifact
+- [`paper/README.md`](paper/README.md) — compile notes (`make paper` / CI `paper-pdf` fallback) + figure paths
 - [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft (must not contradict `.tex`)
 - [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan
 
@@ -93,16 +94,17 @@ Details: [`adapters/PINS.md`](adapters/PINS.md).
 ## Layout
 
 ```
-paper/             # living IEEEtran source
+paper/             # living IEEEtran source + SUBMISSION.md camera-ready package
 diptych/           # core package (contract, grade, gates, axis mutate)
 ops/<op>/          # spec.yaml + operator.py
 controls/<op>/     # conforming.py + violating.py
 diptych-probes/    # full-8 fixture twins (source=diptych_core)
 coverage/matrix.json
 docs/images/       # diptych-vs-single-trace + stack (PNG + SVG)
-docs/adapters/     # CONTRACT, GATING, ONEPAGER, zeroday, aomb
+docs/adapters/     # CONTRACT, GATING, OPERATOR_TABLE, ONEPAGER, zeroday, aomb
 examples/poc/
 scripts/run_poc.sh
+Makefile           # poc | test | matrix | paper (latexmk; CI paper-pdf fallback)
 PAPER_OUTLINE.md
 drafts/ieee-draft.md
 .github/workflows/ci.yml

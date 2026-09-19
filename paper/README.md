@@ -8,12 +8,23 @@
 **Authors:** Abhinav Pandey, Abhishek Pandey (Meta)
 
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
+**Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
 **Open items:** [`NOTES.md`](NOTES.md)
 
 ## Compile locally
 
+**Preferred (repo root):**
+
+```bash
+make paper
+```
+
 Requires a TeX distribution with `IEEEtran.cls`, `IEEEtran.bst`, and `latexmk`
 (Debian/Ubuntu: `texlive-publishers`, `texlive-latex-extra`, `latexmk`).
+If `latexmk` is missing, `make paper` exits non-zero and points at the CI
+fallback below (do not invent PDF content).
+
+Equivalent from `paper/`:
 
 ```bash
 cd paper
@@ -34,11 +45,11 @@ pdflatex -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 pdflatex -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 ```
 
-## CI PDF artifact (download)
+## CI PDF artifact (fallback / download)
 
 GitHub Actions job **Build paper PDF** (`.github/workflows/ci.yml`) installs the
 same TeX packages, builds the PDF, and uploads workflow artifact
-**`one-trace-is-not-enough-pdf`**.
+**`one-trace-is-not-enough-pdf`**. Use this when local TeX is absent.
 
 1. https://github.com/pandeyaby/DIPTYCH/actions → pick a green run
 2. Artifacts → **`one-trace-is-not-enough-pdf`** → download zip
@@ -75,11 +86,11 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 | III | `sec:taxonomy` | Property taxonomy |
 | IV | `sec:audit` | Spec audit + Proposition 1 |
 | V | `sec:harness` | Diptych harness + `gate_axis_mutate` |
-| VI | `sec:operators` | Eight operators (coupling = harness enum) |
+| VI | `sec:operators` | Eight operators (Table `tab:ops`: coupling + graded channels = harness enums) |
 | — | `sec:metrics` | Metrics (definitions only) |
 | **VII** | **`sec:protocol`** | **Evaluation protocol** + ZeroDay/AOMB case studies + Table `tab:coverage`; **no model scores** |
 | VIII | `sec:related` | Related work (real BibTeX citations) |
-| IX | `sec:threats` | Threats + non-claims (GATING-aligned) |
+| IX | `sec:threats` | Threats (pin drift, inconclusive, control bias, coupling limits) + non-claims |
 | X | — | Conclusion |
 
 ## Figures (repo paths)
