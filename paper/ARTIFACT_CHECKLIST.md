@@ -14,7 +14,7 @@ It lists **what ships**, **how to reproduce**, and **what we refuse to claim**.
 | Operator specs + implementations | `ops/<OP>/spec.yaml`, `ops/<OP>/operator.py` |
 | Full-8 fixture twins (`source=diptych_core`) | `diptych-probes/<OP>/{conforming,violating}/` |
 | Adapter pins (read-only SHAs) | `adapters/PINS.md` |
-| CI | `.github/workflows/ci.yml` |
+| CI (pytest + PoC + PDF build) | `.github/workflows/ci.yml` |
 
 **Out of scope for this artifact:** ZeroDay / AOMB *product* trees are **not**
 vendored or edited here. They emit schema-`0.2` twins at pinned SHAs; DIPTYCH grades.
@@ -69,6 +69,7 @@ matrix says so—attributed to pin/merge facts, not invented model scores.
 | Item | Path |
 |------|------|
 | Authoritative IEEEtran | `paper/one-trace-is-not-enough.tex` |
+| Bibliography (BibTeX) | `paper/refs.bib` |
 | Compile notes | `paper/README.md` |
 | Open items | `paper/NOTES.md` |
 | Diagram: one film vs diptych | `docs/images/diptych-vs-single-trace.{png,svg}` |
@@ -76,13 +77,15 @@ matrix says so—attributed to pin/merge facts, not invented model scores.
 | Markdown prose draft | `drafts/ieee-draft.md` |
 | Outline | `PAPER_OUTLINE.md`, `drafts/ieee-outline.md` |
 
-Compile (from `paper/`, TeX with `IEEEtran.cls`):
+Compile (from `paper/`, TeX with `IEEEtran.cls` + BibTeX):
 
 ```bash
-pdflatex one-trace-is-not-enough.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
 ```
 
-Figures resolve via `\graphicspath` to `../docs/images/`.
+Figures resolve via `\graphicspath` to `../docs/images/`. CI job **Build paper PDF**
+uploads `one-trace-is-not-enough.pdf` as workflow artifact
+`one-trace-is-not-enough-pdf`.
 
 ## 5. Non-claims (must match GATING + paper §threats)
 
@@ -93,6 +96,8 @@ Figures resolve via `\graphicspath` to `../docs/images/`.
 - **`inconclusive` ≠ green.**
 - **Protocol + handwritten controls first**; model study is in progress.
 - **Pins only** for ZeroDay / AOMB; no product-tree edits in this repo.
+- **green×8×3** = harness coverage + axis power (`gate_axis_mutate` +
+  conforming/violating controls) — **not** vulnerability-finding or accuracy.
 
 ## 6. Reviewer smoke path
 

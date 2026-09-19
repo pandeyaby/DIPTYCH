@@ -31,3 +31,35 @@ jobs:
       - name: PoC (full-8 gate)
         run: ./scripts/run_poc.sh
         # Fail the job on any non-zero exit (default shell behavior).
+
+  paper-pdf:
+    name: Build paper PDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live (IEEEtran + latexmk + BibTeX)
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-publishers \
+            texlive-science \
+            latexmk \
+            lmodern
+
+      - name: Build PDF (fail on compile errors)
+        working-directory: paper
+        run: |
+          latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: one-trace-is-not-enough-pdf
+          path: paper/one-trace-is-not-enough.pdf
+          if-no-files-found: error

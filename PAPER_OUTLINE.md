@@ -5,7 +5,7 @@
 **Venue target:** IEEE (artifact-friendly).
 
 **Living IEEEtran source (authoritative):** [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)  
-**Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)  
+**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
 **Artifact checklist:** [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md)  
 **Markdown draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
 **IEEE skeleton:** [`drafts/ieee-outline.md`](drafts/ieee-outline.md)
