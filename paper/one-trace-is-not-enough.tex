@@ -1,14 +1,15 @@
 %% One Trace Is Not Enough
 %% IEEE conference submission draft (AUTHORITATIVE living source)
-%% STATUS: discussion + witness appendix + figure polish; Section VII remains PROTOCOL (no model scores).
+%% STATUS: submission polish (venue TODOs, page budget, ANON dry-run, pins frozen); Section VII = PROTOCOL (no model scores).
 %% Artifact: https://github.com/pandeyaby/DIPTYCH
-%% Adapter pins (read-only): ZeroDay@fb5b39da · AOMB@667e475
+%% Adapter pins (read-only, frozen as of main 84930b24): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
 %% Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md · Notes: paper/NOTES.md
 %% RQ: paper/RQ_PROTOCOL.md · Witnesses: paper/WITNESSES.md · docs/adapters/WITNESSES.md
 %% Anon: paper/ANON.md · Pack: make artifact / scripts/pack_artifact.sh
 %% Figures: ../docs/images/{diptych-vs-single-trace,stack}.{png,svg}
 %% Build: make paper (latexmk) · CI fallback: workflow job paper-pdf
+%% Page budget: record after latexmk in paper/NOTES.md + SUBMISSION.md (trim related-work / pin prose first)
 
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -198,35 +199,18 @@
 	
 	\subsection{The orchestrator task}
 	
-	An agent is asked to author a single Python component, an \emph{adaptive
-		traffic orchestrator}, that observes a simulated distributed fleet and
-	returns control decisions each tick. The public contract is three methods:
-	a constructor from configuration, a \texttt{tick} method mapping an
-	observation to a decision bundle, and a state serialization pair used to
-	kill and restore the process. Internal structure is entirely the agent's
-	choice.
+	An agent authors an adaptive traffic orchestrator: constructor, \texttt{tick}
+	(observation$\to$decision), and serialize/restore. Structure is the agent's
+	choice. Observations report rates, latency, errors, queues, capacity,
+	heartbeats, topology, and directives; decisions cover admission, shedding,
+	routing, concurrency, timeouts, ejections, replicas, alerts, and telemetry.
+	Fifteen sealed adversarial scenarios (steady state through brownout,
+	partition, retry storms, cascade, hunting, heavy tails, flaps, rollout, and
+	serialize-restart) score twenty-two invariants.
 	
-	Each observation reports per-endpoint incoming request rate by priority,
-	recent latency samples, error rate, queue depth, in-flight count, capacity,
-	heartbeat gap, and ejection status, together with a service topology that
-	may change between ticks and a set of operator directives such as a latency
-	objective. Each decision may set admission verdicts per priority, shed
-	rates, routing targets, concurrency limits, timeouts, rate limits,
-	ejections, replica deltas, alerts, and telemetry events.
-	
-	Grading runs the artifact through fifteen sealed adversarial scenarios
-	spanning steady state, diurnal load, regional brownout, silent partition,
-	retry storms, cascade attempts, weight changes under load, setpoint hunting,
-	heavy-tail pressure, correlated latency spikes, flapping endpoints, node
-	rollout, and a full serialization-and-restart cycle. The scenarios are
-	scored against twenty-two stated invariants.
-	
-	The task is a good testbed for three reasons. It is long-horizon, with
-	scenarios running to millions of simulated ticks. It is deterministic by
-	construction, which is a precondition for paired execution. And its
-	invariants were written by systems practitioners rather than by formal
-	methods researchers, so the classification errors we find are the errors a
-	realistic specification actually contains.
+	The task is a good testbed: long-horizon (millions of ticks), deterministic
+	(needed for pairing), and written by systems practitioners---so
+	misclassifications are realistic, not formal-methods artifacts.
 	
 	\subsection{Two orchestrators a trace grader cannot separate}
 	\label{sec:twoorch}
@@ -258,7 +242,7 @@
 	
 	\begin{figure}[t]
 		\centering
-		\includegraphics[width=\columnwidth]{diptych-vs-single-trace.png}
+		\includegraphics[width=0.92\columnwidth]{diptych-vs-single-trace.png}
 		\caption{One film versus the diptych. Left: a single execution may satisfy
 			local invariants yet provide no counterfactual twin. Right: calibration
 			is graded only on a coupled pair that shares a prefix and differs on one
@@ -664,76 +648,46 @@
 	\end{table*}
 	
 	Preservation intent (exogenous identity except the varied axis) is enforced by
-	the coupling enum and graded fields above; two operators deserve comment
-	because their construction is subtle.
-	
-	\textsc{TrajSwap} must hold aggregate statistics fixed while changing the
-	recent trajectory. We construct the twin by permuting the samples inside a
-	comparison window, which preserves the multiset exactly and therefore
-	preserves every order-insensitive statistic, then choosing the two
-	permutations so that one window ends in improvement and the other ends in
-	degradation. An artifact that summarizes history with an order-insensitive
-	statistic produces identical decisions on both arms and fails the probe by
-	construction, which is the intended discrimination.
-	
-	\textsc{SatExtend} must hold the immediately observed error fixed while
-	varying how long the artifact sat against a ceiling. We construct the twin
-	by extending the saturated segment and splicing an identical release
-	segment onto both arms. The comparator reads the first post-release response
-	magnitude. An artifact with an unbounded integrator responds more strongly
-	on the longer arm, which is the anti-windup violation stated in prose in the
-	source specification and, as Section \ref{sec:audit} notes, not detectable
-	without this pair.
-	
-	\textsc{SchemaX} is the one operator that is not a twin of a single
-	scenario. It compares emission records of a common event type across two
-	different scenarios, which makes it $2$-safety over the trace set rather
-	than over a perturbation pair. We include it in the same framework because
-	the falsification structure is identical: two traces, one predicate, no
-	single-run witness.
+	the coupling enum and graded fields above. Three constructions deserve a note.
+	\textsc{TrajSwap} permutes samples inside a window (multiset-fixed) so one arm
+	ends improving and the other degrading; order-insensitive summaries fail by
+	construction. \textsc{SatExtend} extends the saturated segment with an identical
+	release splice on both arms and compares the first post-release response;
+	unbounded integrators fail the longer arm (Section~\ref{sec:audit}).
+	\textsc{SchemaX} compares emission records of a common event type across two
+	scenarios ($2$-safety over a trace set rather than a perturbation pair) with
+	the same falsification shape: two traces, one predicate, no single-run witness.
 	
 	\section{Metrics}
 	\label{sec:metrics}
 	
 	\subsection{Probe power}
 	
-	A probe is useless if it never fires on a violating artifact or always fires
-	on a conforming one. For each operator we define power against the control
-	artifacts of Section \ref{sec:protocol}: the fraction of violating controls
-	on which the probe returns a fail, and the fraction of conforming controls
-	on which it returns a pass. Probes that do not achieve a declared power
-	floor against ground truth are excluded from scoring rather than reported
-	with a caveat.
+	For each operator, power against Section~\ref{sec:protocol} controls is the
+	fraction of violating controls on which the probe returns fail and conforming
+	controls on which it returns pass. Probes below a declared power floor are
+	excluded from scoring rather than reported with a caveat.
 	
 	\subsection{Separation index}
 	
-	The central claim of the paper is that hyperproperty grading distinguishes
-	artifacts that trace-property grading does not. We measure this directly.
-	For a pair of artifacts $A$ and $B$, let $\mathrm{eq}_{\mathrm{tr}}(A,B)$
-	hold when their trace-property score vectors agree within tolerance. The
-	separation index is the fraction of such trace-equivalent pairs on which the
-	hyperproperty score vectors disagree. An index near zero refutes the paper's
-	premise; an index near one establishes that hyperproperty probes carry
-	information that no amount of trace grading recovers.
+	For artifacts $A,B$, let $\mathrm{eq}_{\mathrm{tr}}(A,B)$ hold when their
+	trace-property score vectors agree within tolerance. The separation index is
+	the fraction of such pairs on which hyperproperty score vectors disagree.
+	Near zero refutes the premise; near one shows paired probes carry information
+	trace grading cannot recover.
 	
 	\subsection{Predictive validity}
 	
-	Discrimination is not automatically useful. We therefore hold out a subset
-	of adversarial scenarios, score artifacts on hyperproperty probes derived
-	only from the training scenarios, and measure rank correlation between probe
-	score and held-out outcome quality. The comparison baseline is the same
-	correlation computed from trace-property scores alone. The hypothesis is
-	that hyperproperty probes predict held-out robustness better, because
-	calibration generalizes across scenarios while scenario-specific outcome
-	tuning does not.
+	Hold out adversarial scenarios; score probes built only from training
+	scenarios; compare rank correlation of hyperproperty vs.\ trace-property
+	scores with held-out outcome quality. Hypothesis: calibration generalizes
+	better than scenario-specific outcome tuning. No correlations are claimed yet.
 	
 	\subsection{Cost}
 	
-	The probe-tree formulas (Proposition~\ref{prop:prefix},
-	Corollary~\ref{cor:tree}, Definition~\ref{def:cost}) are a \emph{protocol
-	cost model}. A future model study may report measured tick evaluations per
-	probe against the $2n$ naive baseline and the realized amortization factor
-	$\alpha$; those measurements are not claimed here and must not be invented.
+	Proposition~\ref{prop:prefix}, Corollary~\ref{cor:tree}, and
+	Definition~\ref{def:cost} are a \emph{protocol} cost model. Measured tick
+	counts and realized $\alpha$ are not claimed here and must not be invented.
 	
 	\section{Evaluation Protocol}
 	\label{sec:protocol}
@@ -762,43 +716,30 @@
 	\subsection{Offline harness protocol and adapter placement}
 	\label{sec:adapters}
 	
-	The public artifact repository implements \sys{} as schema-\texttt{0.2}
-	probe envelopes, the eight operators of Table~\ref{tab:ops}, handwritten
-	conforming/violating controls, and the gate stack including
-	\texttt{gate\_axis\_mutate}. The reproducible offline check is
-	\begin{verbatim}
-./scripts/run_poc.sh
-	\end{verbatim}
-	Exit code~$0$ means every \texttt{diptych\_core} operator cell is green
-	under the green rule above (twin contrast \emph{and} axis power). Live cells
-	are written to \texttt{coverage/matrix.json}. We invent no AUROC, accuracy,
-	or model-grade numbers; the PoC records categorical cell status and boolean
-	\texttt{axis\_power} only.
+	The public artifact implements schema-\texttt{0.2} envelopes, the eight
+	operators of Table~\ref{tab:ops}, handwritten controls, and
+	\texttt{gate\_axis\_mutate}. Reproduce offline with
+	\texttt{./scripts/run\_poc.sh} (exit~$0$; detail in
+	\texttt{paper/ARTIFACT\_CHECKLIST.md}): live cells go to
+	\texttt{coverage/matrix.json} as categorical green status and boolean
+	\texttt{axis\_power} only---never AUROC, accuracy, or model grades.
 	
-	\textbf{Case studies (adapter pins).} Product emitters are not vendored into
-	the harness repository (Figure~\ref{fig:stack}). They emit schema-\texttt{0.2}
-	conforming/violating twins at pinned SHAs; \sys{} grades. Current pins
-	(read-only; same as \texttt{README.md} / \texttt{adapters/PINS.md}):
-	\begin{itemize}
-		\item \textbf{ZeroDay} @\,\texttt{fb5b39da}
-		(\texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341}): full-8 product probes
-		(cassettes / serialize-restore / decision fingerprints as applicable);
-		TRAJSWAP and VARSCALE require \texttt{crn\_closed\_loop}; exploit and
-		AUROC fields are rejected (adapter contract).
-		\item \textbf{AOMB} @\,\texttt{667e475}
-		(\texttt{667e47538ae5b9c504187b7a73220d22aa8fb96f}): full-8 product
-		fixtures for ranking/session domains; lab AUROC stays unpublished and is
-		never accepted as a hyperproperty grade.
-	\end{itemize}
-	\textbf{What green$\times$8$\times$3 means.} Table~\ref{tab:coverage} records
-	harness coverage and axis power under the twin-contrast +
-	\texttt{gate\_axis\_mutate} rule at the pins above (detail in
-	Section~\ref{sec:discussion}). It is a protocol / QC fact---not a
-	vulnerability-finding, accuracy, or model-quality claim.
+	\textbf{Adapter pins (read-only).} Product emitters are not vendored
+	(Figure~\ref{fig:stack}); they emit schema-\texttt{0.2} twins at pinned SHAs
+	and \sys{} grades. Pins match \texttt{adapters/PINS.md} (frozen as of main
+	\texttt{84930b24}; do not bump unless the matrix requires):
+	ZeroDay@\texttt{fb5b39da}
+	(\texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341}; full-8; CRN for
+	\textsc{TrajSwap}/\textsc{VarScale}; exploit/AUROC fields rejected) and
+	AOMB@\texttt{667e475}
+	(\texttt{667e47538ae5b9c504187b7a73220d22aa8fb96f}; full-8 fixtures; lab
+	AUROC never a hyperproperty grade). Table~\ref{tab:coverage} is harness
+	coverage + axis power at those pins (Section~\ref{sec:discussion})---not a
+	vulnerability-finding or model-quality claim.
 	
 	\begin{figure}[t]
 		\centering
-		\includegraphics[width=\columnwidth]{stack.png}
+		\includegraphics[width=0.92\columnwidth]{stack.png}
 		\caption{Product adapters feed \sys{} graders. ZeroDay@\texttt{fb5b39da}
 			and AOMB@\texttt{667e475} emit schema-\texttt{0.2} twins; this repository
 			grades those envelopes and does not vendor the product trees. Green cells
@@ -808,15 +749,10 @@
 		\label{fig:stack}
 	\end{figure}
 	
-	\textbf{Current offline facts (protocol evidence only).}
-	Table~\ref{tab:coverage} mirrors live \texttt{coverage/matrix.json}:
-	green$\times$8$\times$3 with \texttt{axis\_power=true} on every operator,
-	attributed to the pins above (ZeroDay merge facts \#41+\#42; AOMB merge \#18).
-	Reproduce with \texttt{./scripts/run\_poc.sh} (exit~0) and
-	\texttt{PYTHONPATH=. python -m pytest -q}.
-	Table~\ref{tab:placeholder} and RQ1--RQ5 result cells stay blank / N/A
-	(Section~\ref{sec:rqs}, \texttt{paper/RQ\_PROTOCOL.md}).
-	Non-claims: \texttt{docs/adapters/GATING.md}, Appendix~\ref{sec:witnesses}.
+	Table~\ref{tab:coverage} mirrors \texttt{coverage/matrix.json}
+	(green$\times$8$\times$3, \texttt{axis\_power=true}; ZeroDay merge \#41+\#42,
+	AOMB merge \#18). RQ1--RQ5 and Table~\ref{tab:placeholder} stay N/A /
+	\texttt{---} (\texttt{paper/RQ\_PROTOCOL.md}; Appendix~\ref{sec:witnesses}).
 	
 	\begin{table}[t]
 		\caption{Live offline coverage matrix (\texttt{coverage/matrix.json}).
@@ -845,76 +781,61 @@
 	\subsection{Research questions}
 	\label{sec:rqs}
 	
-	We state five research questions and the harness machinery that answers
-	them. Results cells remain protocol-only (N/A) until a model study lands
-	real measurements; offline green$\times$8$\times$3 evidence is harness
-	coverage, not an answer to RQ1--RQ5. The companion note
-	\texttt{paper/RQ\_PROTOCOL.md} maps each RQ to controls, adapters, metrics,
-	and blank result slots.
+	Five RQs and harness answers; result cells stay N/A until a model study
+	lands measurements. Offline green$\times$8$\times$3 is coverage, not an RQ
+	answer. Companion: \texttt{paper/RQ\_PROTOCOL.md}.
 	
-	\textbf{RQ1 (separation).} Do artifacts that trace-property grading ranks as
-	equivalent separate under hyperproperty probing? \emph{Harness answer:}
-	separation index of Section~\ref{sec:metrics} over agent rollouts plus the
-	twelve handwritten controls; twin contrast + \texttt{gate\_axis\_mutate}
-	per operator. \emph{Result cell:} N/A until the study completes.
+	\textbf{RQ1 (separation).} Do trace-equivalent artifacts separate under
+	hyperproperty probing? \emph{Harness:} separation index
+	(Section~\ref{sec:metrics}) over rollouts + twelve controls; twin contrast +
+	\texttt{gate\_axis\_mutate}. \emph{Result:} N/A.
 	
-	\textbf{RQ2 (operator information).} Which operators carry the most
-	information? \emph{Harness answer:} marginal contribution of each of the
-	eight operators (Table~\ref{tab:ops}) to separation, plus inter-operator
-	redundancy under the same coupling enums. We expect substantial redundancy;
-	a confirmed finding would justify a cheaper subset harness.
-	\emph{Result cell:} N/A (Table~\ref{tab:placeholder} stays \texttt{---}).
+	\textbf{RQ2 (operator information).} Which operators carry most information?
+	\emph{Harness:} marginal separation contribution + inter-operator redundancy
+	(Table~\ref{tab:ops}). \emph{Result:} N/A (\texttt{tab:placeholder} stays
+	\texttt{---}).
 	
-	\textbf{RQ3 (predictive validity).} Do hyperproperty scores predict
-	held-out robustness better than trace scores? \emph{Harness answer:} rank
-	correlation of Section~\ref{sec:metrics} with scenarios held out from probe
-	construction; baseline is trace-property scores alone. Adapter pins
-	(ZeroDay / AOMB) supply product-shaped twins for protocol calibration, not
-	model ranks. \emph{Result cell:} N/A.
+	\textbf{RQ3 (predictive validity).} Do hyperproperty scores predict held-out
+	robustness better than trace scores? \emph{Harness:} rank correlation
+	(Section~\ref{sec:metrics}); pins supply product-shaped twins for protocol
+	calibration, not model ranks. \emph{Result:} N/A.
 	
 	\textbf{RQ4 (cost / amortization).} What does paired grading cost, and how
-	much does the probe tree recover? \emph{Harness answer:} tick-evaluation
-	counts under Definition~\ref{def:cost} (protocol $\alpha$), measured against
-	the $2n$ naive baseline on the same controls used for power. No wall-clock
-	or dollar figures are claimed here. \emph{Result cell:} N/A
+	much does the probe tree recover? \emph{Harness:} tick counts under
+	Definition~\ref{def:cost} vs.\ $2n$; no wall-clock/\$. \emph{Result:} N/A
 	(definitional $\alpha$ only).
 	
-	\textbf{RQ5 (inconclusive / comparability).} How often does the
-	comparability check return \texttt{inconclusive}
-	(Definition~\ref{def:inconclusive}), and does that rate depend on artifact
-	quality? \emph{Harness answer:} count
-	\texttt{meta.inconclusive\_reason} outcomes under
-	Definitions~\ref{def:horizon}--\ref{def:inconclusive}, stratified by
-	control role and (later) model artifact quality; CRN operators are the
-	primary stratum. An artifact-dependent rate is a confound worth reporting.
-	\emph{Result cell:} N/A.
+	\textbf{RQ5 (inconclusive / comparability).} How often is
+	\texttt{inconclusive} (Definition~\ref{def:inconclusive}), and does the rate
+	depend on artifact quality? \emph{Harness:} count
+	\texttt{meta.inconclusive\_reason} under
+	Definitions~\ref{def:horizon}--\ref{def:inconclusive} (CRN primary).
+	\emph{Result:} N/A.
 	
 	\subsection{Subjects}
 	
-	Artifacts are drawn from independent agent rollouts on the orchestrator
-	task, plus the twelve hand-written controls, plus a do-nothing artifact that
-	returns an empty decision on every tick. The do-nothing artifact is
-	important: the source task grants it partial credit for violating no safety
-	invariant, and it is a useful lower anchor for whether hyperproperty probes
-	correctly treat inaction as uncalibrated rather than as safe.
+	Subjects: independent agent rollouts on the orchestrator task, twelve
+	handwritten controls, and a do-nothing artifact (empty decision every tick).
+	The source task grants do-nothing partial credit for violating no safety
+	invariant; hyperproperty probes should treat inaction as uncalibrated, not
+	safe. Forthcoming model-study numeric cells (power / separation per
+	operator) are reserved in \texttt{paper/RQ\_PROTOCOL.md} and stay
+	N/A/\texttt{---} here---Table~\ref{tab:placeholder} is intentionally blank
+	(no invented scores).
 	
 	\begin{table}[t]
-		\caption{Model-study results table structure. No model scores are reported; the study is in progress. Offline green$\times$8 / \texttt{gate\_axis\_mutate} facts live in \texttt{coverage/matrix.json}, not in this table.}
+		\caption{Reserved model-study cells (intentionally blank). Offline
+			green$\times$8 / \texttt{gate\_axis\_mutate} facts live only in
+			\texttt{coverage/matrix.json} and Table~\ref{tab:coverage}.}
 		\label{tab:placeholder}
 		\centering
 		\small
-		\begin{tabular}{@{}lccc@{}}
+		\begin{tabular}{@{}lc@{}}
 			\toprule
-			Operator & Power (viol.) & Power (conf.) & Sep. contribution \\
+			Reserved field & Status \\
 			\midrule
-			\textsc{SignFlip}  & --- & --- & --- \\
-			\textsc{TrajSwap}  & --- & --- & --- \\
-			\textsc{VarScale}  & --- & --- & --- \\
-			\textsc{SatExtend} & --- & --- & --- \\
-			\textsc{HistSwap}  & --- & --- & --- \\
-			\textsc{FreezeDry} & --- & --- & --- \\
-			\textsc{Reseed}    & --- & --- & --- \\
-			\textsc{SchemaX}   & --- & --- & --- \\
+			Power (viol.\ /\ conf.) per operator & --- \\
+			Separation contribution per operator & --- \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
@@ -922,182 +843,129 @@
 	\section{Related Work}
 	\label{sec:related}
 	
-	\textbf{Hyperproperties and relational verification.} The hyperproperty
-	framework and the safety-liveness classification over trace sets are due to
-	Clarkson and Schneider \cite{clarkson2010}; temporal logics (HyperLTL /
-	HyperCTL$^*$) follow \cite{clarkson2014}, with model-checking algorithms in
-	\cite{finkbeiner2015} and related information-flow checking in
-	\cite{dimitrova2014}. Observational determinism as a security condition
-	predates the general framework \cite{roscoe1995,zdancewic2003}. Self
-	composition reduces $k$-safety verification to ordinary safety verification
-	of a product program \cite{barthe2004,terauchi2005}. Our contribution is not
-	to that theory. It is the observation that agentic benchmark design has an
-	unrecognized dependence on it, and a grading harness that acts on pairs.
+	\textbf{Hyperproperties / relational verification.} Clarkson and Schneider
+	\cite{clarkson2010} with HyperLTL/HyperCTL$^*$ \cite{clarkson2014},
+	model checking \cite{finkbeiner2015}, information-flow checking
+	\cite{dimitrova2014}, observational determinism
+	\cite{roscoe1995,zdancewic2003}, and self composition
+	\cite{barthe2004,terauchi2005}. We do not extend that theory; we observe that
+	agentic benchmarks depend on it unrecognized, and ship a pair harness.
 	
-	\textbf{Observational equivalence and differential privacy.} Differential
-	privacy calibrates distinguishability over neighboring datasets
-	\cite{dwork2006,dwork2014}: the object of judgment is again a relation over
-	executions (or query answers), not a single transcript. We share the
-	\emph{relational} stance---grading requires comparing related runs---but we
-	target calibration and reproducibility hyperproperties of agent-authored
-	controllers, not privacy budgets or $(\varepsilon,\delta)$ guarantees. We do
-	not claim a privacy result.
+	\textbf{Differential privacy.} Distinguishability over neighboring datasets
+	\cite{dwork2006,dwork2014} is again relational. We share the stance, not the
+	privacy claim: we target calibration hyperproperties of agent-authored
+	controllers, not $(\varepsilon,\delta)$ budgets.
 	
-	\textbf{Runtime verification and control monitors.} Runtime verification
-	monitors properties of observed traces \cite{leucker2009,bartocci2018}, with
-	tool taxonomies in \cite{falcone2018}. Classic RV is powerful for
-	single-trace temporal properties; $k$-safety hyperproperties still require
-	multiple runs (or an explicit product construction). \sys{} is closer to a
-	paired metamorphic harness than to an online monitor: we deliberately
-	perturb one axis and compare twins under a coupling discipline.
+	\textbf{Runtime verification.} RV monitors observed traces
+	\cite{leucker2009,bartocci2018,falcone2018}. Classic RV fits single-trace
+	temporals; $k$-safety still needs multiple runs or a product. \sys{} is a
+	paired metamorphic harness, not an online monitor.
 	
-	\textbf{Metamorphic testing.} Metamorphic relations test a program by
-	relating outputs on related inputs when no oracle is available
-	\cite{chen1998,segura2016}. Every metamorphic relation is a $k$-safety
-	hyperproperty, so the two literatures describe overlapping objects with
-	different vocabularies. The distinction here is the subject and the target:
-	we test a stateful long-horizon artifact \emph{authored by} an agent,
-	against calibration requirements, under a closed-loop simulator that makes
-	input coupling nontrivial. Coupling discipline and comparability horizons for
-	closed-loop paired grading are the engineering gap we address.
+	\textbf{Metamorphic testing.} Metamorphic relations are $k$-safety
+	hyperproperties under another vocabulary \cite{chen1998,segura2016}. Here
+	the subject is a stateful long-horizon agent-authored artifact under
+	closed-loop coupling---the engineering gap we address.
 	
-	\textbf{Agentic and LLM evaluation (single-trace grading).} Contemporary
-	benchmarks score repository-level task completion, tool-use trajectories,
-	web or multi-turn reward, or unit-test pass rates
-	\cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021}. All of these grade
-	single executions (or aggregates of independent single executions).
-	Trajectory judging inherits the same limitation regardless of judge quality:
-	the counterfactual evidence a hyperproperty needs is not in one trajectory.
-	We position \sys{} as complementary, not as a replacement pass@k leaderboard:
-	where the requirement is calibration across related worlds, one trace is not
-	enough. We report no invented AUROC, F1, or model scores against those
+	\textbf{Agentic / LLM evaluation.} Repository tasks, tool-use, web/multi-turn
+	reward, and unit-test pass rates
+	\cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021} grade single executions
+	(or aggregates thereof). Trajectory judges inherit the same limit: the
+	counterfactual is not in one film. \sys{} is complementary, not a pass@k
+	replacement. We report no invented AUROC/F1/model scores against those
 	benchmarks.
 	
-	\textbf{Differential and regression testing.} Differential testing compares
-	independent implementations on shared inputs \cite{mckeeman1998}. We compare
-	one implementation on deliberately related inputs---the dual construction---
-	and require the input relation to be semantically controlled, not merely shared.
+	\textbf{Differential / regression testing.} Differential testing compares
+	implementations on shared inputs \cite{mckeeman1998}. We compare one
+	implementation on deliberately related inputs---the dual---and require a
+	semantically controlled input relation.
 	
 	\section{Discussion}
 	\label{sec:discussion}
 	
 	\textbf{What green$\times$8$\times$3 proves.} Across eight operators and three
-	sources (\texttt{diptych\_core}, \texttt{zeroday}, \texttt{aomb}), each cell in
-	Table~\ref{tab:coverage} is green with \texttt{axis\_power=true}. That means:
-	(i)~conforming twins grade \texttt{pass} and violating twins grade
-	\texttt{fail}; and (ii)~\texttt{gate\_axis\_mutate} flips pass$\rightarrow$fail
-	when only the named axis payload changes. Together these facts establish
-	\emph{harness coverage} and \emph{axis power} for the grader and for pinned
-	emitters (Appendix~\ref{sec:witnesses}). They are the right QC bar before any
-	model study.
+	sources, every Table~\ref{tab:coverage} cell is green with
+	\texttt{axis\_power=true}: conforming twins pass, violating twins fail, and
+	\texttt{gate\_axis\_mutate} flips pass$\rightarrow$fail on the named axis only.
+	That is harness coverage + axis power for the grader and pinned emitters
+	(Appendix~\ref{sec:witnesses})---the QC bar before any model study.
 	
-	\textbf{What it does not prove.} Green cells are not vulnerability findings,
-	exploitability certificates, deployment readiness, accuracy, AUROC, F1, or
-	model ranks. Localization $\neq$ exploitability. Adapter columns are pin-scoped
+	\textbf{What it does not prove.} Not vulnerability findings, exploitability,
+	deployment readiness, accuracy, AUROC, F1, or model ranks. Localization
+	$\neq$ exploitability. Adapter columns are pin-scoped
 	(ZeroDay@\texttt{fb5b39da}, AOMB@\texttt{667e475}); product trees are not
-	vendored here. Lab AUROC and \texttt{model\_grade} fields are rejected by the
-	envelope contract and never appear as graded channels.
+	vendored. Lab AUROC / \texttt{model\_grade} are rejected by the envelope
+	contract.
 	
-	\textbf{RQ1--RQ5 result cells stay N/A.} Section~\ref{sec:rqs} and
-	\texttt{paper/RQ\_PROTOCOL.md} give harness-answer scaffolding (controls,
-	adapters, metrics) with an honest blank ledger. Offline green$\times$8$\times$3
-	must \emph{not} be back-filled into separation indices, operator-redundancy
-	scores, held-out rank correlations, measured amortization $\alpha$, or
-	inconclusive rates. Those cells remain N/A until a completed model study
-	supplies measured artifacts and scenarios. Table~\ref{tab:placeholder} stays
-	\texttt{---} for the same reason.
+	\textbf{RQ1--RQ5 stay N/A.} Section~\ref{sec:rqs} /
+	\texttt{paper/RQ\_PROTOCOL.md} keep an honest blank ledger. Do not back-fill
+	offline greens into separation indices, redundancy scores, held-out
+	correlations, measured $\alpha$, or inconclusive rates.
+	Table~\ref{tab:placeholder} stays \texttt{---}.
 	
-	\textbf{Design implication.} For benchmark authors, the actionable boundary is
-	sharp: when a requirement is about calibration across related worlds, a
-	single-trace pass is insufficient evidence even if the film looks legal
+	\textbf{Design implication.} When a requirement is calibration across related
+	worlds, a single-trace pass is insufficient even if the film looks legal
 	(Figure~\ref{fig:diptych}). Paired grading with an explicit axis and an
 	inconclusive escape hatch is the minimal honest substitute.
 	
 	\section{Threats to Validity}
 	\label{sec:threats}
 	
-	\textbf{Construct.} Our operators encode one reading of each invariant's
-	intent. A different reading yields a different twin and possibly a different
-	verdict. We mitigate by publishing operators as executable code alongside the
-	prose (Table~\ref{tab:ops}), so disagreement about intent becomes disagreement
-	about a specific artifact. ``Green'' means twin contrast plus
-	\texttt{gate\_axis\_mutate} under schema~\texttt{0.2}
-	(Figure~\ref{fig:diptych}; Section~\ref{sec:discussion}), not exploitability or
-	model quality.
+	\textbf{Construct.} Operators encode one reading of each invariant; a
+	different reading yields a different twin. We publish operators as
+	executable code (Table~\ref{tab:ops}) so intent disputes become artifact
+	disputes. ``Green'' means twin contrast + \texttt{gate\_axis\_mutate} under
+	schema~\texttt{0.2} (Section~\ref{sec:discussion}), not exploitability.
 	
-	\textbf{Adapter pin drift.} ZeroDay and AOMB columns are greens at pinned SHAs
-	only (Section~\ref{sec:adapters}, Figure~\ref{fig:stack},
-	\texttt{adapters/PINS.md}). A silent pin move or emitter schema skew can flip
-	adapter cells while \texttt{diptych\_core} stays green. Reviewers must
-	re-resolve pins rather than assume floating \texttt{main}.
+	\textbf{Adapter pin drift.} Adapter columns are greens at pinned SHAs only
+	(\texttt{adapters/PINS.md}). A silent pin move can flip adapter cells while
+	\texttt{diptych\_core} stays green; re-resolve pins rather than assume
+	floating \texttt{main}.
 	
-	\textbf{Inconclusive verdicts.} Schema~\texttt{0.2} admits
-	\texttt{inconclusive} with \texttt{meta.inconclusive\_reason} when twins are
-	incomparable. That verdict is \emph{not} green. Over-use can hide weak probes;
-	under-use can force spurious pass/fail. We do not convert inconclusive rates
-	into model scores (RQ5 remains N/A).
+	\textbf{Inconclusive.} Schema~\texttt{0.2} admits \texttt{inconclusive} with
+	\texttt{meta.inconclusive\_reason}. That is \emph{not} green. Over-/under-use
+	can hide weak probes or force spurious verdicts; rates are not model scores
+	(RQ5 N/A).
 	
-	\textbf{Handwritten-control bias.} Controls establish probe power before any
-	model is scored; they can overfit the grader or understate difficulty for
-	agent-authored artifacts. Mitigations: public \texttt{controls/}, mandatory
-	axis mutation, and a held-out model study still in progress---so
-	Table~\ref{tab:placeholder} stays blank.
+	\textbf{Handwritten-control bias.} Controls can overfit the grader. Mitigations:
+	public \texttt{controls/}, mandatory axis mutation, and a held-out model
+	study still in progress (\texttt{tab:placeholder} blank).
 	
-	\textbf{Open-loop vs.\ CRN coupling limits.} Six operators use
-	\texttt{open\_loop}; \textsc{TrajSwap} and \textsc{VarScale} require
-	\texttt{crn\_closed\_loop}. Open-loop greens do not transfer to closed-loop
-	deployments by assumption; CRN residuals are not a universal coupling. RQ5 is
-	designed to measure drift vs.\ artifact quality rather than assume it away.
+	\textbf{Open-loop vs.\ CRN.} Six operators use \texttt{open\_loop};
+	\textsc{TrajSwap}/\textsc{VarScale} need \texttt{crn\_closed\_loop}. Open-loop
+	greens do not transfer to closed-loop by assumption; CRN residuals are not
+	universal. RQ5 measures drift vs.\ artifact quality rather than assuming it away.
 	
 	\textbf{Internal / external.} Graders are deterministic functions of envelopes;
-	the full-8 gate and matrix check against
-	\texttt{examples/poc/expected\_matrix\_snippet.json} regress harness logic, not
-	model quality. Findings are from one task family (fleet traffic control): we
-	claim generality for the classification and harness architecture, not for the
-	operator set. Twin construction is deterministic, so classical significance
-	testing over probe outcomes is inappropriate; forthcoming model-study variation
-	enters through scenario and artifact sampling only.
+	the full-8 gate regresses harness logic, not model quality. Findings are from
+	one task family: we claim generality for the classification and harness
+	architecture, not the operator set. Twin construction is deterministic, so
+	classical significance over probe outcomes is inappropriate; forthcoming
+	variation enters through scenario and artifact sampling only.
 	
 	\section{Conclusion}
 	
-	Agentic benchmarks grade one trace at a time, and a substantial class of the
-	requirements we place on agent-authored systems cannot be falsified that
-	way. We classified the grading targets of a real long-horizon control task
-	and found that seven of its twenty-two invariants, including every invariant
-	concerning calibration, are only falsifiable as $2$-safety hyperproperties,
-	though most are written as if a single run would do. We proved the
-	obstruction that makes this unavoidable for stateful artifacts, and we
-	presented a harness that renders each such judgment on a coupled pair, with
-	a coupling discipline for closed-loop simulators, an explicit inconclusive
-	verdict, and a probe-tree cost model that makes paired grading affordable.
-	
-	The design rule for benchmark authors is simple. When a requirement concerns
-	how strongly a system should react, how much it should weight recent
-	evidence, or how conservative it should be under uncertainty, the requirement
-	is a statement about a counterfactual, and a counterfactual needs two
-	executions. Writing it as a single-trace check does not make it one.
-	Offline green$\times$8$\times$3 shows the harness has coverage and axis power;
-	it does not answer RQ1--RQ5 (Section~\ref{sec:discussion}).
+	Agentic benchmarks grade one trace at a time, yet many requirements on
+	agent-authored systems---especially calibration---are only falsifiable as
+	$2$-safety hyperproperties. We audited a real long-horizon control task
+	(seven of twenty-two invariants misclassified), proved the single-trace
+	confound for stateful artifacts, and presented a paired harness with
+	coupling, an inconclusive verdict, and a probe-tree cost model. Offline
+	green$\times$8$\times$3 shows coverage and axis power; it does not answer
+	RQ1--RQ5 (Section~\ref{sec:discussion}). When a requirement is about a
+	counterfactual, a counterfactual needs two executions.
 	
 	\appendices
 	\section{Witness and adapter audit trail}
 	\label{sec:witnesses}
 	
-	Reviewers can audit green cells without opening product repositories.
-	Canonical recipes live in \texttt{docs/adapters/WITNESSES.md} (companion note
-	\texttt{paper/WITNESSES.md}); the green rule and counting policy are in
-	\texttt{docs/adapters/GATING.md}. Pins are recorded in
+	Audit green cells without product repos:
+	\texttt{docs/adapters/WITNESSES.md}, \texttt{docs/adapters/GATING.md},
 	\texttt{adapters/PINS.md} (ZeroDay@\texttt{fb5b39da}, AOMB@\texttt{667e475}).
-	
-	Briefly: \texttt{gate\_axis\_mutate} requires a conforming baseline
-	\texttt{pass}, a mutation that changes only the named axis fingerprint, and a
-	flipped \texttt{fail} (cosmetic verdict-only edits fail the gate). Per-operator
-	witnesses match Table~\ref{tab:ops} graded channels; ZeroDay deferred-uplift
-	recipes for \textsc{SignFlip}/\textsc{TrajSwap}/\textsc{VarScale} reject SARIF
-	level renames, empty CRN residuals, and AUROC-as-variance. Reproduce with
-	\texttt{./scripts/run\_poc.sh} and inspect \texttt{coverage/matrix.json}.
-	Witnesses establish probe power only---not vulnerability finding or model
-	accuracy (Section~\ref{sec:discussion}).
+	\texttt{gate\_axis\_mutate} needs conforming \texttt{pass}, a named-axis-only
+	mutation, and flipped \texttt{fail}. Reproduce:
+	\texttt{./scripts/run\_poc.sh}; inspect \texttt{coverage/matrix.json}.
+	Witnesses establish probe power only---not vuln finding or model accuracy
+	(Section~\ref{sec:discussion}).
 	
 	\balance
 	

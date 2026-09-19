@@ -75,10 +75,17 @@ Live cells: `coverage/matrix.json`. Expected stranger contract:
 | ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
+**Pins frozen as of main `84930b24`** (see `adapters/PINS.md`). Do not bump
+unless the matrix requires.
+
 **green×8×3** = twin contrast + `gate_axis_mutate` axis power across
 `diptych_core` × `zeroday` × `aomb` for eight operators. It is **not** an
 accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 `tab:placeholder` stays blank (`---`) until real data exists.
+
+**PDF page count:** after `make paper`, record pages in
+[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft ≈9pp;
+venue limit TBD). Anonymization dry-run: [`ANON.md`](ANON.md) (CI stays named).
 
 ## Section map (authoritative)
 

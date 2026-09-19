@@ -59,6 +59,8 @@ jobs:
             lmodern
 
       - name: Build PDF (fail on compile errors)
+        # Named author block only. Anonymization is a local/pre-upload dry-run
+        # (paper/ANON.md); do not fail CI on anon PDF absence.
         working-directory: paper
         run: |
           latexmk -pdf -interaction=nonstopmode -halt-on-error one-trace-is-not-enough.tex

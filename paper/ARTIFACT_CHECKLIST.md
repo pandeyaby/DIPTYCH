@@ -51,6 +51,8 @@ violating→`fail`, and `gate_axis_mutate` reports axis power.
 | ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
+Pins frozen as of main `84930b24`. Do not bump unless the matrix requires.
+
 Source of truth: `adapters/PINS.md` (mirrored in root `README.md`).
 Record the git commit you graded against (paper cites these shorts; full SHAs above).
 
