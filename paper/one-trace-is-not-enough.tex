@@ -34,13 +34,13 @@
 	\title{One Trace Is Not Enough: Hyperproperty Grading\\for Agent-Authored Control Systems}
 	
 	\author{
+		\IEEEauthorblockN{Abhinav Pandey}
+		\IEEEauthorblockA{Independent / affiliation TBD\\
+			pandey.aby@gmail.com}
+		\and
 		\IEEEauthorblockN{Abhishek Pandey}
 		\IEEEauthorblockA{Meta\\
 			pandeyabhi1987@gmail.com}
-		\and
-		\IEEEauthorblockN{Abhinav Pandey}
-		\IEEEauthorblockA{Cisco\\
-			pandey.aby@gmail.com}
 	}
 	
 	\maketitle
@@ -76,8 +76,9 @@
 		Third, we give a full evaluation protocol with synthetic positive and
 		negative controls, a separation metric for distinguishing artifacts that
 		trace-property grading ranks as equal, and a cost model. We report the
-		protocol and its controls; the model study is in progress and no scores are
-		claimed here.
+		protocol, handwritten controls, and offline harness coverage
+		(green$\times$8$\times$3 via \texttt{gate\_axis\_mutate}); the model study
+		is in progress and no accuracy, AUROC, or ranking scores are claimed here.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -699,8 +700,8 @@
 	or model-grade numbers; the PoC records categorical cell status and boolean
 	\texttt{axis\_power} only.
 	
-	\textbf{Adapter case placements.} Product emitters are not vendored into the
-	harness repository (Figure~\ref{fig:stack}). They emit schema-\texttt{0.2}
+	\textbf{Case studies (adapter pins).} Product emitters are not vendored into
+	the harness repository (Figure~\ref{fig:stack}). They emit schema-\texttt{0.2}
 	conforming/violating twins at pinned SHAs; \sys{} grades. Current pins
 	(read-only; same as \texttt{README.md} / \texttt{adapters/PINS.md}):
 	\begin{itemize}
@@ -708,37 +709,45 @@
 		(\texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341}): full-8 product probes
 		(cassettes / serialize-restore / decision fingerprints as applicable);
 		TRAJSWAP and VARSCALE require \texttt{crn\_closed\_loop}; exploit and
-		AUROC fields are rejected.
+		AUROC fields are rejected (adapter contract).
 		\item \textbf{AOMB} @\,\texttt{667e475}
 		(\texttt{667e47538ae5b9c504187b7a73220d22aa8fb96f}): full-8 product
 		fixtures for ranking/session domains; lab AUROC stays unpublished and is
 		never accepted as a hyperproperty grade.
 	\end{itemize}
-	Adapter columns in the coverage matrix turn green only under the same
-	twin-contrast + \texttt{gate\_axis\_mutate} rule, attributed to those
-	pins---not to invented model studies.
+	\textbf{What green$\times$8$\times$3 means.} Table~\ref{tab:coverage} records
+	harness \emph{coverage} and \emph{axis power}: for each of eight operators,
+	across \texttt{diptych\_core}, \texttt{zeroday}, and \texttt{aomb}, the
+	conforming/violating twin contrast passes and \texttt{gate\_axis\_mutate}
+	shows the axis can flip the verdict. That is a protocol / QC fact about the
+	grader and pinned emitters---\emph{not} a vulnerability-finding claim, not an
+	accuracy claim, and not a model-quality score. Adapter columns turn green only
+	under that same twin-contrast + axis-power rule at the pins above.
 	
 	\begin{figure}[t]
 		\centering
 		\includegraphics[width=\columnwidth]{stack.png}
-		\caption{Product adapters feed \sys{} graders. ZeroDay and AOMB emit
-			schema-\texttt{0.2} twins at pinned SHAs; this repository grades and does
-			not vendor those product trees. Source: \texttt{docs/images/stack.png}.}
+		\caption{Product adapters feed \sys{} graders. ZeroDay@\texttt{fb5b39da}
+			and AOMB@\texttt{667e475} emit schema-\texttt{0.2} twins; this repository
+			grades and does not vendor those product trees. Green cells measure
+			harness coverage / axis power, not exploit findings. Source:
+			\texttt{docs/images/stack.png}.}
 		\label{fig:stack}
 	\end{figure}
 	
 	\textbf{Current offline facts (protocol evidence only).}
-	Table~\ref{tab:coverage} mirrors the live
-	\texttt{coverage/matrix.json} at the artifact tip cited in this draft:
-	green$\times$8$\times$3 across \texttt{diptych\_core}, \texttt{zeroday}, and
-	\texttt{aomb}, with \texttt{axis\_power=true} on every operator. Adapter greens
-	cite the pins above (ZeroDay merge facts \#41+\#42; AOMB merge \#18) plus
-	prior adapter QC---never fabricated LLM scores.
+	Table~\ref{tab:coverage} mirrors live \texttt{coverage/matrix.json}:
+	green$\times$8$\times$3 with \texttt{axis\_power=true} on every operator,
+	attributed to the pins above (ZeroDay merge facts \#41+\#42; AOMB merge \#18)
+	and prior adapter QC---never fabricated LLM scores. Reproduce from the
+	artifact root with \texttt{./scripts/run\_poc.sh} (exit~0 refreshes the
+	matrix) and \texttt{PYTHONPATH=. python -m pytest -q}.
 	Table~\ref{tab:placeholder} remains blank for model-study power and
-	separation metrics; those cells stay unreported until the study completes.
-	Non-claims follow the gating contract (\texttt{docs/adapters/GATING.md}):
-	protocol and handwritten controls first; stub/TODO/hardcoded-pass rejected;
-	\texttt{inconclusive}$\neq$green; no AUROC / exploit fields.
+	separation metrics until real data exists.
+	Non-claims follow \texttt{docs/adapters/GATING.md} and
+	\texttt{paper/ARTIFACT\_CHECKLIST.md}: protocol and handwritten controls
+	first; stub/TODO/hardcoded-pass rejected; \texttt{inconclusive}$\neq$green;
+	no AUROC / exploit fields; no product-tree edits in this repo.
 	
 	\begin{table}[t]
 		\caption{Live offline coverage matrix (\texttt{coverage/matrix.json}).
@@ -824,38 +833,54 @@
 	
 	\textbf{Hyperproperties and relational verification.} The hyperproperty
 	framework and the safety-liveness classification over trace sets are due to
-	Clarkson and Schneider \cite{clarkson2010}; temporal logics for the class
-	follow \cite{clarkson2014}. Observational determinism as a security
-	condition predates the general framework \cite{roscoe1995,zdancewic2003}.
-	Self composition reduces $k$-safety verification to ordinary safety
-	verification of a product program \cite{barthe2004,terauchi2005}. Our
-	contribution is not to the theory. It is the observation that agentic
-	benchmark design has an unrecognized dependence on this theory, and the
-	construction of a grading harness that acts on it.
+	Clarkson and Schneider \cite{clarkson2010}; temporal logics (HyperLTL /
+	HyperCTL$^*$) follow \cite{clarkson2014}, with model-checking algorithms in
+	\cite{finkbeiner2015} and related information-flow checking in
+	\cite{dimitrova2014}. Observational determinism as a security condition
+	predates the general framework \cite{roscoe1995,zdancewic2003}. Self
+	composition reduces $k$-safety verification to ordinary safety verification
+	of a product program \cite{barthe2004,terauchi2005}. Our contribution is not
+	to that theory. It is the observation that agentic benchmark design has an
+	unrecognized dependence on it, and a grading harness that acts on pairs.
+	
+	\textbf{Observational equivalence and differential privacy.} Differential
+	privacy calibrates distinguishability over neighboring datasets
+	\cite{dwork2006,dwork2014}: the object of judgment is again a relation over
+	executions (or query answers), not a single transcript. We share the
+	\emph{relational} stance---grading requires comparing related runs---but we
+	target calibration and reproducibility hyperproperties of agent-authored
+	controllers, not privacy budgets or $(\varepsilon,\delta)$ guarantees. We do
+	not claim a privacy result.
+	
+	\textbf{Runtime verification and control monitors.} Runtime verification
+	monitors properties of observed traces \cite{leucker2009,bartocci2018}, with
+	tool taxonomies in \cite{falcone2018}. Classic RV is powerful for
+	single-trace temporal properties; $k$-safety hyperproperties still require
+	multiple runs (or an explicit product construction). \sys{} is closer to a
+	paired metamorphic harness than to an online monitor: we deliberately
+	perturb one axis and compare twins under a coupling discipline.
 	
 	\textbf{Metamorphic testing.} Metamorphic relations test a program by
 	relating outputs on related inputs when no oracle is available
 	\cite{chen1998,segura2016}. Every metamorphic relation is a $k$-safety
 	hyperproperty, so the two literatures describe overlapping objects with
-	different vocabularies. Recent work applies metamorphic ideas to
-	language-model outputs and to generated interfaces. The distinction here is
-	the subject and the target: we test a stateful long-horizon artifact
-	\emph{authored by} an agent, against calibration requirements, under a
-	closed-loop simulator that makes input coupling nontrivial. To our
-	knowledge, coupling discipline and comparability horizons for closed-loop
-	paired grading have not been treated.
+	different vocabularies. The distinction here is the subject and the target:
+	we test a stateful long-horizon artifact \emph{authored by} an agent,
+	against calibration requirements, under a closed-loop simulator that makes
+	input coupling nontrivial. Coupling discipline and comparability horizons for
+	closed-loop paired grading are the engineering gap we address.
 	
-	\textbf{Agentic benchmarks.} Contemporary agent benchmarks score repository
-	level task completion, tool-use trajectories, or environment reward
-	\cite{jimenez2024,yao2024}. All grade single executions. Trajectory judging
-	approaches inherit the same limitation regardless of judge quality, because
-	the evidence required is not in the trajectory. Our audit suggests the gap
-	is not a matter of harness maturity but of expressiveness.
-	
-	\textbf{Specification-guided learning and control.} Temporal-logic
-	specifications have been used to shape reward and to guide policy search.
-	That line targets learned policies and single-trace temporal properties;
-	neither the artifact type nor the property class matches ours.
+	\textbf{Agentic and LLM evaluation (single-trace grading).} Contemporary
+	benchmarks score repository-level task completion, tool-use trajectories,
+	web or multi-turn reward, or unit-test pass rates
+	\cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021}. All of these grade
+	single executions (or aggregates of independent single executions).
+	Trajectory judging inherits the same limitation regardless of judge quality:
+	the counterfactual evidence a hyperproperty needs is not in one trajectory.
+	We position \sys{} as complementary, not as a replacement pass@k leaderboard:
+	where the requirement is calibration across related worlds, one trace is not
+	enough. We report no invented AUROC, F1, or model scores against those
+	benchmarks.
 	
 	\textbf{Differential and regression testing.} Differential testing compares
 	independent implementations on shared inputs \cite{mckeeman1998}. We compare
@@ -921,18 +946,7 @@
 	
 	\balance
 	
-	\begin{thebibliography}{99}
-		\bibitem{clarkson2010} M. R. Clarkson and F. B. Schneider, ``Hyperproperties,'' \emph{Journal of Computer Security}, vol. 18, no. 6, pp. 1157--1210, 2010.
-		\bibitem{clarkson2014} M. R. Clarkson, B. Finkbeiner, M. Koleini, K. K. Micinski, M. N. Rabe, and C. S\'anchez, ``Temporal logics for hyperproperties,'' in \emph{Principles of Security and Trust (POST)}, 2014.
-		\bibitem{roscoe1995} A. W. Roscoe, ``CSP and determinism in security modelling,'' in \emph{IEEE Symposium on Security and Privacy}, 1995.
-		\bibitem{zdancewic2003} S. Zdancewic and A. C. Myers, ``Observational determinism for concurrent program security,'' in \emph{IEEE Computer Security Foundations Workshop}, 2003.
-		\bibitem{barthe2004} G. Barthe, P. R. D'Argenio, and T. Rezk, ``Secure information flow by self-composition,'' in \emph{IEEE Computer Security Foundations Workshop}, 2004.
-		\bibitem{terauchi2005} T. Terauchi and A. Aiken, ``Secure information flow as a safety problem,'' in \emph{Static Analysis Symposium (SAS)}, 2005.
-		\bibitem{chen1998} T. Y. Chen, S. C. Cheung, and S. M. Yiu, ``Metamorphic testing: A new approach for generating next test cases,'' Technical Report HKUST-CS98-01, Hong Kong University of Science and Technology, 1998.
-		\bibitem{segura2016} S. Segura, G. Fraser, A. B. Sanchez, and A. Ruiz-Cort\'es, ``A survey on metamorphic testing,'' \emph{IEEE Transactions on Software Engineering}, vol. 42, no. 9, pp. 805--824, 2016.
-		\bibitem{mckeeman1998} W. M. McKeeman, ``Differential testing for software,'' \emph{Digital Technical Journal}, vol. 10, no. 1, pp. 100--107, 1998.
-		\bibitem{jimenez2024} C. E. Jimenez, J. Yang, A. Wettig, S. Yao, K. Pei, O. Press, and K. Narasimhan, ``SWE-bench: Can language models resolve real-world GitHub issues?'' in \emph{International Conference on Learning Representations (ICLR)}, 2024.
-		\bibitem{yao2024} S. Yao, N. Shinn, P. Razavi, and K. Narasimhan, ``$\tau$-bench: A benchmark for tool-agent-user interaction in real-world domains,'' arXiv preprint, 2024.
-	\end{thebibliography}
+	\bibliographystyle{IEEEtran}
+	\bibliography{refs}
 	
 \end{document}

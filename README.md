@@ -27,7 +27,7 @@ See [`examples/poc/`](examples/poc/).
 
 ## Paper
 
-Living IEEEtran conference source (authors: Abhishek Pandey / Meta, Abhinav Pandey / Cisco):
+Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
 - [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce)
