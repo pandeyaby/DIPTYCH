@@ -48,19 +48,37 @@ uploads `one-trace-is-not-enough-pdf` when local TeX is absent.
 
 ## 3. Artifact zip (what to include)
 
+**Preferred (automated):** from repository root
+
+```bash
+make artifact          # or: ./scripts/pack_artifact.sh
+# writes dist/DIPTYCH-<shortsha>.zip
+```
+
+The pack script records `CODE_SHA.txt`, copies `coverage/matrix.json`, the PoC
+expected snippet, pins, key paper docs (`SUBMISSION.md`, `ARTIFACT_CHECKLIST.md`,
+`RQ_PROTOCOL.md`, `ANON.md`, `.tex` / `refs.bib`), harness trees needed for
+`./scripts/run_poc.sh`, and writes `ARTIFACT_NOTES.txt`.
+
+**PDF attachment:** if `paper/one-trace-is-not-enough.pdf` exists (from
+`make paper`), it is bundled. Otherwise `ARTIFACT_NOTES.txt` explains how to
+download CI workflow artifact **`one-trace-is-not-enough-pdf`** from Actions and
+place the PDF under `paper/` (or submit alongside the zip).
+
 Package a reviewer-facing zip (or GitHub release tarball) that reproduces
 **green×8×3** without GPU or network for the core PoC.
 
 | Include | Path / how |
 |---------|------------|
-| Code SHA | Annotated tag or release pointing at commit SHA (cite in README of zip) |
+| Code SHA | `CODE_SHA.txt` via `scripts/pack_artifact.sh` / annotated tag |
 | Harness tree | `diptych/`, `ops/`, `controls/`, `diptych-probes/`, `scripts/`, `tests/` |
 | Pins | `adapters/PINS.md` (ZeroDay@`fb5b39da`, AOMB@`667e475`) |
 | Live matrix | `coverage/matrix.json` (refresh with `./scripts/run_poc.sh`) |
 | Expected snippet | `examples/poc/expected_matrix_snippet.json` |
-| PoC logs | Capture stdout of `./scripts/run_poc.sh` → e.g. `artifact/poc.log` |
+| PoC notes | `ARTIFACT_NOTES.txt` + optional `artifact/matrix_snapshot.txt` |
 | Paper PDF | `paper/one-trace-is-not-enough.pdf` (from `make paper` or CI artifact) |
 | Paper source | `paper/*.tex`, `paper/refs.bib`, `docs/images/*` |
+| RQ / anon docs | `paper/RQ_PROTOCOL.md`, `paper/ANON.md` |
 | Checklists | `paper/ARTIFACT_CHECKLIST.md`, this file (`SUBMISSION.md`) |
 | License | `LICENSE` |
 
@@ -77,10 +95,13 @@ Package a reviewer-facing zip (or GitHub release tarball) that reproduces
 DIPTYCH-<shortsha>/
   README.md                 # point to stranger path + non-claims
   CODE_SHA.txt              # full git SHA
+  ARTIFACT_NOTES.txt        # CI PDF attach instructions
   coverage/matrix.json
-  artifact/poc.log
-  paper/one-trace-is-not-enough.pdf
+  artifact/matrix_snapshot.txt
+  paper/one-trace-is-not-enough.pdf   # optional; else attach from CI
   paper/SUBMISSION.md
+  paper/RQ_PROTOCOL.md
+  paper/ANON.md
   paper/ARTIFACT_CHECKLIST.md
   <repo tree as needed for PoC>
 ```
@@ -100,21 +121,27 @@ pip install pytest && PYTHONPATH=. python -m pytest -q
 
 - [ ] PDF builds (`make paper` or CI `paper-pdf`)
 - [ ] `./scripts/run_poc.sh` exit 0; matrix matches snippet
+- [ ] `make artifact` / `./scripts/pack_artifact.sh` produces zip with CODE_SHA + matrix
 - [ ] Pins in PDF / checklist match `adapters/PINS.md`
 - [ ] Table `tab:ops` coupling + graded channels match
       `docs/adapters/OPERATOR_TABLE.md` / `ops/*/spec.yaml`
 - [ ] Table `tab:placeholder` has **no** numeric model scores
+- [ ] RQ1–RQ5 result cells stay N/A (`paper/RQ_PROTOCOL.md`)
 - [ ] Threats § lists concrete DIPTYCH limits (pins, inconclusive, controls, coupling)
 - [ ] Venue name + page limit filled in this file
+- [ ] Anonymization path ready if needed (`paper/ANON.md`)
 - [ ] Abhinav approves merge / camera-ready (HOLD for yes)
 
 ---
 
 ## 5. Anonymization notes (if double-blind)
 
+**Authoritative switch:** [`ANON.md`](ANON.md) (commented author block in the
+`.tex` + deanonymizing-string checklist). Venue remains TBD — do not invent one.
+
 If the venue requires anonymity:
 
-1. Replace author block with paper ID / “Anonymous Submission”.
+1. Replace author block with paper ID / “Anonymous Submission” (see `ANON.md`).
 2. Redact GitHub URLs that deanonymize (`pandeyaby/DIPTYCH` → “supplementary
    anonymous repo” or CMT upload). Prefer an anonymized mirror or zip-only
    artifact for review.
@@ -140,4 +167,5 @@ author block in the `.tex`.
 - ZeroDay / AOMB are **pins**, not in-repo product edits.
 
 See also: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md), [`NOTES.md`](NOTES.md),
+[`RQ_PROTOCOL.md`](RQ_PROTOCOL.md), [`ANON.md`](ANON.md),
 [`docs/adapters/GATING.md`](../docs/adapters/GATING.md).

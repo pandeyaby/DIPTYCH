@@ -94,7 +94,7 @@ Details: [`adapters/PINS.md`](adapters/PINS.md).
 ## Layout
 
 ```
-paper/             # living IEEEtran source + SUBMISSION.md camera-ready package
+paper/             # living IEEEtran + SUBMISSION / RQ_PROTOCOL / ANON
 diptych/           # core package (contract, grade, gates, axis mutate)
 ops/<op>/          # spec.yaml + operator.py
 controls/<op>/     # conforming.py + violating.py
@@ -104,7 +104,8 @@ docs/images/       # diptych-vs-single-trace + stack (PNG + SVG)
 docs/adapters/     # CONTRACT, GATING, OPERATOR_TABLE, ONEPAGER, zeroday, aomb
 examples/poc/
 scripts/run_poc.sh
-Makefile           # poc | test | matrix | paper (latexmk; CI paper-pdf fallback)
+scripts/pack_artifact.sh   # make artifact → dist/DIPTYCH-<sha>.zip
+Makefile           # poc | test | matrix | paper | artifact
 PAPER_OUTLINE.md
 drafts/ieee-draft.md
 .github/workflows/ci.yml

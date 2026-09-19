@@ -9,6 +9,8 @@
 
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 **Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
+**RQ scaffolding:** [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) (RQ1–RQ5; results N/A)  
+**Anonymization switch:** [`ANON.md`](ANON.md)  
 **Open items:** [`NOTES.md`](NOTES.md)
 
 ## Compile locally
@@ -85,10 +87,10 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 | II | `sec:motivating` | Motivating example + Fig. diptych |
 | III | `sec:taxonomy` | Property taxonomy |
 | IV | `sec:audit` | Spec audit + Proposition 1 |
-| V | `sec:harness` | Diptych harness + `gate_axis_mutate` |
+| V | `sec:harness` | Diptych harness: open-loop + CRN defs, horizon, inconclusive, probe-tree cost (protocol), `gate_axis_mutate` |
 | VI | `sec:operators` | Eight operators (Table `tab:ops`: coupling + graded channels = harness enums) |
 | — | `sec:metrics` | Metrics (definitions only) |
-| **VII** | **`sec:protocol`** | **Evaluation protocol** + ZeroDay/AOMB case studies + Table `tab:coverage`; **no model scores** |
+| **VII** | **`sec:protocol`** / **`sec:rqs`** | **Evaluation protocol** + RQ1–RQ5 scaffolding (N/A cells) + ZeroDay/AOMB pins + Table `tab:coverage`; **no model scores** |
 | VIII | `sec:related` | Related work (real BibTeX citations) |
 | IX | `sec:threats` | Threats (pin drift, inconclusive, control bias, coupling limits) + non-claims |
 | X | — | Conclusion |

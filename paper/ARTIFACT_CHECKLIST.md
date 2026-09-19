@@ -105,6 +105,12 @@ make paper   # from repo root; requires latexmk
 
 Figures resolve via `\graphicspath` to `../docs/images/`. Zip contents, page
 budget, anonymization, corresponding author: [`SUBMISSION.md`](SUBMISSION.md).
+RQ scaffolding (results N/A): [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md).
+Double-blind switch: [`ANON.md`](ANON.md).
+
+**Pack reviewer zip:** `make artifact` (or `./scripts/pack_artifact.sh`) →
+`dist/DIPTYCH-<shortsha>.zip`. If the PDF is not local, attach CI artifact
+`one-trace-is-not-enough-pdf` per `ARTIFACT_NOTES.txt` in the zip.
 
 ### Download the CI PDF artifact
 
@@ -139,11 +145,12 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 
 ## 6. Reviewer smoke path
 
-1. Read abstract + §VII (evaluation **protocol**, not results).
+1. Read abstract + §VII (evaluation **protocol**, not results); skim `RQ_PROTOCOL.md`.
 2. Confirm Table `tab:coverage` matches `coverage/matrix.json`.
 3. Confirm pins match `adapters/PINS.md` / README.
 4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK`.
-6. Confirm Table `tab:placeholder` has no numeric model scores.
-7. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
+5. Confirm Table `tab:placeholder` has no numeric model scores; RQ cells N/A.
+6. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
+7. (Optional) `make artifact` → inspect zip for CODE_SHA + matrix + notes.
 8. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf` or `make paper`.
-9. (Optional) Read `paper/SUBMISSION.md` for artifact-zip / camera-ready notes.
+9. (Optional) Read `paper/SUBMISSION.md` / `paper/ANON.md` for camera-ready / blind.
