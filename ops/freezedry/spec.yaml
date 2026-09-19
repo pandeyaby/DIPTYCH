@@ -1,0 +1,10 @@
+operator: FREEZEDRY
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Freeze rng+clock across paired probe
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role

@@ -1,0 +1,102 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "HISTSWAP",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.histswap_v0.conforming",
+  "fixture_id": "diptych_core.histswap_v0.conforming",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "history": {
+          "values": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8
+          ]
+        },
+        "alt_history": {
+          "values": [
+            0.8,
+            0.7,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.2,
+            0.1
+          ]
+        },
+        "present": {
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "history_corrupt": false,
+        "hist_splice_at": 4
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "history": {
+          "values": [
+            0.8,
+            0.7,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.2,
+            0.1
+          ]
+        },
+        "alt_history": {
+          "values": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8
+          ]
+        },
+        "present": {
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "history_corrupt": false,
+        "hist_splice_at": 4
+      }
+    }
+  ]
+}

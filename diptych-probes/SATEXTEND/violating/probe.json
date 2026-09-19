@@ -1,0 +1,68 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "SATEXTEND",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.satextend_v0.violating",
+  "fixture_id": "diptych_core.satextend_v0.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "actuator": {
+          "values": [
+            0.0,
+            0.5,
+            1.2,
+            1.5,
+            2.0,
+            1.8,
+            1.1,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "sat_channel": "actuator",
+        "sat_lo": -2.0,
+        "sat_hi": 2.0,
+        "legal_lo": -1.0,
+        "legal_hi": 1.0
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "actuator": {
+          "values": [
+            0.0,
+            -0.5,
+            -1.2,
+            -1.5,
+            -2.0,
+            -1.8,
+            -1.1,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "sat_channel": "actuator",
+        "sat_lo": -2.0,
+        "sat_hi": 2.0,
+        "legal_lo": -1.0,
+        "legal_hi": 1.0
+      }
+    }
+  ]
+}

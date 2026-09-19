@@ -1,0 +1,10 @@
+operator: VARSCALE
+coupling: crn_closed_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Scale variance/gain under CRN closed loop
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role

@@ -1,0 +1,71 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "VARSCALE",
+  "coupling": "crn_closed_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.varscale_v0.violating",
+  "fixture_id": "diptych_core.varscale_v0.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "variance_proxy": {
+          "values": [
+            9.449777302259397,
+            10.379118326978483,
+            10.326927286595044,
+            10.681398497295092,
+            10.047170761849072,
+            9.240914512425702,
+            8.873198984446992,
+            11.017988194665874
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "crn_stream_id": "758a62c05fda",
+        "crn_closed_loop": true,
+        "var_scale": 1.0,
+        "crn_mean": 10.0,
+        "var_scale_bound": 3.0,
+        "mean_match_eps": 0.0001
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "variance_proxy": {
+          "values": [
+            16.715533269422835,
+            18.73319667879366,
+            12.03616548392885,
+            -5.50349212724641,
+            8.7940872473325,
+            -0.5927574487730247,
+            13.814369665471087,
+            -1.7342904371677328
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "crn_stream_id": "758a62c05fda",
+        "crn_closed_loop": true,
+        "var_scale": 10.0,
+        "crn_mean": 10.0,
+        "var_scale_bound": 3.0,
+        "mean_match_eps": 0.0001
+      }
+    }
+  ],
+  "crn_closed_loop": true
+}

@@ -1,0 +1,10 @@
+operator: RESEED
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Reseed stochastic channels; stability within epsilon
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role

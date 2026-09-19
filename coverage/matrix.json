@@ -1,0 +1,55 @@
+{
+  "diptych_schema": "0.2",
+  "source_row": "diptych_core",
+  "operators": {
+    "SIGNFLIP": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "TRAJSWAP": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "VARSCALE": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "SATEXTEND": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "HISTSWAP": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "FREEZEDRY": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "RESEED": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    },
+    "SCHEMAX": {
+      "diptych_core": "green",
+      "zeroday": "pending",
+      "aomb": "pending",
+      "axis_power": true
+    }
+  },
+  "notes": "diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; adapter columns turn green when ZeroDay@fb5b39da / AOMB@667e475 emitters pass"
+}

@@ -1,0 +1,62 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.reseed_v0.conforming",
+  "fixture_id": "diptych_core.reseed_v0.conforming",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "config_id": "stability_smoke_v0",
+        "epsilon": 0.05
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [
+            1.0,
+            1.01,
+            0.99,
+            1.0,
+            1.002,
+            0.998,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "config_id": "stability_smoke_v0",
+        "epsilon": 0.05
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "FREEZEDRY",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.freezedry_v0.conforming",
+  "fixture_id": "diptych_core.freezedry_v0.conforming",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "graded": {
+          "values": [
+            0.1,
+            0.12,
+            0.11,
+            0.13,
+            0.1,
+            0.12,
+            0.11,
+            0.13
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "freeze_channels": [
+          "rng",
+          "clock"
+        ],
+        "decision_fingerprint": "sha256:6ffe4fbf82e9536b79125926e19ed8baee0c192dbb5a51484fa4f42e8930aa98",
+        "frozen": true
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "graded": {
+          "values": [
+            0.1,
+            0.12,
+            0.11,
+            0.13,
+            0.1,
+            0.12,
+            0.11,
+            0.13
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "freeze_channels": [
+          "rng",
+          "clock"
+        ],
+        "decision_fingerprint": "sha256:6ffe4fbf82e9536b79125926e19ed8baee0c192dbb5a51484fa4f42e8930aa98",
+        "frozen": true
+      }
+    }
+  ]
+}

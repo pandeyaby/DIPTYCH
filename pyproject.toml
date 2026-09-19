@@ -1,0 +1,10 @@
+[project]
+name = "diptych"
+version = "0.2.0"
+description = "DIPTYCH — paired-trace hyperproperty grading harness (IEEE artifact)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+include = ["diptych*"]

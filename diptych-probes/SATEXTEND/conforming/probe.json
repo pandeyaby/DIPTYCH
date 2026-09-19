@@ -1,0 +1,68 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "SATEXTEND",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "diptych_core.satextend_v0.conforming",
+  "fixture_id": "diptych_core.satextend_v0.conforming",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "actuator": {
+          "values": [
+            0.0,
+            0.2,
+            0.5,
+            0.8,
+            1.0,
+            0.6,
+            0.3,
+            0.1
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "sat_channel": "actuator",
+        "sat_lo": -1.0,
+        "sat_hi": 1.0,
+        "legal_lo": -1.0,
+        "legal_hi": 1.0
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "actuator": {
+          "values": [
+            0.0,
+            -0.2,
+            -0.5,
+            -0.8,
+            -1.0,
+            -0.4,
+            0.2,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "sat_channel": "actuator",
+        "sat_lo": -1.0,
+        "sat_hi": 1.0,
+        "legal_lo": -1.0,
+        "legal_hi": 1.0
+      }
+    }
+  ]
+}
