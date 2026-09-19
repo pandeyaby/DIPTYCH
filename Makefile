@@ -1,4 +1,4 @@
-.PHONY: poc test full8 matrix paper clean
+.PHONY: poc test full8 matrix paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -26,6 +26,12 @@ paper:
 		exit 1; \
 	fi
 
+# Reviewer-facing zip (SHA, matrix, PoC snippet, key docs). See paper/SUBMISSION.md.
+# Optional: run `make paper` first to bundle the PDF; else ARTIFACT_NOTES.txt
+# explains how to attach CI artifact one-trace-is-not-enough-pdf.
+artifact:
+	./scripts/pack_artifact.sh
+
 clean:
-	rm -rf reports/paired-probes __pycache__ diptych/__pycache__ tests/__pycache__
+	rm -rf reports/paired-probes dist __pycache__ diptych/__pycache__ tests/__pycache__
 	@cd paper && latexmk -C one-trace-is-not-enough.tex >/dev/null 2>&1 || true

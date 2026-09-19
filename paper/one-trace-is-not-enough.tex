@@ -1,10 +1,11 @@
 %% One Trace Is Not Enough
 %% IEEE conference submission draft (AUTHORITATIVE living source)
-%% STATUS: complete methods; Section VII is an evaluation PROTOCOL, not model results.
+%% STATUS: methods depth + RQ scaffolding; Section VII is an evaluation PROTOCOL, not model results.
 %% Artifact: https://github.com/pandeyaby/DIPTYCH
 %% Adapter pins (read-only): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
 %% Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md · Notes: paper/NOTES.md
+%% RQ: paper/RQ_PROTOCOL.md · Anon switch: paper/ANON.md · Pack: make artifact / scripts/pack_artifact.sh
 %% Figures: ../docs/images/{diptych-vs-single-trace,stack}.{png,svg}
 %% Build: make paper (latexmk) · CI fallback: workflow job paper-pdf
 
@@ -34,6 +35,9 @@
 	
 	\title{One Trace Is Not Enough: Hyperproperty Grading\\for Agent-Authored Control Systems}
 	
+	% --- Author block switch (see paper/ANON.md) ---
+	% Default: camera-ready / single-blind (named authors).
+	% Double-blind: comment the named block and uncomment the anonymous block.
 	\author{
 		\IEEEauthorblockN{Abhinav Pandey}
 		\IEEEauthorblockA{Independent / affiliation TBD\\
@@ -43,6 +47,12 @@
 		\IEEEauthorblockA{Meta\\
 			pandeyabhi1987@gmail.com}
 	}
+	% \author{
+	% 	\IEEEauthorblockN{Anonymous Author(s)}
+	% 	\IEEEauthorblockA{Paper under double-blind review\\
+	% 		Anonymous Institution(s)\\
+	% 		Correspondence via conference submission system only}
+	% }
 	
 	\maketitle
 	
@@ -481,51 +491,98 @@
 		the single dimension the perturbation operator varies.
 	\end{definition}
 	
-	Coupling is straightforward in an open loop, where the observation sequence
-	is replayed regardless of what the artifact decides, and delicate in a
-	closed loop, where decisions feed the plant and change subsequent
-	observations. We use both, and the choice is dictated by what is being
-	measured.
+	The harness encodes coupling as an envelope enum
+	\texttt{coupling}$\,\in\,\{\texttt{open\_loop},\,\texttt{crn\_closed\_loop}\}$
+	(\texttt{diptych.COUPLINGS}; enforced by \texttt{ops/*/spec.yaml} and the
+	schema-\texttt{0.2} contract). The choice is dictated by what is being
+	measured, not by convenience.
 	
-	\textbf{Open-loop probing} measures the artifact's response function. The
-	harness drives a fixed observation sequence, ignores the decisions for
-	simulation purposes, and compares the decision streams. This gives exact
-	coupling and isolates the contrast in Proposition \ref{prop:confound}. It is
-	the right mode for asymmetric response, anti-windup, and setpoint-change
-	quiet, all of which are statements about response magnitude.
+	\begin{definition}[Open-loop coupling]
+		\label{def:openloop}
+		A probe is \texttt{open\_loop} if both arms are driven by a fixed
+		observation (or cassette) sequence that does not depend on the artifact's
+		decisions after the shared prefix. Decisions are recorded and graded but
+		do not feed the plant. Coupling is therefore exact: the only intentional
+		difference between arms is the operator axis.
+	\end{definition}
 	
-	\textbf{Closed-loop probing with common random numbers} measures outcomes.
-	Both arms run against a live plant seeded identically, so all exogenous
-	noise, arrival processes, and fault injections are shared, and the arms
-	diverge only through the perturbation and the artifact's reaction to it.
-	This is the classical common-random-numbers variance reduction from
-	simulation practice, repurposed as a coupling device. It is the right mode
-	for volatility suppression and trend recency, which are statements about
-	which operating point the system settles into.
+	Open-loop probing isolates the response function in Proposition
+	\ref{prop:confound}. It is the harness default for
+	\textsc{FreezeDry}, \textsc{Reseed}, \textsc{SchemaX}, \textsc{SignFlip},
+	\textsc{SatExtend}, and \textsc{HistSwap}---statements about response
+	magnitude, fingerprint stability, or schema identity under a controlled
+	axis.
+	
+	\begin{definition}[CRN closed-loop coupling]
+		\label{def:crn}
+		A probe is \texttt{crn\_closed\_loop} if both arms run against a live
+		plant under a shared common-random-numbers (CRN) stream
+		(\texttt{meta.crn\_stream\_id}, \texttt{meta.crn\_closed\_loop=true} on
+		each twin). Exogenous noise, arrivals, and fault injections are drawn
+		from the shared stream; arms diverge only through the perturbation and
+		the artifact's closed-loop reaction. The contract requires this enum for
+		\textsc{TrajSwap} and \textsc{VarScale} (\texttt{diptych.CRN\_REQUIRED}).
+	\end{definition}
+	
+	CRN closed-loop probing measures outcomes---which operating point the system
+	settles into under mean-matched variance or swapped trajectory segments---
+	rather than open-loop response magnitude. Residual channels
+	(\texttt{channels.closed\_loop\_residual}, variance-proxy ordering) are the
+	graded witnesses; open-loop tagging of those operators is a contract reject.
 	
 	\subsection{Comparability horizon}
 	
 	A closed-loop pair eventually becomes incomparable. Once the two plants have
 	drifted far apart, a difference in decisions no longer attributes to the
 	perturbation. \sys{} therefore attaches to each probe a
-	\emph{comparability horizon} and a runtime validity check.
+	\emph{comparability horizon} declared on the envelope and mirrored in
+	\texttt{ops/*/spec.yaml}.
 	
-	The check tracks a divergence statistic between the two plant states, for
-	instance the normalized $L_1$ distance over per-endpoint utilization. A
-	probe is reported as valid only if the divergence stays inside a declared
-	envelope for the full comparison window; otherwise the probe is reported as
-	\emph{inconclusive} rather than as a pass or a fail. Reporting inconclusive
-	verdicts separately is a deliberate choice. Silent degradation of a
+	\begin{definition}[Comparability horizon]
+		\label{def:horizon}
+		The comparability horizon of a probe is the envelope field
+		\texttt{horizon}$=\{$\texttt{unit},\,\texttt{length}$\}$, where
+		\texttt{unit}$\,\in\,\{\texttt{steps},\,\texttt{ms},\,\texttt{events}\}$
+		and \texttt{length} is a non-negative integer. A twin pair remains
+		\emph{comparable} for grading only while a declared divergence statistic
+		(for CRN probes: closed-loop residual / plant-state distance; for
+		open-loop probes: shared-prefix integrity) stays inside the operator's
+		envelope for the full horizon window.
+	\end{definition}
+	
+	When the horizon check fails---shared-prefix breakage, missing twin role, or
+	residual outside bound---the harness does not invent a pass or fail. It
+	emits an inconclusive verdict (Definition~\ref{def:inconclusive}).
+	
+	\subsection{Inconclusive verdicts}
+	
+	\begin{definition}[Inconclusive verdict]
+		\label{def:inconclusive}
+		Schema~\texttt{0.2} admits exactly three expected verdicts:
+		\texttt{pass}, \texttt{fail}, and \texttt{inconclusive}
+		(\texttt{diptych.VERDICTS}). An envelope may declare
+		\texttt{expected\_verdict=inconclusive} only with
+		\texttt{meta.inconclusive\_reason}. Operator specs list
+		\texttt{inconclusive\_when} conditions (shared-prefix incomparability,
+		missing twin role). Coverage counting treats
+		\texttt{inconclusive}$\,\neq\,$green: a cell is green only under
+		conforming$\to$\texttt{pass}, violating$\to$\texttt{fail}, and
+		\texttt{gate\_axis\_mutate} power (\texttt{docs/adapters/GATING.md}).
+	\end{definition}
+	
+	Reporting inconclusive separately is deliberate. Silent degradation of a
 	hyperproperty probe into a coin flip is exactly the failure mode the paper
-	argues against, and a harness that hides it reproduces the problem one level
-	up.
+	argues against; a harness that hides incomparability reproduces the problem
+	one level up. We do not convert inconclusive rates into model scores.
 	
 	\subsection{Probe trees and amortization}
 	
 	Naive $k$-safety grading multiplies cost by $k$. Deterministic replay makes
 	that unnecessary. If a perturbation is applied at tick $t_p$, both arms
 	share the prefix $o_1 \ldots o_{t_p}$ exactly, so the prefix need only be
-	executed once.
+	executed once. The formulas below are a \emph{protocol cost model}: they
+	define how the harness accounts for tick evaluations. They are not measured
+	wall-clock results and carry no claimed AUROC or dollar cost.
 	
 	\begin{proposition}[Prefix sharing]
 		\label{prop:prefix}
@@ -544,13 +601,24 @@
 		suffix alone.
 	\end{corollary}
 	
+	\begin{definition}[Probe-tree cost (protocol)]
+		\label{def:cost}
+		Let $C_{\mathrm{naive}}(m)=\sum_{j=1}^{m} 2 n_j$ and
+		$C_{\mathrm{tree}}(m)=t_p + \sum_{j=1}^{m}(n_j-t_p)$ under a shared
+		fork at $t_p$. The protocol amortization factor is
+		$\alpha(m)=C_{\mathrm{naive}}(m)/C_{\mathrm{tree}}(m)$ when
+		$C_{\mathrm{tree}}(m)>0$. Reporting $\alpha$ in a model study requires
+		measured tick counts; until then the factor is definitional only.
+	\end{definition}
+	
 	The engineering requirement is a cheap fork of artifact state at $t_p$. The
 	orchestrator contract already provides one, since the task mandates a
-	serialize-and-restore pair with bit-identical subsequent behavior. This is a
-	pleasant alignment: the same property that makes the artifact operationally
-	restartable makes hyperproperty grading affordable. We suggest that future
-	task specifications require a state fork for this reason, independent of any
-	operational motivation.
+	serialize-and-restore pair with bit-identical subsequent behavior
+	(\textsc{FreezeDry}'s graded axis). This is a pleasant alignment: the same
+	property that makes the artifact operationally restartable makes
+	hyperproperty grading affordable. We suggest that future task specifications
+	require a state fork for this reason, independent of any operational
+	motivation.
 	
 	\subsection{Power-on-axis: \texttt{gate\_axis\_mutate}}
 	
@@ -660,9 +728,11 @@
 	
 	\subsection{Cost}
 	
-	We report measured tick evaluations per probe against the $2n$ naive
-	baseline, and the realized amortization factor for probe trees, to validate
-	Proposition \ref{prop:prefix} and Corollary \ref{cor:tree} empirically.
+	The probe-tree formulas (Proposition~\ref{prop:prefix},
+	Corollary~\ref{cor:tree}, Definition~\ref{def:cost}) are a \emph{protocol
+	cost model}. A future model study may report measured tick evaluations per
+	probe against the $2n$ naive baseline and the realized amortization factor
+	$\alpha$; those measurements are not claimed here and must not be invented.
 	
 	\section{Evaluation Protocol}
 	\label{sec:protocol}
@@ -778,29 +848,51 @@
 	\end{table}
 	
 	\subsection{Research questions}
+	\label{sec:rqs}
 	
-	\textbf{RQ1.} Do artifacts that trace-property grading ranks as equivalent
-	separate under hyperproperty probing? Measured by the separation index of
-	Section \ref{sec:metrics}.
+	We state five research questions and the harness machinery that answers
+	them. Results cells remain protocol-only (N/A) until a model study lands
+	real measurements; offline green$\times$8$\times$3 evidence is harness
+	coverage, not an answer to RQ1--RQ5. The companion note
+	\texttt{paper/RQ\_PROTOCOL.md} maps each RQ to controls, adapters, metrics,
+	and blank result slots.
 	
-	\textbf{RQ2.} Which operators carry the most information? Measured by the
-	marginal contribution of each operator to separation, and by inter-operator
-	redundancy. We expect substantial redundancy, because an artifact that
-	mishandles one form of calibration probably mishandles others, and a
-	redundancy finding would let future harnesses run a cheaper subset.
+	\textbf{RQ1 (separation).} Do artifacts that trace-property grading ranks as
+	equivalent separate under hyperproperty probing? \emph{Harness answer:}
+	separation index of Section~\ref{sec:metrics} over agent rollouts plus the
+	twelve handwritten controls; twin contrast + \texttt{gate\_axis\_mutate}
+	per operator. \emph{Result cell:} N/A until the study completes.
 	
-	\textbf{RQ3.} Do hyperproperty scores predict held-out robustness better
-	than trace scores? Measured by the rank correlations of Section
-	\ref{sec:metrics}.
+	\textbf{RQ2 (operator information).} Which operators carry the most
+	information? \emph{Harness answer:} marginal contribution of each of the
+	eight operators (Table~\ref{tab:ops}) to separation, plus inter-operator
+	redundancy under the same coupling enums. We expect substantial redundancy;
+	a confirmed finding would justify a cheaper subset harness.
+	\emph{Result cell:} N/A (Table~\ref{tab:placeholder} stays \texttt{---}).
 	
-	\textbf{RQ4.} What does paired grading cost in practice, and how much does
-	the probe tree recover?
+	\textbf{RQ3 (predictive validity).} Do hyperproperty scores predict
+	held-out robustness better than trace scores? \emph{Harness answer:} rank
+	correlation of Section~\ref{sec:metrics} with scenarios held out from probe
+	construction; baseline is trace-property scores alone. Adapter pins
+	(ZeroDay / AOMB) supply product-shaped twins for protocol calibration, not
+	model ranks. \emph{Result cell:} N/A.
 	
-	\textbf{RQ5.} How often does the closed-loop comparability check return
-	inconclusive, and does that rate depend on artifact quality? An
-	artifact-dependent inconclusive rate would be a confound worth reporting,
-	since a wildly unstable controller drives its plant out of the comparability
-	envelope faster.
+	\textbf{RQ4 (cost / amortization).} What does paired grading cost, and how
+	much does the probe tree recover? \emph{Harness answer:} tick-evaluation
+	counts under Definition~\ref{def:cost} (protocol $\alpha$), measured against
+	the $2n$ naive baseline on the same controls used for power. No wall-clock
+	or dollar figures are claimed here. \emph{Result cell:} N/A
+	(definitional $\alpha$ only).
+	
+	\textbf{RQ5 (inconclusive / comparability).} How often does the
+	comparability check return \texttt{inconclusive}
+	(Definition~\ref{def:inconclusive}), and does that rate depend on artifact
+	quality? \emph{Harness answer:} count
+	\texttt{meta.inconclusive\_reason} outcomes under
+	Definitions~\ref{def:horizon}--\ref{def:inconclusive}, stratified by
+	control role and (later) model artifact quality; CRN operators are the
+	primary stratum. An artifact-dependent rate is a confound worth reporting.
+	\emph{Result cell:} N/A.
 	
 	\subsection{Subjects}
 	
