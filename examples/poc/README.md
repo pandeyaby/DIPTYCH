@@ -9,5 +9,7 @@ Deterministic offline smoke. No GPU. No network. No AUROC.
 make poc
 ```
 
-Expected: exit 0, `coverage/matrix.json` with all eight `diptych_core` cells `green`,
-and `gate_axis_mutate` power-on-axis true for each operator.
+Expected: exit 0, `coverage/matrix.json` with green×8×3
+(`diptych_core` / `zeroday` / `aomb`), and `gate_axis_mutate` power-on-axis
+true for each operator. Adapter greens cite ZeroDay@fb5b39da (merged #41+#42)
+and AOMB@667e475 (merged #18)—no AUROC / invented scores.

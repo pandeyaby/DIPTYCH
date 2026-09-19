@@ -10,7 +10,7 @@
 
 ## Abstract
 
-Calibration and safety claims for agent-authored controllers are routinely demonstrated with a single execution. We argue that such claims are **2-safety hyperproperties**: the bad thing is not one run, but a **coupled pair** that shares all exogenous inputs except one controlled perturbation. **DIPTYCH** is an IEEE-oriented artifact harness that forks a shared prefix (open-loop shape or common-random-numbers closed-loop point), discards incomparable pairs, and grades suffixes only. It ships schema-`0.2` probe envelopes, eight operators spanning open-loop and CRN closed-loop regimes, and a `gate_axis_mutate` power-on-axis check that rejects cosmetic verdict flips. Product adapters (ZeroDay, AOMB) emit conforming/violating twins at pinned SHAs; DIPTYCH grades and does not vendor those trees. Live offline evaluation on this repository reports all eight `diptych_core` coverage cells **green** with `axis_power: true`; adapter columns remain **pending** until product emitters pass the same gates. We invent no AUROC or model scores—only repo and CI facts.
+Calibration and safety claims for agent-authored controllers are routinely demonstrated with a single execution. We argue that such claims are **2-safety hyperproperties**: the bad thing is not one run, but a **coupled pair** that shares all exogenous inputs except one controlled perturbation. **DIPTYCH** is an IEEE-oriented artifact harness that forks a shared prefix (open-loop shape or common-random-numbers closed-loop point), discards incomparable pairs, and grades suffixes only. It ships schema-`0.2` probe envelopes, eight operators spanning open-loop and CRN closed-loop regimes, and a `gate_axis_mutate` power-on-axis check that rejects cosmetic verdict flips. Product adapters (ZeroDay, AOMB) emit conforming/violating twins at pinned SHAs; DIPTYCH grades and does not vendor those trees. Live offline evaluation on this repository reports a full **green×8×3** coverage matrix—`diptych_core`, `zeroday`, and `aomb` all green for every operator, with `axis_power: true`—citing ZeroDay@`fb5b39da` (merged #41+#42) and AOMB@`667e475` (merged #18) plus prior adapter green QCs. We invent no AUROC or model scores—only repo, merge, and CI facts.
 
 > One film = legal; only the pair = calibrated.
 
@@ -31,7 +31,7 @@ Agent-authored control stacks—LLM-assisted planners, security triage agents, r
 3. **Adapter contract** — ZeroDay and AOMB emit twins; DIPTYCH grades; product trees are pinned, not forked into this repo.
 4. **Coverage matrix** — Operator × `{diptych_core, zeroday, aomb}`; green iff twin contrast **and** axis power.
 
-**Non-claims (stated up front).** Localization ≠ exploitability. No exploit/PoC payloads. No AUROC / model-score fields in graded envelopes. Adapter columns are not green until emitters pass—pending is honest.
+**Non-claims (stated up front).** Localization ≠ exploitability. No exploit/PoC payloads. No AUROC / model-score fields in graded envelopes. Adapter greens cite pinned merge SHAs and adapter QCs only—never invented model scores.
 
 ---
 
@@ -166,7 +166,7 @@ Source of truth: [`adapters/PINS.md`](../adapters/PINS.md). This draft does **no
 
 - AUROC, lab AUROC, or invented model grades as hyperproperty scores  
 - Exploit / attack / PoC payload fields  
-- Green adapter cells without emitter evidence  
+- Green adapter cells without pin/merge evidence (ZeroDay #41+#42, AOMB #18) 
 
 ---
 
@@ -174,24 +174,24 @@ Source of truth: [`adapters/PINS.md`](../adapters/PINS.md). This draft does **no
 
 ### A. Setup
 
-Artifact tip evaluated for this draft’s live matrix: repository `pandeyaby/DIPTYCH`, schema `0.2`, source row `diptych_core`. Matrix path: [`coverage/matrix.json`](../coverage/matrix.json). Notes field in that file: *diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; adapter columns turn green when ZeroDay@fb5b39da / AOMB@667e475 emitters pass*.
+Artifact tip evaluated for this draft’s live matrix: repository `pandeyaby/DIPTYCH`, schema `0.2`, source row `diptych_core`. Matrix path: [`coverage/matrix.json`](../coverage/matrix.json). Notes field in that file: *diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; zeroday=green and aomb=green at pins ZeroDay@fb5b39daf88e37521aaee8526ae9d286cf74f341 (merged #41+#42) and AOMB@667e47538ae5b9c504187b7a73220d22aa8fb96f (merged #18); no AUROC / invented model scores*.
 
 ### B. Live coverage matrix (verbatim from `coverage/matrix.json`)
 
-Operator × `{diptych_core, zeroday, aomb}` with `axis_power`:
+Operator × `{diptych_core, zeroday, aomb}` with `axis_power`. Adapter greens cite merge facts only: ZeroDay pin = merge of [#41](https://github.com/pandeyaby/ZERODAY/pull/41)+[#42](https://github.com/pandeyaby/ZERODAY/pull/42); AOMB pin = merge of [#18](https://github.com/pandeyaby/AOMB/pull/18); plus adapter green QCs already performed on those pins.
 
 | Operator | diptych_core | zeroday | aomb | axis_power |
 |---|---|---|---|---|
-| FREEZEDRY | **green** | pending | pending | true |
-| RESEED | **green** | pending | pending | true |
-| SCHEMAX | **green** | pending | pending | true |
-| SIGNFLIP | **green** | pending | pending | true |
-| SATEXTEND | **green** | pending | pending | true |
-| HISTSWAP | **green** | pending | pending | true |
-| TRAJSWAP | **green** | pending | pending | true |
-| VARSCALE | **green** | pending | pending | true |
+| FREEZEDRY | **green** | **green** | **green** | true |
+| RESEED | **green** | **green** | **green** | true |
+| SCHEMAX | **green** | **green** | **green** | true |
+| SIGNFLIP | **green** | **green** | **green** | true |
+| SATEXTEND | **green** | **green** | **green** | true |
+| HISTSWAP | **green** | **green** | **green** | true |
+| TRAJSWAP | **green** | **green** | **green** | true |
+| VARSCALE | **green** | **green** | **green** | true |
 
-**Summary:** live **green×8** on `diptych_core` with axis power on every operator; **pending×8** on both `zeroday` and `aomb` columns. No fabricated adapter greens. No AUROC column exists.
+**Summary:** live **green×8×3** across `diptych_core`, `zeroday`, and `aomb`, with axis power on every operator. No AUROC column exists. No invented model scores.
 
 ### C. Negative controls (repo tests)
 
@@ -211,9 +211,9 @@ Unit tests assert that cosmetic mutators—expected-verdict-only flips, SARIF le
 
 **Construct.** “Green” means twin contrast + axis power under schema `0.2`, not exploitability, not deployment safety certification, and not model quality. Mapping product domains (SARIF decisions, ranking sessions) onto channels is adapter responsibility; a weak domain mapping could pass DIPTYCH while missing the intended product risk.
 
-**External.** Adapter columns remain pending until ZeroDay@`fb5b39da` and AOMB@`667e475` emitters pass the same gates. Results on `diptych_core` do not automatically transfer to product CI mirrors.
+**External.** Adapter greens are pinned to ZeroDay@`fb5b39da` (merged #41+#42) and AOMB@`667e475` (merged #18) plus prior adapter QCs; they are not re-derived by vendoring product trees into this repo. A pin move without a matching QC would drop those columns out of green.
 
-**Conclusion validity.** We do not claim AUROC improvements, ranking lifts, or security exploit findings. Claims are limited to harness behavior and the live matrix cells cited above.
+**Conclusion validity.** We do not claim AUROC improvements, ranking lifts, or security exploit findings. Claims are limited to harness behavior, merge/pin facts, and the live matrix cells cited above.
 
 ---
 
@@ -229,7 +229,7 @@ Unit tests assert that cosmetic mutators—expected-verdict-only flips, SARIF le
 
 ## IX. Conclusion
 
-DIPTYCH treats calibration of agent-authored controllers as a **2-safety** grading problem over coupled traces. The harness couples prefixes, applies one of eight operators, requires asymmetric twin verdicts, and demands `gate_axis_mutate` power-on-axis. Live offline evaluation paints **all eight** `diptych_core` cells green with axis power; ZeroDay and AOMB columns stay pending at the pinned SHAs until product emitters clear the same bar. One film can be legal; only the pair is calibrated.
+DIPTYCH treats calibration of agent-authored controllers as a **2-safety** grading problem over coupled traces. The harness couples prefixes, applies one of eight operators, requires asymmetric twin verdicts, and demands `gate_axis_mutate` power-on-axis. Live offline evaluation paints a full **green×8×3** matrix—`diptych_core` plus ZeroDay@`fb5b39da` (merged #41+#42) and AOMB@`667e475` (merged #18)—with axis power on every operator. One film can be legal; only the pair is calibrated.
 
 ---
 

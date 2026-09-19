@@ -47,4 +47,4 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 ```
 
 Pins: **ZeroDay@fb5b39da** · **AOMB@667e475**  
-Live matrix: [`coverage/matrix.json`](coverage/matrix.json) (`diptych_core` green×8; adapter columns pending until emitters pass).
+Live matrix: [`coverage/matrix.json`](coverage/matrix.json) (green×8×3: `diptych_core` / `zeroday` / `aomb`; ZeroDay@fb5b39da = merged #41+#42; AOMB@667e475 = merged #18).

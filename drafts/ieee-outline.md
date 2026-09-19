@@ -62,7 +62,7 @@ CRN closed-loop regimes. Product adapters emit probe twins; the harness grades.
 
 - No exploitability claims
 - No AUROC as hyperproperty grade
-- Adapter columns pending until emitters pass
+- Adapter columns green at pins (ZeroDay #41+#42, AOMB #18) — no invented scores
 
 ## IX. Conclusion
 

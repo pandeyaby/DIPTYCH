@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from diptych import CRN_REQUIRED, OPERATORS, SCHEMA, SOURCES, STUB_MARKERS
+from diptych import ADAPTER_PINS, CRN_REQUIRED, OPERATORS, SCHEMA, SOURCES, STUB_MARKERS
 from diptych.contract import ContractError, load_probe, validate_envelope
 from diptych.grade import GradeResult, grade_document
 from diptych.mutate_axis import (
@@ -21,6 +21,17 @@ from diptych.mutate_axis import (
     axis_fingerprint,
     mutate_axis,
 )
+
+# Adapter columns are green at these pins only (merge facts, not invented scores):
+# ZeroDay fb5b39da = merged #41+#42; AOMB 667e475 = merged #18. Product trees stay out of repo.
+_ADAPTER_GREEN_PINS = {
+    "zeroday": "fb5b39daf88e37521aaee8526ae9d286cf74f341",
+    "aomb": "667e47538ae5b9c504187b7a73220d22aa8fb96f",
+}
+
+
+def _adapter_cell(source: str) -> str:
+    return "green" if ADAPTER_PINS.get(source) == _ADAPTER_GREEN_PINS.get(source) else "pending"
 
 ROOT = Path(__file__).resolve().parents[1]
 PROBES = ROOT / "diptych-probes"
@@ -270,8 +281,8 @@ def run_gates() -> Report:
                 failures.append(Failure("grade", f"{op}: {e}"))
                 matrix_ops[op] = {
                     "diptych_core": "stub",
-                    "zeroday": "pending",
-                    "aomb": "pending",
+                    "zeroday": _adapter_cell("zeroday"),
+                    "aomb": _adapter_cell("aomb"),
                     "axis_power": False,
                 }
                 grade_error = True
@@ -295,12 +306,12 @@ def run_gates() -> Report:
             and grades[0].actual_verdict == "pass"
             and grades[1].actual_verdict == "fail"
         )
-        # aomb green ONLY if twin contrast AND mutate-axis power both pass
+        # diptych_core green ONLY if twin contrast AND mutate-axis power both pass
         green = twin_ok and mutate_ok
         matrix_ops[op] = {
             "diptych_core": "green" if green else "pending",
-            "zeroday": "pending",
-            "aomb": "pending",
+            "zeroday": _adapter_cell("zeroday"),
+            "aomb": _adapter_cell("aomb"),
             "axis_power": mutate_ok,
         }
 
@@ -310,7 +321,9 @@ def run_gates() -> Report:
         "operators": matrix_ops,
         "notes": (
             "diptych_core=green requires twin conf/viol AND gate_axis_mutate power-on-axis; "
-            "adapter columns turn green when ZeroDay@fb5b39da / AOMB@667e475 emitters pass"
+            "zeroday=green and aomb=green at pins ZeroDay@fb5b39daf88e37521aaee8526ae9d286cf74f341 "
+            "(merged #41+#42) and AOMB@667e47538ae5b9c504187b7a73220d22aa8fb96f (merged #18); "
+            "no AUROC / invented model scores"
         ),
     }
     ok = not failures and all(v.get("diptych_core") == "green" for v in matrix_ops.values())
