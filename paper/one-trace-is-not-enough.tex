@@ -1,7 +1,7 @@
 %% One Trace Is Not Enough
 %% IEEE conference submission draft (AUTHORITATIVE living source)
-%% STATUS: submission polish (venue TODOs, page budget, ANON dry-run, pins frozen); Section VII = PROTOCOL (no model scores).
-%% Artifact: https://github.com/pandeyaby/DIPTYCH
+%% STATUS: camera-ready polish (#10): abstract/keywords, proofread, CITATION.cff; Section VII = PROTOCOL (no model scores).
+%% Artifact: https://github.com/pandeyaby/DIPTYCH · Cite: CITATION.cff (no DOI yet)
 %% Adapter pins (read-only, frozen as of main 84930b24): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
 %% Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md · Notes: paper/NOTES.md
@@ -59,39 +59,30 @@
 	\maketitle
 	
 	\begin{abstract}
-		Agentic coding benchmarks grade a candidate artifact by executing it and
-		scoring the resulting trace: tests pass or fail, a task succeeds or does
-		not, a judge reads a trajectory. We show that this evaluation model is
-		structurally unable to express a large class of requirements we actually
-		place on agent-authored systems. Properties such as calibrated
-		conservatism under volatility, recency sensitivity, anti-windup,
-		reproducibility across process restarts, and telemetry schema stability
-		are \emph{hyperproperties}: predicates over sets of traces rather than
-		over individual traces. No single execution can falsify them.
+		Agentic coding benchmarks grade a candidate artifact from a single
+		execution trace. We show that this model cannot express many requirements
+		on agent-authored systems. Properties such as calibrated conservatism
+		under volatility, anti-windup, reproducibility across restarts, and
+		telemetry schema stability are \emph{hyperproperties}: predicates over
+		sets of traces. No single execution can falsify them.
 		
-		We make three contributions. First, we give a property taxonomy for
-		agentic evaluation grounded in the hyperproperty framework and audit a
-		long-horizon control-system specification with twenty-two stated
-		invariants. Seven invariants written in single-trace prose are only
-		falsifiable as $2$-safety hyperproperties, so a conforming single-trace
-		harness would silently pass artifacts that violate them. We prove the
-		obstruction: for a stateful deterministic artifact, any asymmetry
-		estimate drawn from one trace confounds the effect under test with
-		internal state drift between the compared ticks.
+		We make three contributions. First, a property taxonomy for agentic
+		evaluation and an audit of a long-horizon control-system specification
+		(twenty-two invariants): seven written as single-trace prose are only
+		falsifiable as $2$-safety hyperproperties. We prove the obstruction:
+		for a stateful deterministic artifact, any asymmetry estimate from one
+		trace confounds the effect under test with internal state drift.
 		
-		Second, we present \sys{}, a grading harness that renders every
-		hyperproperty judgment on a coupled pair of executions: eight
-		perturbation operators that vary one semantic dimension while holding
-		exogenous input bit-identical, a coupling discipline that keeps
-		closed-loop pairs comparable, and a \emph{probe tree} execution strategy
-		that amortizes a shared prefix across branching perturbations.
+		Second, \sys{}, a grading harness that renders every hyperproperty
+		judgment on a coupled pair: eight perturbation operators, a coupling
+		discipline for closed-loop pairs, and a probe-tree strategy that
+		amortizes a shared prefix.
 		
-		Third, we give a full evaluation protocol with synthetic positive and
-		negative controls, a separation metric for distinguishing artifacts that
-		trace-property grading ranks as equal, and a cost model. We report the
-		protocol, handwritten controls, and offline harness coverage
-		(green$\times$8$\times$3 via \texttt{gate\_axis\_mutate}); the model study
-		is in progress and no accuracy, AUROC, or ranking scores are claimed here.
+		Third, an evaluation protocol with synthetic controls, a separation
+		metric, and a cost model. We report the protocol, handwritten controls,
+		and offline harness coverage (green$\times$8$\times$3 via
+		\texttt{gate\_axis\_mutate}); the model study is in progress and no
+		accuracy, AUROC, or ranking scores are claimed here.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -631,6 +622,7 @@
 		\label{tab:ops}
 		\centering
 		\scriptsize
+		\resizebox{\textwidth}{!}{%
 		\begin{tabular}{@{}lllll@{}}
 			\toprule
 			Operator & Coupling & Primary graded channels & Varies & Probe \\
@@ -644,7 +636,8 @@
 			\textsc{Reseed} & \texttt{open\_loop} & \texttt{meta.seed}, \texttt{channels.stability.values} & process / hash seed & stability under reseed \\
 			\textsc{SchemaX} & \texttt{open\_loop} & \texttt{channels.schema.keys}, \texttt{meta.required\_schema\_keys} & scenario / key set & schema stability \\
 			\bottomrule
-		\end{tabular}
+		\end{tabular}%
+		}
 	\end{table*}
 	
 	Preservation intent (exogenous identity except the varied axis) is enforced by
@@ -727,15 +720,10 @@
 	\textbf{Adapter pins (read-only).} Product emitters are not vendored
 	(Figure~\ref{fig:stack}); they emit schema-\texttt{0.2} twins at pinned SHAs
 	and \sys{} grades. Pins match \texttt{adapters/PINS.md} (frozen as of main
-	\texttt{84930b24}; do not bump unless the matrix requires):
-	ZeroDay@\texttt{fb5b39da}
-	(\texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341}; full-8; CRN for
-	\textsc{TrajSwap}/\textsc{VarScale}; exploit/AUROC fields rejected) and
-	AOMB@\texttt{667e475}
-	(\texttt{667e47538ae5b9c504187b7a73220d22aa8fb96f}; full-8 fixtures; lab
-	AUROC never a hyperproperty grade). Table~\ref{tab:coverage} is harness
-	coverage + axis power at those pins (Section~\ref{sec:discussion})---not a
-	vulnerability-finding or model-quality claim.
+	\texttt{84930b24}): ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475}
+	(full SHAs in the pin file; CRN required for \textsc{TrajSwap}/\textsc{VarScale};
+	exploit/AUROC fields rejected). Table~\ref{tab:coverage} is harness coverage
+	+ axis power at those pins---not a vulnerability or model-quality claim.
 	
 	\begin{figure}[t]
 		\centering
@@ -757,14 +745,15 @@
 	\begin{table}[t]
 		\caption{Live offline coverage matrix (\texttt{coverage/matrix.json}).
 			Every cell is categorical \texttt{green} with boolean
-			\texttt{axis\_power}; no AUROC or model-score columns. Adapter columns
-			are attributed to ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475}.}
+			\texttt{axis\_power}; no AUROC or model-score columns. Columns
+			\texttt{diptych\_core}/\texttt{zeroday}/\texttt{aomb} at pins
+			ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475}.}
 		\label{tab:coverage}
 		\centering
-		\small
+		\scriptsize
 		\begin{tabular}{@{}lcccc@{}}
 			\toprule
-			Operator & \texttt{diptych\_core} & \texttt{zeroday} & \texttt{aomb} & \texttt{axis\_power} \\
+			Operator & core & zd & aomb & axis \\
 			\midrule
 			\textsc{FreezeDry} & green & green & green & true \\
 			\textsc{Reseed}    & green & green & green & true \\
@@ -845,38 +834,34 @@
 	
 	\textbf{Hyperproperties / relational verification.} Clarkson and Schneider
 	\cite{clarkson2010} with HyperLTL/HyperCTL$^*$ \cite{clarkson2014},
-	model checking \cite{finkbeiner2015}, information-flow checking
+	model checking \cite{finkbeiner2015}, information-flow
 	\cite{dimitrova2014}, observational determinism
 	\cite{roscoe1995,zdancewic2003}, and self composition
-	\cite{barthe2004,terauchi2005}. We do not extend that theory; we observe that
-	agentic benchmarks depend on it unrecognized, and ship a pair harness.
+	\cite{barthe2004,terauchi2005}. We do not extend that theory; we observe
+	that agentic benchmarks depend on it unrecognized, and ship a pair harness.
 	
-	\textbf{Differential privacy.} Distinguishability over neighboring datasets
-	\cite{dwork2006,dwork2014} is again relational. We share the stance, not the
-	privacy claim: we target calibration hyperproperties of agent-authored
-	controllers, not $(\varepsilon,\delta)$ budgets.
+	\textbf{Differential privacy.} Neighboring-dataset distinguishability
+	\cite{dwork2006,dwork2014} is relational; we target calibration
+	hyperproperties, not $(\varepsilon,\delta)$ budgets.
 	
-	\textbf{Runtime verification.} RV monitors observed traces
-	\cite{leucker2009,bartocci2018,falcone2018}. Classic RV fits single-trace
-	temporals; $k$-safety still needs multiple runs or a product. \sys{} is a
-	paired metamorphic harness, not an online monitor.
+	\textbf{Runtime verification.} Classic RV fits single-trace temporals
+	\cite{leucker2009,bartocci2018,falcone2018}; $k$-safety still needs
+	multiple runs or a product. \sys{} is a paired metamorphic harness, not an
+	online monitor.
 	
-	\textbf{Metamorphic testing.} Metamorphic relations are $k$-safety
-	hyperproperties under another vocabulary \cite{chen1998,segura2016}. Here
-	the subject is a stateful long-horizon agent-authored artifact under
-	closed-loop coupling---the engineering gap we address.
+	\textbf{Metamorphic testing.} Metamorphic relations are $k$-safety under
+	another vocabulary \cite{chen1998,segura2016}. Our subject is a stateful
+	long-horizon artifact under closed-loop coupling---the engineering gap.
 	
-	\textbf{Agentic / LLM evaluation.} Repository tasks, tool-use, web/multi-turn
-	reward, and unit-test pass rates
-	\cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021} grade single executions
-	(or aggregates thereof). Trajectory judges inherit the same limit: the
-	counterfactual is not in one film. \sys{} is complementary, not a pass@k
-	replacement. We report no invented AUROC/F1/model scores against those
-	benchmarks.
+	\textbf{Agentic / LLM evaluation.} Repository, tool-use, and pass-rate
+	benchmarks \cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021} grade single
+	executions (or aggregates). Trajectory judges inherit the same limit.
+	\sys{} is complementary, not a pass@$k$ replacement; we invent no
+	AUROC/F1/model scores against those suites.
 	
 	\textbf{Differential / regression testing.} Differential testing compares
 	implementations on shared inputs \cite{mckeeman1998}. We compare one
-	implementation on deliberately related inputs---the dual---and require a
+	implementation on deliberately related inputs---the dual---with a
 	semantically controlled input relation.
 	
 	\section{Discussion}
