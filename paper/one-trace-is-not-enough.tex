@@ -1,0 +1,337 @@
+%% Living IEEEtran conference source for DIPTYCH.
+%% Title locked: One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems
+%% Synthesized from drafts/ieee-draft.md + PAPER_OUTLINE.md (no author PDF binary available).
+%% Section VII is the evaluation PROTOCOL only --- no invented AUROC / model scores.
+%% Compile: pdflatex one-trace-is-not-enough.tex
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{xcolor}
+
+\hyphenation{DIP-TYCH hyper-prop-er-ty}
+
+\begin{document}
+
+\title{One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems}
+
+\author{
+\IEEEauthorblockN{Abhishek Pandey}
+\IEEEauthorblockA{Meta}
+\and
+\IEEEauthorblockN{Abhinav Pandey}
+\IEEEauthorblockA{Cisco}
+}
+
+\maketitle
+
+\begin{abstract}
+Calibration and safety claims for agent-authored controllers are routinely demonstrated with a single execution.
+We argue that such claims are \emph{2-safety hyperproperties}: the bad thing is not one run, but a \emph{coupled pair} that shares all exogenous inputs except one controlled perturbation.
+\textbf{DIPTYCH} is an IEEE-oriented artifact harness that forks a shared prefix (open-loop shape or common-random-numbers closed-loop point), discards incomparable pairs, and grades suffixes only.
+It ships schema-\texttt{0.2} probe envelopes, eight operators spanning open-loop and CRN closed-loop regimes, and a \texttt{gate\_axis\_mutate} power-on-axis check that rejects cosmetic verdict flips.
+Product adapters (ZeroDay, AOMB) emit conforming/violating twins at pinned SHAs; DIPTYCH grades and does not vendor those trees.
+This paper specifies the harness, operator inventory, adapter case placements, and an offline evaluation \emph{protocol}.
+We invent no AUROC or model scores---only harness behavior, pin facts, and coverage-cell criteria.
+\end{abstract}
+
+\begin{IEEEkeywords}
+hyperproperties, 2-safety, agent-authored controllers, paired-trace grading, CRN coupling, software artifacts
+\end{IEEEkeywords}
+
+\section{Introduction}
+\label{sec:intro}
+
+Agent-authored control stacks---LLM-assisted planners, security triage agents, ranking and closed-loop simulators---are often shipped with a \emph{single-trace demo}: one seed, one schedule, one cassette replay.
+A lone film can look legal while hiding that the claimed calibration depends on an unstated coupling (shared clock, shared noise, shared schema, shared polarity convention).
+Single-run demos therefore overclaim.
+
+\paragraph{Hyperproperty framing.}
+Clarkson and Schneider's hyperproperties lift properties from individual traces to sets of traces~\cite{clarkson2010hyperproperties}.
+Calibration-as-robustness under a controlled axis is a classic \emph{2-safety} pattern: for every comparable pair related by a declared perturbation, a relational verdict must hold.
+DIPTYCH operationalizes that pattern for agent-authored controllers.
+
+\paragraph{Film metaphor.}
+One reel may be admissible under local invariants.
+Calibration is the \emph{diptych}: two frames that share a prefix and differ on exactly one graded axis.
+Incomparable pairs are discarded, not papered over with a score.
+\emph{One film $=$ legal; only the pair $=$ calibrated.}
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item \textbf{DIPTYCH harness} --- schema~\texttt{0.2} envelopes, eight operators, gates including \texttt{gate\_axis\_mutate}.
+  \item \textbf{Operator inventory} --- FREEZEDRY, RESEED, SCHEMAX, SIGNFLIP, SATEXTEND, HISTSWAP, TRAJSWAP, VARSCALE.
+  \item \textbf{Adapter contract} --- ZeroDay and AOMB emit twins; DIPTYCH grades; product trees are pinned, not forked into this repository.
+  \item \textbf{Coverage matrix} --- Operator $\times$ \{\texttt{diptych\_core}, \texttt{zeroday}, \texttt{aomb}\}; green iff twin contrast \emph{and} axis power.
+\end{enumerate}
+
+\paragraph{Non-claims.}
+Localization $\neq$ exploitability.
+No exploit/PoC payloads.
+No AUROC / model-score fields in graded envelopes.
+Adapter case placements cite pinned SHAs only---never invented model scores.
+
+\section{Related Work and Hyperproperty Taxonomy}
+\label{sec:related}
+
+\subsection{Hyperproperties and $k$-safety}
+Hyperproperties classify requirements over \emph{sets} of executions~\cite{clarkson2010hyperproperties}.
+\emph{2-safety} hyperproperties are falsified by a finite pair of traces.
+Relational verification, product programs, and hyperproperty runtime verification study the same shape: couple two runs, then check a relational assertion~\cite{barthe2011relational,finkbeiner2019rv}.
+DIPTYCH does not claim a new hyperproperty calculus; it supplies an \emph{executable grading harness} and operator taxonomy tuned to agent-authored control artifacts.
+
+\subsection{Coupling disciplines}
+\begin{table}[!t]
+\caption{Coupling disciplines used by DIPTYCH.}
+\label{tab:coupling}
+\centering
+\begin{tabular}{@{}llp{4.2cm}@{}}
+\toprule
+\textbf{Discipline} & \textbf{Shared mass} & \textbf{Graded axes (this work)} \\
+\midrule
+Open-loop & Prefix / cassette / freeze & FREEZEDRY, RESEED, SCHEMAX, SIGNFLIP, SATEXTEND, HISTSWAP \\
+CRN closed-loop & CRN stream + residual & TRAJSWAP, VARSCALE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Common Random Numbers (CRN) couple stochastic closed-loop rollouts so residuals and variance scales are attributable to the declared axis rather than to independent noise draws.
+
+\subsection{Taxonomy used by DIPTYCH}
+\begin{table}[!t]
+\caption{Trace property vs.\ hyperproperty grading.}
+\label{tab:taxonomy}
+\centering
+\begin{tabular}{@{}llp{3.6cm}@{}}
+\toprule
+\textbf{Layer} & \textbf{Question} & \textbf{DIPTYCH answer} \\
+\midrule
+Trace property & Does one film satisfy a local invariant? & Necessary but insufficient for calibration \\
+2-safety & Do coupled twins respect the axis? & Graded via conforming/violating pairs \\
+Power-on-axis & Does mutating \emph{only} the axis flip pass$\to$fail? & \texttt{gate\_axis\_mutate} \\
+Incomparability & Are twins even comparable? & Discard / \texttt{inconclusive} ($\neq$ green) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Verdict vocabulary is exactly $\{\texttt{pass}, \texttt{fail}, \texttt{inconclusive}\}$.
+\texttt{inconclusive} requires a documented reason and does \emph{not} paint a coverage cell green.
+
+\section{DIPTYCH Model}
+\label{sec:model}
+
+\subsection{Shared prefix, suffix probes}
+DIPTYCH forks a shared prefix---open-loop shape or CRN closed-loop point---then probes \emph{suffixes} under one operator.
+Pairs that violate the shared-prefix / CRN identity rule are incomparable and are not scored as green.
+
+\subsection{Schema \texttt{0.2} envelope}
+Hard keys (contract): \texttt{diptych\_schema}, \texttt{source}, \texttt{operator}, \texttt{coupling}, \texttt{probe\_id}, \texttt{control\_role}, \texttt{traces} (length $\geq 2$), \texttt{expected\_verdict}.
+Sources: $\{\texttt{diptych\_core}, \texttt{zeroday}, \texttt{aomb}\}$.
+TRAJSWAP and VARSCALE \emph{must} use \texttt{coupling: crn\_closed\_loop}.
+Forbidden fields include \texttt{auroc}, \texttt{AUROC}, \texttt{lab\_auroc}, and \texttt{model\_grade} (contract rejection).
+
+\subsection{Artifact layout}
+Core package under \texttt{diptych/} (contract, grade, gates, \texttt{mutate\_axis}, CRN helpers);
+per-operator \texttt{ops/<op>/} and handwritten \texttt{controls/<op>/};
+fixture twins under \texttt{diptych-probes/};
+live cells in \texttt{coverage/matrix.json};
+read-only pins in \texttt{adapters/PINS.md}.
+
+\section{Eight-Operator Inventory}
+\label{sec:ops}
+
+Waves follow the harness inventory (A: fastest open-loop power; B: polarity/bounds/history; C: CRN closed-loop).
+
+\begin{table*}[!t]
+\caption{Operator inventory (axes and twin contrast). No model scores.}
+\label{tab:ops}
+\centering
+\footnotesize
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Op} & \textbf{Wave} & \textbf{Coupling} & \textbf{Conforming ($\to$ pass)} & \textbf{Violating ($\to$ fail)} \\
+\midrule
+FREEZEDRY & A & open\_loop & freeze $\to$ identical fingerprints & unfrozen leak $\to$ diverge \\
+RESEED & A & open\_loop & seeds differ; stability $\leq\varepsilon$ & stability $>\varepsilon$ \\
+SCHEMAX & A & open\_loop & required key sets equal & required key renamed/dropped \\
+SIGNFLIP & B & open\_loop & odd-symmetry / invariant holds & polarity assumption broken \\
+SATEXTEND & B & open\_loop & values in sat and legal band & sat pushes into violation \\
+HISTSWAP & B & open\_loop & splice preserves property & corrupt/misalign history \\
+TRAJSWAP & C & \textbf{crn\_closed\_loop} & CRN residual in bound after swap & swap breaks closed-loop invariant \\
+VARSCALE & C & \textbf{crn\_closed\_loop} & scale within bound; ordering holds & scale breaks bound/ordering \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Canonical semantics live in the repository under \texttt{docs/OPERATORS.md} and \texttt{docs/adapters/OPERATOR\_TABLE.md}.
+
+\section{Gates and Methods}
+\label{sec:gates}
+
+\subsection{Gate stack}
+\begin{table}[!t]
+\caption{Gates that reject thin implementations.}
+\label{tab:gates}
+\centering
+\begin{tabular}{@{}lp{5.4cm}@{}}
+\toprule
+\textbf{Gate} & \textbf{Role} \\
+\midrule
+Manifest & 8 operators $\times$ \{\texttt{conforming}, \texttt{violating}\} paths present \\
+Stub rejection & Reject TODO / NotImplemented / empty traces / role$\leftrightarrow$verdict mismatch \\
+Contrast & Twins not identical; expected verdicts asymmetric (\texttt{pass} vs.\ \texttt{fail}) \\
+Axis presence & Operator-specific graded channels/meta present \\
+\texttt{gate\_axis\_mutate} & On conforming twin: mutate \emph{only} the operator axis $\Rightarrow$ grader flips \texttt{pass}$\to$\texttt{fail}; cosmetic edits leave the axis fingerprint unchanged and \emph{fail} the gate \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A coverage cell is \textbf{green} only when (1)~conforming~$\to$~\texttt{pass}, (2)~violating~$\to$~\texttt{fail}, and (3)~\texttt{gate\_axis\_mutate} reports \texttt{power\_ok}.
+
+\subsection{Offline PoC command}
+No GPU and no network are required for the core PoC.
+From the repository root:
+\begin{verbatim}
+./scripts/run_poc.sh
+# equivalent: make poc
+\end{verbatim}
+The script runs \texttt{python3 -m diptych.run\_full8} (manifest $\to$ stubs $\to$ contrast $\to$ axis $\to$ \texttt{gate\_axis\_mutate} $\to$ write \texttt{coverage/matrix.json}) then unit tests.
+Exit code~$0$ means all eight \texttt{diptych\_core} cells are green under the protocol of Section~\ref{sec:eval}.
+
+\subsection{What we refuse to report}
+AUROC, lab AUROC, or invented model grades as hyperproperty scores;
+exploit / attack / PoC payload fields;
+green adapter cells without pin evidence.
+
+\section{Adapters: ZeroDay and AOMB Case Placements}
+\label{sec:adapters}
+
+DIPTYCH does \emph{not} vendor ZeroDay or AOMB product trees.
+Adapters emit schema-\texttt{0.2} probe twins; this harness grades.
+Pins are read-only case placements for the coverage matrix columns \texttt{zeroday} and \texttt{aomb}.
+
+\begin{table}[!t]
+\caption{Adapter pins (read-only; not vendored).}
+\label{tab:pins}
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Adapter} & \textbf{Short SHA} & \textbf{Full SHA} \\
+\midrule
+ZeroDay & \texttt{fb5b39da} & \texttt{fb5b39daf88e37521aaee8526ae9d286cf74f341} \\
+AOMB & \texttt{667e475} & \texttt{667e47538ae5b9c504187b7a73220d22aa8fb96f} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{ZeroDay@\texttt{fb5b39da}.}
+Product probes emit full-8 conforming/violating twins (cassettes / serialize-restore / SARIF+decision fingerprints as applicable).
+TRAJSWAP/VARSCALE require \texttt{crn\_closed\_loop}.
+Hard omit: exploit/PoC/payload/AUROC fields.
+Desk-safe fingerprints only.
+
+\paragraph{AOMB@\texttt{667e475}.}
+Product fixtures emit full-8 conforming/violating twins for ranking/session domains.
+Lab AUROC stays unpublished and is never accepted as a hyperproperty grade.
+Public ranking cards are smoke narrative only.
+
+\paragraph{\texttt{gate\_axis\_mutate} on adapters.}
+Adapter greens inherit the same power-on-axis rule as \texttt{diptych\_core}: mutating only the operator axis on a conforming twin must flip the grader verdict.
+Identical twins, stub markers, and cosmetic SARIF/score renames fail the gate.
+Source of truth for pins: \texttt{adapters/PINS.md}.
+
+\section{Evaluation Protocol}
+\label{sec:eval}
+
+This section specifies the evaluation \emph{protocol}.
+It does \textbf{not} invent AUROC, accuracy, ranking lifts, or other model scores.
+
+\subsection{Protocol object}
+Evaluate Operator $\times$ \{\texttt{diptych\_core}, \texttt{zeroday}, \texttt{aomb}\} cells written to \texttt{coverage/matrix.json}.
+Each cell records a categorical status (\texttt{green} / \texttt{pending} / \texttt{stub} / \ldots) and a boolean \texttt{axis\_power}.
+No numeric model metric is part of the grade.
+
+\subsection{Steps (offline, deterministic)}
+\begin{enumerate}
+  \item Checkout this repository; set \texttt{PYTHONPATH=.}.
+  \item Run \texttt{./scripts/run\_poc.sh} (or \texttt{make poc}).
+  \item Confirm exit code~$0$.
+  \item Confirm \texttt{coverage/matrix.json} lists eight operators with \texttt{diptych\_core=green} and \texttt{axis\_power=true}.
+  \item For adapter columns: attribute \texttt{zeroday}/\texttt{aomb} status only via pin facts in Table~\ref{tab:pins} and adapter QC evidence---do not invent scores; do not vendor product trees into this repo.
+  \item Negative controls (unit tests): cosmetic mutators (expected-verdict-only flips, SARIF level renames, AUROC injection) must \emph{not} change the axis fingerprint and therefore must fail \texttt{gate\_axis\_mutate}.
+\end{enumerate}
+
+\subsection{Green rule (repeatable criterion)}
+A cell is green iff all hold:
+\begin{itemize}
+  \item conforming control $\to$ grader \texttt{pass};
+  \item violating control $\to$ grader \texttt{fail};
+  \item \texttt{gate\_axis\_mutate} power-on-axis succeeds on the conforming twin;
+  \item no stub markers; traces length $\geq 2$; CRN ops tagged \texttt{crn\_closed\_loop}.
+\end{itemize}
+\texttt{inconclusive} $\neq$ green.
+
+\subsection{Citation policy for metrics}
+Cite only: repository facts, CI exit codes, and cells written to \texttt{coverage/matrix.json}.
+Do not invent AUROC, accuracy, or model-score numbers for this artifact.
+Live matrix notes in-repo state that adapter greens (when recorded) cite ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475} with \texttt{gate\_axis\_mutate}---not fabricated model studies.
+
+\subsection{Reproducibility command}
+\begin{verbatim}
+./scripts/run_poc.sh   # expect exit 0; refreshes coverage/matrix.json
+\end{verbatim}
+
+\section{Limitations, Ethics, and Non-Claims}
+\label{sec:limits}
+
+\paragraph{Internal.}
+Fixture twins under \texttt{diptych\_core} are handwritten controls; they establish protocol power, not statistical generalization across production fleets.
+Graders are deterministic functions of envelope fields---bugs in graders would systematically mislabel cells.
+
+\paragraph{Construct.}
+``Green'' means twin contrast + axis power under schema~\texttt{0.2}, not exploitability, not deployment safety certification, and not model quality.
+
+\paragraph{External.}
+Adapter columns are pinned case placements (Table~\ref{tab:pins}); product trees are not re-derived inside this repository.
+A pin move without a matching QC would drop those columns out of green.
+
+\paragraph{Ethics.}
+Desk-safe fingerprints and fixtures; omit exploit/payload fields from artifacts.
+Localization $\neq$ exploitability.
+No AUROC / model scores in graded envelopes.
+\texttt{inconclusive} $\neq$ green.
+
+\section{Conclusion}
+\label{sec:concl}
+
+DIPTYCH treats calibration of agent-authored controllers as a \emph{2-safety} grading problem over coupled traces.
+The harness couples prefixes, applies one of eight operators, requires asymmetric twin verdicts, and demands \texttt{gate\_axis\_mutate} power-on-axis.
+ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475} are adapter case placements that emit twins; DIPTYCH grades.
+The evaluation protocol in Section~\ref{sec:eval} records coverage cells and axis power---never invented model scores.
+One film can be legal; only the pair is calibrated.
+
+\section*{Artifact Availability}
+Source, PoC, and living \LaTeX{}: \url{https://github.com/pandeyaby/DIPTYCH}
+(\texttt{paper/one-trace-is-not-enough.tex}, \texttt{./scripts/run\_poc.sh}).
+
+\begin{thebibliography}{00}
+\bibitem{clarkson2010hyperproperties}
+M.~R. Clarkson and F.~B. Schneider, ``Hyperproperties,''
+\emph{J. Comput. Secur.}, vol.~18, no.~6, pp.~1157--1210, 2010.
+
+\bibitem{barthe2011relational}
+G.~Barthe, P.~R. D'Argenio, and T.~Rezk, ``Secure information flow by self-composition,''
+\emph{Math. Struct. Comput. Sci.}, vol.~21, no.~6, pp.~1207--1252, 2011.
+% Note: classical relational / product-program line; abbreviated for artifact draft.
+
+\bibitem{finkbeiner2019rv}
+B.~Finkbeiner, C.~Hahn, M.~Stenger, and L.~Tentrup,
+``Monitoring hyperproperties,''
+\emph{Formal Methods Syst. Des.}, vol.~54, no.~3, pp.~336--363, 2019.
+\end{thebibliography}
+
+\end{document}

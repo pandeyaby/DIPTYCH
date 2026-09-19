@@ -11,6 +11,10 @@ incomparable pairs, and probes suffixes only.
 
 IEEE artifact harness. Schema `0.2`. Eight operators + `gate_axis_mutate`.
 
+![One film vs coupled diptych](docs/images/diptych-vs-single-trace.png)
+
+![ZeroDay and AOMB feed DIPTYCH graders](docs/images/stack.png)
+
 ## Quick PoC
 
 ```bash
@@ -19,13 +23,26 @@ IEEE artifact harness. Schema `0.2`. Eight operators + `gate_axis_mutate`.
 ```
 
 Exit `0` means full-8 `diptych_core` cells are green (twin contrast + axis power).
-See [`examples/poc/`](examples/poc/) and [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md).
+See [`examples/poc/`](examples/poc/).
 
 ## Paper
 
-- [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — full IEEE draft (preferred)
-- [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis, contributions, section plan
-- [`drafts/ieee-outline.md`](drafts/ieee-outline.md) — IEEE draft skeleton
+Living IEEEtran conference source (authors: Abhishek Pandey / Meta, Abhinav Pandey / Cisco):
+
+- **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — continuous IEEEtran source (§VII = evaluation **protocol**, no invented scores)
+- [`paper/README.md`](paper/README.md) — compile notes
+- [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft
+- [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan
+
+## Why no AUROC
+
+AUROC (and lab AUROC / model grades) are **single-trace ranking scores**. DIPTYCH grades a **2-safety** claim over a *coupled pair*: twin contrast + `gate_axis_mutate` power-on-axis. Publishing AUROC as a hyperproperty grade would:
+
+1. Collapse a relational property into a unary model metric
+2. Invite cosmetic score fields that fail the axis gate (contract rejects `auroc` / `model_grade`)
+3. Confuse localization with exploitability or model quality
+
+Coverage cells record categorical green/pending status and boolean `axis_power` only — never invented model scores. See paper §VII (evaluation protocol).
 
 ## Operators
 
@@ -51,17 +68,18 @@ Details: [`adapters/PINS.md`](adapters/PINS.md).
 ## Layout
 
 ```
+paper/             # living IEEEtran source
 diptych/           # core package (contract, grade, gates, axis mutate)
 ops/<op>/          # spec.yaml + operator.py
 controls/<op>/     # conforming.py + violating.py
 diptych-probes/    # full-8 fixture twins (source=diptych_core)
 coverage/matrix.json
+docs/images/       # diptych-vs-single-trace + stack diagrams
 docs/adapters/     # CONTRACT, GATING, ONEPAGER, zeroday, aomb
 examples/poc/
 scripts/run_poc.sh
 PAPER_OUTLINE.md
 drafts/ieee-draft.md
-drafts/ieee-outline.md
 .github/workflows/ci.yml
 ```
 
