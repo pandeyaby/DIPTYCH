@@ -29,7 +29,7 @@ See [`examples/poc/`](examples/poc/).
 
 Living IEEEtran conference source (authors: Abhishek Pandey / Meta, Abhinav Pandey / Cisco):
 
-- **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — continuous IEEEtran source (§VII = evaluation **protocol**, no invented scores)
+- **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; no invented scores)
 - [`paper/README.md`](paper/README.md) — compile notes
 - [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft
 - [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan

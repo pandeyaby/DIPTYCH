@@ -14,21 +14,28 @@ pdflatex one-trace-is-not-enough.tex
 
 Requires a TeX distribution with `IEEEtran.cls`.
 
-## Section map
+## Section map (authoritative)
 
-| § | Content |
-|---|--------|
-| I | Introduction |
-| II | Related work / hyperproperty taxonomy |
-| III | DIPTYCH model |
-| IV | Eight operators |
-| V | Gates + `gate_axis_mutate` |
-| VI | Adapters: ZeroDay@`fb5b39da`, AOMB@`667e475` |
-| **VII** | **Evaluation protocol** (no invented AUROC / model scores) |
-| VIII | Limitations / ethics / non-claims |
-| IX | Conclusion |
+| § | Label | Content |
+|---|--------|--------|
+| I | — | Introduction |
+| II | `sec:motivating` | Motivating example |
+| III | `sec:taxonomy` | Property taxonomy |
+| IV | `sec:audit` | Spec audit + Proposition 1 |
+| V | `sec:harness` | Diptych harness + `gate_axis_mutate` |
+| VI | `sec:operators` | Eight operators |
+| — | `sec:metrics` | Metrics (definitions only) |
+| **VII** | **`sec:protocol`** | **Evaluation protocol** + ZeroDay/AOMB pins; **no model scores** |
+| VIII | `sec:related` | Related work |
+| IX | `sec:threats` | Threats to validity |
+| X | — | Conclusion |
 
 ## Provenance
 
-Synthesized from [`../drafts/ieee-draft.md`](../drafts/ieee-draft.md) and [`../PAPER_OUTLINE.md`](../PAPER_OUTLINE.md) when no author PDF binary was available.
-Markdown drafts remain under `drafts/` for prose iteration; this directory is the conference-ready continuous source.
+Authoritative author IEEEtran source (uploaded), extended only for:
+
+- ZeroDay@`fb5b39da` / AOMB@`667e475` adapter placement
+- Offline green×8 + `gate_axis_mutate` protocol facts from `coverage/matrix.json`
+- Explicit non-claims (no invented AUROC / model scores)
+
+Markdown drafts under `drafts/` remain for prose iteration.

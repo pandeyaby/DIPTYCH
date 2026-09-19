@@ -4,9 +4,9 @@
 
 **Venue target:** IEEE (artifact-friendly).
 
-**Living IEEEtran source:** [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)  
+**Living IEEEtran source (authoritative):** [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)  
 **Authors:** Abhishek Pandey (Meta), Abhinav Pandey (Cisco)  
-**Full markdown draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
+**Markdown draft:** [`drafts/ieee-draft.md`](drafts/ieee-draft.md)  
 **IEEE skeleton:** [`drafts/ieee-outline.md`](drafts/ieee-outline.md)
 
 ## Thesis
@@ -31,17 +31,19 @@ discards incomparable pairs, and probes suffixes only. **One film = legal; only 
 
 ## Outline → IEEEtran map (`paper/one-trace-is-not-enough.tex`)
 
-| Section | TeX |
-|---------|-----|
-| 1. Introduction | §I |
-| 2. Hyperproperty framing + related work | §II |
-| 3. DIPTYCH model | §III |
-| 4. Operator semantics | §IV |
-| 5. Harness: schema, gates, axis mutate | §V |
-| 6. Adapters: ZeroDay@fb5b39da, AOMB@667e475 | §VI |
-| 7. **Evaluation protocol** (no invented scores) | **§VII** |
-| 8. Limitations & ethics | §VIII |
-| 9. Conclusion | §IX |
+| Topic | TeX |
+|-------|-----|
+| Introduction | §I |
+| Motivating example | §II `sec:motivating` |
+| Property taxonomy | §III `sec:taxonomy` |
+| Spec audit + confound | §IV `sec:audit` |
+| Harness + `gate_axis_mutate` | §V `sec:harness` |
+| Eight operators | §VI `sec:operators` |
+| Metrics (defs only) | `sec:metrics` |
+| **Evaluation protocol** + ZeroDay/AOMB pins | **§VII `sec:protocol`** |
+| Related work | `sec:related` |
+| Threats | `sec:threats` |
+| Conclusion | final § |
 
 ## Artifact
 
