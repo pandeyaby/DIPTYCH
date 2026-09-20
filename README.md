@@ -66,8 +66,10 @@ Machine-readable: [`CITATION.cff`](CITATION.cff) (no invented DOI).
 Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
+- [`paper/READINESS.md`](paper/READINESS.md) — one-page submission readiness scorecard (green vs human TODOs; baseline main `98eb0efa`)
 - [`paper/SUBMISSION.md`](paper/SUBMISSION.md) — camera-ready / artifact zip package (venue TBD; corresponding author Abhinav)
 - [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce, CI PDF download)
+- [`paper/RQ_PROTOCOL.md`](paper/RQ_PROTOCOL.md) — RQ1–RQ5 scaffolding (result cells N/A)
 - [`paper/README.md`](paper/README.md) — compile notes (`make paper` / CI `paper-pdf` fallback) + figure paths
 - [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft (must not contradict `.tex`)
 - [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan
@@ -110,7 +112,8 @@ bump. Details: [`adapters/PINS.md`](adapters/PINS.md).
 ## Layout
 
 ```
-paper/             # living IEEEtran + SUBMISSION / RQ_PROTOCOL / ANON
+paper/             # living IEEEtran + READINESS / SUBMISSION / RQ_PROTOCOL / ANON
+LICENSE            # MIT (also cited below)
 CITATION.cff       # cite metadata (pandeyaby/DIPTYCH; no DOI)
 diptych/           # core package (contract, grade, gates, axis mutate)
 ops/<op>/          # spec.yaml + operator.py
@@ -138,4 +141,5 @@ drafts/ieee-draft.md
 
 ## License
 
-See [`LICENSE`](LICENSE) (MIT).
+MIT — see root [`LICENSE`](LICENSE). Bundled in `make artifact` zip and cited
+from [`paper/SUBMISSION.md`](paper/SUBMISSION.md) / [`paper/READINESS.md`](paper/READINESS.md).

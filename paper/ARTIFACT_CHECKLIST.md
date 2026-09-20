@@ -1,7 +1,9 @@
 # IEEE artifact checklist — DIPTYCH
 
 Living paper: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)  
+Readiness scorecard: [`READINESS.md`](READINESS.md) (green vs human TODOs; baseline main `98eb0efa`)  
 Submission package: [`SUBMISSION.md`](SUBMISSION.md) (venue placeholder, zip contents, anonymization, corresponding author)  
+License: root [`LICENSE`](../LICENSE) (MIT) · Cite: [`CITATION.cff`](../CITATION.cff) (no DOI)  
 Repo: https://github.com/pandeyaby/DIPTYCH · schema `0.2`
 
 This checklist is for reviewers and for keeping the IEEEtran draft honest.
@@ -88,7 +90,9 @@ the pins above—never invented model scores.
 | Authoritative IEEEtran | `paper/one-trace-is-not-enough.tex` |
 | Bibliography (BibTeX) | `paper/refs.bib` |
 | Citation file (no DOI) | `CITATION.cff` (root; preferred-citation → paper title) |
+| License (MIT) | `LICENSE` (root; cited from README / SUBMISSION / READINESS) |
 | Compile notes | `paper/README.md` |
+| Readiness scorecard | `paper/READINESS.md` |
 | Submission / camera-ready package | `paper/SUBMISSION.md` |
 | Open items | `paper/NOTES.md` |
 | Diagram: one film vs diptych | `docs/images/diptych-vs-single-trace.{png,svg}` |
@@ -112,8 +116,9 @@ RQ scaffolding (results N/A): [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md).
 Double-blind switch: [`ANON.md`](ANON.md).
 
 **Pack reviewer zip:** `make artifact` (or `./scripts/pack_artifact.sh`) →
-`dist/DIPTYCH-<shortsha>.zip` (includes `CITATION.cff`). If the PDF is not local,
-attach CI artifact `one-trace-is-not-enough-pdf` per `ARTIFACT_NOTES.txt` in the zip.
+`dist/DIPTYCH-<shortsha>.zip` (includes `LICENSE`, `CITATION.cff`,
+`paper/READINESS.md`). If the PDF is not local, attach CI artifact
+`one-trace-is-not-enough-pdf` per `ARTIFACT_NOTES.txt` in the zip.
 
 ### Download the CI PDF artifact
 
@@ -156,4 +161,5 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 6. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
 7. (Optional) `make artifact` → inspect zip for CODE_SHA + matrix + notes.
 8. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf` or `make paper`.
-9. (Optional) Read `paper/SUBMISSION.md` / `paper/ANON.md` for camera-ready / blind.
+9. (Optional) Read `paper/READINESS.md` / `paper/SUBMISSION.md` / `paper/ANON.md`
+   for readiness / camera-ready / blind. Confirm `LICENSE` in zip.

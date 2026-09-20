@@ -11,6 +11,10 @@ or model-study scores. Product trees (ZeroDay / AOMB) are **not** edited here.
 
 **HOLD for Abhinav merge yes** before treating any upload as submission-final.
 
+**One-page scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs;
+baseline main `98eb0efa` after #10). **License:** root [`LICENSE`](../LICENSE)
+(MIT) — required in artifact zip.
+
 ---
 
 ## 0. Venue fill-in (TODOs — do not invent)
@@ -122,7 +126,7 @@ Paths below are relative to the bundle root `DIPTYCH-<shortsha>/`.
 | Pins | `adapters/PINS.md` | **yes** |
 | License / README / cite | `LICENSE`, `README.md`, `CITATION.cff` | **yes** |
 | PoC / pack scripts | `scripts/run_poc.sh`, `scripts/pack_artifact.sh`, `scripts/print_matrix.py` | **yes** / best-effort |
-| Paper docs | `paper/SUBMISSION.md`, `ARTIFACT_CHECKLIST.md`, `NOTES.md`, `README.md`, `RQ_PROTOCOL.md`, `ANON.md`, `WITNESSES.md` | **yes** when present |
+| Paper docs | `paper/READINESS.md`, `SUBMISSION.md`, `ARTIFACT_CHECKLIST.md`, `NOTES.md`, `README.md`, `RQ_PROTOCOL.md`, `ANON.md`, `WITNESSES.md` | **yes** when present |
 | Paper source | `paper/one-trace-is-not-enough.tex`, `paper/refs.bib` | **yes** when present |
 | Paper PDF | `paper/one-trace-is-not-enough.pdf` | **optional** (bundled only if already built) |
 | Figures | `docs/images/*.{png,svg}` | if present |
@@ -156,6 +160,7 @@ DIPTYCH-<shortsha>/
   examples/poc/expected_matrix_snippet.json
   adapters/PINS.md
   paper/one-trace-is-not-enough.pdf   # optional; else attach from CI
+  paper/READINESS.md
   paper/SUBMISSION.md
   paper/RQ_PROTOCOL.md
   paper/ANON.md
@@ -181,6 +186,8 @@ pip install pytest && PYTHONPATH=. python -m pytest -q
 
 ## 4. What “done” means for submission (honest)
 
+- [ ] Readiness scorecard reviewed: [`READINESS.md`](READINESS.md)
+- [ ] Root `LICENSE` (MIT) present and cited (README / this file / pack zip)
 - [ ] Cite path present: root `CITATION.cff` (no fake DOI) + README cite snippet
 - [ ] PDF builds (`make paper` or CI `paper-pdf`); page count recorded in §2 + `NOTES.md`
 - [ ] `./scripts/run_poc.sh` exit 0; matrix matches snippet
@@ -235,7 +242,8 @@ author block in the `.tex`.
 - green×8×3 = harness coverage + `gate_axis_mutate` only.
 - ZeroDay / AOMB are **pins**, not in-repo product edits.
 
-See also: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md), [`NOTES.md`](NOTES.md),
-[`RQ_PROTOCOL.md`](RQ_PROTOCOL.md), [`ANON.md`](ANON.md), [`WITNESSES.md`](WITNESSES.md),
+See also: [`READINESS.md`](READINESS.md), [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md),
+[`NOTES.md`](NOTES.md), [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md), [`ANON.md`](ANON.md),
+[`WITNESSES.md`](WITNESSES.md), root [`LICENSE`](../LICENSE),
 [`docs/adapters/GATING.md`](../docs/adapters/GATING.md),
 [`docs/adapters/WITNESSES.md`](../docs/adapters/WITNESSES.md).
