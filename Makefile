@@ -1,7 +1,12 @@
-.PHONY: poc test full8 matrix paper artifact clean
+.PHONY: poc poc-json test full8 matrix paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
+
+# Machine-readable stranger path: all 8 ops × conf/viol + gate_axis_mutate → JSON
+# Optional SARIF: make poc-json SARIF=1
+poc-json:
+	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
 
 test:
 	PYTHONPATH=. python3 -m unittest discover -s tests -v
