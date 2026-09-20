@@ -11,9 +11,12 @@ poc-json:
 # Adapter cassette/fixture ingest: grade CONTRACT JSON from disk (no product imports)
 # Usage: make grade INPUT=examples/fixtures/zeroday/RESEED
 # Optional: WITH_AXIS=1 make grade INPUT=examples/fixtures/aomb/SIGNFLIP/conforming
+# Optional SARIF: SARIF=1 make grade INPUT=…   (or --format sarif)
 grade:
 	@test -n "$(INPUT)" || (echo "usage: make grade INPUT=path/to/probe.json|dir"; exit 2)
-	PYTHONPATH=. python3 -m diptych.grade --input "$(INPUT)" $(if $(WITH_AXIS),--with-axis-mutate,)
+	PYTHONPATH=. python3 -m diptych.grade --input "$(INPUT)" \
+		$(if $(WITH_AXIS),--with-axis-mutate,) \
+		$(if $(SARIF),--sarif,)
 
 test:
 	@if python3 -c "import pytest" 2>/dev/null; then \
