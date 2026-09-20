@@ -4,9 +4,12 @@ Stranger / adapter path (no product imports)::
 
     python -m diptych.grade --input path/to/probe.json
     python -m diptych.grade --input path/to/fixtures/dir --with-axis-mutate
+    python -m diptych.grade --input path/to/probe.json --sarif
+    python -m diptych.grade --input path/to/probe.json --format sarif
 
 Consumes CONTRACT v0.2 JSON from disk (as ZeroDay/AOMB would emit) and emits
-a machine-readable grade report. No AUROC / invented model scores.
+a machine-readable grade report (JSON default; optional SARIF 2.1.0).
+No AUROC / invented model scores.
 """
 from __future__ import annotations
 
@@ -22,6 +25,15 @@ from diptych.contract import ContractError, validate_envelope
 from diptych.crn import max_abs, mean, prove_traj, prove_varscale, variance
 
 GRADE_SCHEMA = "1.0"
+SARIF_VERSION = "2.1.0"
+SARIF_SCHEMA_URI = "https://json.schemastore.org/sarif-2.1.0.json"
+
+# Verdict → SARIF level (adapter consumers; no invented scores).
+_VERDICT_LEVEL = {
+    "pass": "none",
+    "fail": "error",
+    "inconclusive": "warning",
+}
 
 
 @dataclass
@@ -450,12 +462,173 @@ def build_grade_report(
     }
 
 
+def _sarif_level_for_entry(entry: dict[str, Any]) -> str:
+    """Map graded/rejected entry → SARIF level (pass/fail/inconclusive/reject)."""
+    if entry.get("status") == "rejected":
+        return "error"
+    verdict = entry.get("actual_verdict")
+    if isinstance(verdict, str) and verdict in _VERDICT_LEVEL:
+        return _VERDICT_LEVEL[verdict]
+    return "error"
+
+
+def _sarif_rule_id_for_entry(entry: dict[str, Any]) -> str:
+    if entry.get("status") == "rejected":
+        return "diptych.grade.rejected"
+    verdict = entry.get("actual_verdict")
+    if verdict == "pass":
+        return "diptych.grade.pass"
+    if verdict == "fail":
+        return "diptych.grade.fail"
+    if verdict == "inconclusive":
+        return "diptych.grade.inconclusive"
+    return "diptych.grade.rejected"
+
+
+def report_to_sarif(report: dict[str, Any]) -> dict[str, Any]:
+    """Map a grade report into SARIF 2.1.0 (adapter export; no invented scores).
+
+    Levels/rules encode graded verdicts only:
+    - pass → level ``none``, rule ``diptych.grade.pass``
+    - fail → level ``error``, rule ``diptych.grade.fail``
+    - inconclusive → level ``warning``, rule ``diptych.grade.inconclusive``
+    - rejected / thin envelope → level ``error``, rule ``diptych.grade.rejected``
+    """
+    results: list[dict[str, Any]] = []
+    for entry in report.get("results") or []:
+        if not isinstance(entry, dict):
+            continue
+        rule_id = _sarif_rule_id_for_entry(entry)
+        level = _sarif_level_for_entry(entry)
+        status = entry.get("status")
+        verdict = entry.get("actual_verdict")
+        path = entry.get("path")
+        if status == "rejected":
+            msg = (
+                f"rejected {path}: {entry.get('error')}"
+            )
+        else:
+            msg = (
+                f"{entry.get('operator')}/{entry.get('control_role')}: "
+                f"expected={entry.get('expected_verdict')} actual={verdict} "
+                f"matches_expected={entry.get('matches_expected')} "
+                f"({entry.get('reason')})"
+            )
+        props: dict[str, Any] = {
+            "path": path,
+            "status": status,
+            "operator": entry.get("operator"),
+            "probe_id": entry.get("probe_id"),
+            "control_role": entry.get("control_role"),
+            "expected_verdict": entry.get("expected_verdict"),
+            "actual_verdict": verdict,
+            "matches_expected": entry.get("matches_expected"),
+            "diptych_schema": entry.get("diptych_schema"),
+        }
+        if entry.get("error") is not None:
+            props["error"] = entry.get("error")
+        if entry.get("reason") is not None:
+            props["reason"] = entry.get("reason")
+        loc: dict[str, Any] | None = None
+        if isinstance(path, str) and path:
+            loc = {
+                "physicalLocation": {
+                    "artifactLocation": {"uri": path},
+                }
+            }
+        result: dict[str, Any] = {
+            "ruleId": rule_id,
+            "level": level,
+            "message": {"text": msg},
+            "properties": props,
+        }
+        if loc is not None:
+            result["locations"] = [loc]
+        results.append(result)
+
+    rules = [
+        {
+            "id": "diptych.grade.pass",
+            "shortDescription": {"text": "Graded verdict: pass"},
+            "fullDescription": {
+                "text": (
+                    "Probe graded pass under CONTRACT v0.2. "
+                    "Not AUROC or model quality."
+                )
+            },
+            "defaultConfiguration": {"level": "none"},
+        },
+        {
+            "id": "diptych.grade.fail",
+            "shortDescription": {"text": "Graded verdict: fail"},
+            "fullDescription": {
+                "text": (
+                    "Probe graded fail under CONTRACT v0.2. "
+                    "Not AUROC or model quality."
+                )
+            },
+            "defaultConfiguration": {"level": "error"},
+        },
+        {
+            "id": "diptych.grade.inconclusive",
+            "shortDescription": {"text": "Graded verdict: inconclusive"},
+            "fullDescription": {
+                "text": (
+                    "Honest inconclusive (comparability / missing twin). "
+                    "inconclusive ≠ green."
+                )
+            },
+            "defaultConfiguration": {"level": "warning"},
+        },
+        {
+            "id": "diptych.grade.rejected",
+            "shortDescription": {"text": "Envelope rejected (thin/stub/schema)"},
+            "fullDescription": {
+                "text": (
+                    "Loud reject: missing axis, stub markers, hardcoded_pass, "
+                    "forbidden score fields, or wrong schema version."
+                )
+            },
+            "defaultConfiguration": {"level": "error"},
+        },
+    ]
+
+    return {
+        "$schema": SARIF_SCHEMA_URI,
+        "version": SARIF_VERSION,
+        "runs": [
+            {
+                "tool": {
+                    "driver": {
+                        "name": "diptych.grade",
+                        "informationUri": "https://github.com/pandeyaby/DIPTYCH",
+                        "version": GRADE_SCHEMA,
+                        "rules": rules,
+                    }
+                },
+                "results": results,
+                "properties": {
+                    "grade_schema": report.get("grade_schema"),
+                    "diptych_schema": report.get("diptych_schema"),
+                    "ok": report.get("ok"),
+                    "input": report.get("input"),
+                    "count": report.get("count"),
+                    "graded": report.get("graded"),
+                    "rejected": report.get("rejected"),
+                    "mismatches": report.get("mismatches"),
+                },
+            }
+        ],
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         prog="python -m diptych.grade",
         description=(
             "Grade CONTRACT v0.2 probe JSON from disk "
-            "(adapter cassette/fixture ingest; no product imports)."
+            "(adapter cassette/fixture ingest; no product imports). "
+            "JSON default; optional SARIF 2.1.0 via --sarif / --format sarif."
         ),
     )
     p.add_argument(
@@ -469,11 +642,23 @@ def main(argv: list[str] | None = None) -> int:
         help="Also run gate_axis_mutate on conforming probes that grade pass",
     )
     p.add_argument(
+        "--format",
+        choices=("json", "sarif"),
+        default="json",
+        help="Output format (default: json)",
+    )
+    p.add_argument(
+        "--sarif",
+        action="store_true",
+        help="Emit SARIF 2.1.0 (alias for --format sarif)",
+    )
+    p.add_argument(
         "--output", "-o",
         default=None,
-        help="Optional path to write the JSON report (default: stdout)",
+        help="Optional path to write the report (default: stdout)",
     )
     args = p.parse_args(argv)
+    fmt = "sarif" if args.sarif else args.format
 
     try:
         report = build_grade_report(args.input, with_axis_mutate=args.with_axis_mutate)
@@ -485,11 +670,19 @@ def main(argv: list[str] | None = None) -> int:
             "error": str(exc),
             "results": [],
         }
-        text = json.dumps(err, indent=2, sort_keys=False) + "\n"
+        if fmt == "sarif":
+            payload: dict[str, Any] = report_to_sarif(err)
+        else:
+            payload = err
+        text = json.dumps(payload, indent=2, sort_keys=False) + "\n"
         sys.stderr.write(text)
         return 2
 
-    text = json.dumps(report, indent=2, sort_keys=False) + "\n"
+    if fmt == "sarif":
+        payload = report_to_sarif(report)
+    else:
+        payload = report
+    text = json.dumps(payload, indent=2, sort_keys=False) + "\n"
     if args.output:
         out = Path(args.output)
         out.parent.mkdir(parents=True, exist_ok=True)

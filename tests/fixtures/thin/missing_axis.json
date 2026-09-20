@@ -1,0 +1,52 @@
+{
+  "diptych_schema": "0.2",
+  "source": "zeroday",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 4
+  },
+  "probe_id": "thin.missing_axis",
+  "fixture_id": "thin.missing_axis",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "placeholder": {
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "config_id": "thin"
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "placeholder": {
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "config_id": "thin"
+      }
+    }
+  ]
+}
