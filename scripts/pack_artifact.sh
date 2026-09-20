@@ -96,7 +96,7 @@ for d in diptych ops controls diptych-probes tests docs/adapters; do
   fi
 done
 # Root helpers used by PoC / make
-for f in Makefile pyproject.toml PAPER_OUTLINE.md; do
+for f in Makefile pyproject.toml PAPER_OUTLINE.md CHANGELOG.md; do
   [[ -f "$ROOT/$f" ]] && cp -a "$ROOT/$f" "$DEST/"
 done
 
@@ -130,7 +130,7 @@ Non-claims
 - inconclusive != green
 - ZeroDay / AOMB product trees are NOT vendored (pins only: adapters/PINS.md)
 
-See paper/READINESS.md, paper/SUBMISSION.md, and paper/ARTIFACT_CHECKLIST.md.
+See paper/READINESS.md, CHANGELOG.md, paper/SUBMISSION.md, and paper/ARTIFACT_CHECKLIST.md.
 License: LICENSE (MIT). Cite: CITATION.cff (https://github.com/pandeyaby/DIPTYCH; no DOI yet).
 EOF
 

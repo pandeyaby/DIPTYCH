@@ -66,7 +66,8 @@ Machine-readable: [`CITATION.cff`](CITATION.cff) (no invented DOI).
 Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
-- [`paper/READINESS.md`](paper/READINESS.md) — one-page submission readiness scorecard (green vs human TODOs; baseline main `98eb0efa`)
+- [`paper/READINESS.md`](paper/READINESS.md) — one-page submission readiness scorecard (green vs human TODOs; as of main `4576506a`)
+- [`CHANGELOG.md`](CHANGELOG.md) — merged IEEE polish milestones (#2–#11); status → READINESS
 - [`paper/SUBMISSION.md`](paper/SUBMISSION.md) — camera-ready / artifact zip package (venue TBD; corresponding author Abhinav)
 - [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce, CI PDF download)
 - [`paper/RQ_PROTOCOL.md`](paper/RQ_PROTOCOL.md) — RQ1–RQ5 scaffolding (result cells N/A)
@@ -113,6 +114,7 @@ bump. Details: [`adapters/PINS.md`](adapters/PINS.md).
 
 ```
 paper/             # living IEEEtran + READINESS / SUBMISSION / RQ_PROTOCOL / ANON
+CHANGELOG.md       # IEEE polish milestones (#2–#11); status → paper/READINESS
 LICENSE            # MIT (also cited below)
 CITATION.cff       # cite metadata (pandeyaby/DIPTYCH; no DOI)
 diptych/           # core package (contract, grade, gates, axis mutate)

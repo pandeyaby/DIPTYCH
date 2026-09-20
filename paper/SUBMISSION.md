@@ -12,7 +12,8 @@ or model-study scores. Product trees (ZeroDay / AOMB) are **not** edited here.
 **HOLD for Abhinav merge yes** before treating any upload as submission-final.
 
 **One-page scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs;
-baseline main `98eb0efa` after #10). **License:** root [`LICENSE`](../LICENSE)
+as of main `4576506a` after #11). **Milestone log:** root
+[`CHANGELOG.md`](../CHANGELOG.md). **License:** root [`LICENSE`](../LICENSE)
 (MIT) — required in artifact zip.
 
 ---
@@ -132,7 +133,7 @@ Paths below are relative to the bundle root `DIPTYCH-<shortsha>/`.
 | Figures | `docs/images/*.{png,svg}` | if present |
 | Adapter docs | `docs/adapters/` (incl. `WITNESSES.md`, `GATING.md`) | if present |
 | Harness trees | `diptych/`, `ops/`, `controls/`, `diptych-probes/`, `tests/` | if present |
-| Root helpers | `Makefile`, `pyproject.toml`, `PAPER_OUTLINE.md` | if present |
+| Root helpers | `Makefile`, `pyproject.toml`, `PAPER_OUTLINE.md`, `CHANGELOG.md` | if present |
 | Matrix snapshot | `artifact/matrix_snapshot.txt` | generated |
 
 **PDF attachment:** if `paper/one-trace-is-not-enough.pdf` exists (from
@@ -153,6 +154,7 @@ place the PDF under `paper/` (or submit alongside the zip).
 DIPTYCH-<shortsha>/
   README.md
   CITATION.cff
+  CHANGELOG.md
   CODE_SHA.txt
   ARTIFACT_NOTES.txt
   coverage/matrix.json

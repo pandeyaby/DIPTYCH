@@ -7,7 +7,8 @@
 
 **Authors:** Abhinav Pandey, Abhishek Pandey (Meta)
 
-**Readiness scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs; baseline main `98eb0efa`)  
+**Readiness scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs; as of main `4576506a`)  
+**Milestone log:** root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11)  
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 **Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
 **RQ scaffolding:** [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) (RQ1–RQ5; results N/A)  
@@ -87,9 +88,10 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 
 **PDF page count:** after `make paper`, record pages in
 [`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**
-as of main `98eb0efa`; venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff).
+as of main `4576506a`; venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff).
 License: [`LICENSE`](../LICENSE). Readiness: [`READINESS.md`](READINESS.md).
-Anonymization dry-run: [`ANON.md`](ANON.md) (CI stays named).
+Changelog: [`CHANGELOG.md`](../CHANGELOG.md). Anonymization dry-run: [`ANON.md`](ANON.md)
+(CI stays named).
 
 ## Section map (authoritative)
 

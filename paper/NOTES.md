@@ -1,12 +1,20 @@
 # Paper notes — open items
 
 Living source: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)  
-Readiness scorecard: [`READINESS.md`](READINESS.md) (baseline main `98eb0efa`)  
+Readiness scorecard: [`READINESS.md`](READINESS.md) (frozen as of main `4576506a`)  
+Milestone log: root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11)  
 Artifact checklist: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 Submission package: [`SUBMISSION.md`](SUBMISSION.md)  
 RQ scaffolding: [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md)  
 Anonymization switch: [`ANON.md`](ANON.md)  
 Cite: [`CITATION.cff`](../CITATION.cff) (no DOI) · License: [`LICENSE`](../LICENSE) (MIT)
+
+## Stop condition
+
+Engineering polish is at **diminishing returns**. Next material unlock is
+Abhinav filling venue / author fields (`SUBMISSION.md` §0) or a real
+model-study data drop (RQ / `tab:placeholder` still **N/A**). Do not invent
+venue, DOI, or scores. Prefer HOLD over cosmetic churn.
 
 ## Status
 
@@ -41,6 +49,7 @@ Cite: [`CITATION.cff`](../CITATION.cff) (no DOI) · License: [`LICENSE`](../LICE
 | When | Command | Pages | Note |
 |------|---------|------:|------|
 | This polish draft (#10) | `make paper` / `latexmk` | **8** | Abstract ≤250w; related-work + pin-prose trim; tab:ops resizebox; coverage headers shortened |
+| Post-#11 freeze (#12) | docs only | **8** | CHANGELOG + READINESS as-of `4576506a`; stop-condition note |
 | Post-#10 readiness (#11) | docs only | **8** | `READINESS.md` + LICENSE/cross-link sync; no tex churn unless typo |
 | Post-#9 baseline | (prior) | **9** | ≈8pp body+appendix; refs spill to p9 |
 
@@ -54,7 +63,8 @@ or to force a 6pp cut that would gut honest protocol scaffolding.
 |-------|--------|
 | Cite / badge path | `CITATION.cff` + README cite snippet (no DOI) |
 | License | root `LICENSE` (MIT); README / SUBMISSION / READINESS / pack |
-| Readiness scorecard | `paper/READINESS.md` (baseline main `98eb0efa`) |
+| Readiness scorecard | `paper/READINESS.md` (frozen as of main `4576506a`) |
+| Milestone log | root `CHANGELOG.md` (#2–#11) |
 | Adapter pins | `adapters/PINS.md`, root `README.md` |
 | Coverage cells | `coverage/matrix.json` |
 | Coupling enums | `ops/*/spec.yaml`, `docs/adapters/OPERATOR_TABLE.md` |
@@ -73,7 +83,8 @@ or to force a 6pp cut that would gut honest protocol scaffolding.
 - [x] Pin freeze line (main `84930b24`)
 - [x] Abstract ≤250 words; IEEE keywords present
 - [x] `CITATION.cff` → pandeyaby/DIPTYCH + paper title (no fake DOI)
-- [x] `paper/READINESS.md` scorecard + LICENSE/cross-link sync (#11; baseline `98eb0efa`)
+- [x] `paper/READINESS.md` scorecard + LICENSE/cross-link sync (#11 @ `4576506a`)
+- [x] `CHANGELOG.md` + READINESS freeze / stop-condition (#12; as of `4576506a`)
 - [ ] Discussion / threats still honest on green×8×3 vs RQ N/A after any edit
 - [ ] Witness appendix paths resolve (`docs/adapters/WITNESSES.md`)
 - [ ] Fill Table `tab:placeholder` only after model-study completion (power / sep.).
