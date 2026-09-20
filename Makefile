@@ -9,7 +9,11 @@ poc-json:
 	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
 
 test:
-	PYTHONPATH=. python3 -m unittest discover -s tests -v
+	@if python3 -c "import pytest" 2>/dev/null; then \
+		python3 -m pytest -q; \
+	else \
+		PYTHONPATH=. python3 -m unittest discover -s tests -v; \
+	fi
 
 full8:
 	PYTHONPATH=. python3 -m diptych.run_full8

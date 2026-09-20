@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from diptych import OPERATORS, SCHEMA
+from diptych.api import grade_operator, parse_probe
 from diptych.gates import Report, run_gates, write_matrix
 
 POC_SCHEMA = "1.0"
@@ -87,10 +88,25 @@ def build_poc_report(report: Report | None = None) -> dict[str, Any]:
     for op in OPERATORS:
         cell = (report.matrix.get("operators") or {}).get(op) or {}
         power = report.axis_power.get(op) or {}
+        # Typed API path: parse fixture envelopes (same contract strangers import).
+        conf_path = ROOT / "diptych-probes" / op / "conforming" / "probe.json"
+        viol_path = ROOT / "diptych-probes" / op / "violating" / "probe.json"
+        conf_env = parse_probe(conf_path) if conf_path.is_file() else None
+        viol_env = parse_probe(viol_path) if viol_path.is_file() else None
+        conf_grade = grade_operator(conf_env) if conf_env is not None else None
+        viol_grade = grade_operator(viol_env) if viol_env is not None else None
+        # Prefer gate report results; typed grades must agree when both present.
+        conforming = _role_from_results(report.results, op, "conforming")
+        violating = _role_from_results(report.results, op, "violating")
+        if conf_grade is not None and conforming.get("actual_verdict") is not None:
+            assert conf_grade.actual_verdict == conforming["actual_verdict"], op
+        if viol_grade is not None and violating.get("actual_verdict") is not None:
+            assert viol_grade.actual_verdict == violating["actual_verdict"], op
         operators[op] = {
             "operator": op,
-            "conforming": _role_from_results(report.results, op, "conforming"),
-            "violating": _role_from_results(report.results, op, "violating"),
+            "coupling": conf_env.coupling if conf_env is not None else None,
+            "conforming": conforming,
+            "violating": violating,
             "gate_axis_mutate": {
                 "mutation": power.get("mutation", ""),
                 "expected_axis": power.get("expected_axis"),
@@ -119,8 +135,13 @@ def build_poc_report(report: Report | None = None) -> dict[str, Any]:
         "matrix": report.matrix,
         "axis_power": report.axis_power,
         "failures": [f.__dict__ for f in report.failures],
+        "api": {
+            "import": "from diptych import parse_probe, grade_operator, run_gate_axis_mutate",
+            "schema": "diptych_schema 0.2",
+        },
         "notes": (
             "PoC JSON = twin conforming/violating grades + gate_axis_mutate axis power; "
+            "typed API: parse_probe / grade_operator / run_gate_axis_mutate; "
             "not AUROC / accuracy / vuln-finding"
         ),
     }
