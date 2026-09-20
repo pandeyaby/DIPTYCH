@@ -35,6 +35,22 @@ class ContractError(ValueError):
     pass
 
 
+def _inconclusive_reason(doc: dict[str, Any]) -> str | None:
+    """Return documented inconclusive reason if present (OPERATOR_TABLE / ONEPAGER)."""
+    meta = doc.get("meta") if isinstance(doc.get("meta"), dict) else {}
+    reason = meta.get("inconclusive_reason")
+    if isinstance(reason, str) and reason.strip():
+        return reason.strip()
+    for tr in doc.get("traces") or []:
+        if not isinstance(tr, dict):
+            continue
+        tmeta = tr.get("meta") if isinstance(tr.get("meta"), dict) else {}
+        reason = tmeta.get("inconclusive_reason")
+        if isinstance(reason, str) and reason.strip():
+            return reason.strip()
+    return None
+
+
 def _axis_present(op: str, doc: dict[str, Any]) -> bool:
     """Operator-specific axis fields (GATING / OPERATOR_TABLE)."""
     traces = doc.get("traces") or []
@@ -168,9 +184,18 @@ def validate_envelope(
         raise ContractError("bad control_role")
     if doc["expected_verdict"] not in VERDICTS:
         raise ContractError("bad expected_verdict")
-    if doc["control_role"] == "conforming" and doc["expected_verdict"] != "pass":
+    # Honest inconclusive path (OPERATOR_TABLE / ONEPAGER): requires a reason;
+    # inconclusive ≠ green. Otherwise role→verdict coupling is strict.
+    if doc["expected_verdict"] == "inconclusive":
+        reason = _inconclusive_reason(doc)
+        if not reason:
+            raise ContractError(
+                "inconclusive requires meta.inconclusive_reason "
+                "(top-level meta or traces[].meta)"
+            )
+    elif doc["control_role"] == "conforming" and doc["expected_verdict"] != "pass":
         raise ContractError("conforming must expected_verdict=pass")
-    if doc["control_role"] == "violating" and doc["expected_verdict"] != "fail":
+    elif doc["control_role"] == "violating" and doc["expected_verdict"] != "fail":
         raise ContractError("violating must expected_verdict=fail")
     traces = doc["traces"]
     if not isinstance(traces, list) or len(traces) < 2:

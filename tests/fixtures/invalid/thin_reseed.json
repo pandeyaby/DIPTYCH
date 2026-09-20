@@ -1,0 +1,36 @@
+{
+  "diptych_schema": "0.2",
+  "source": "zeroday",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 4
+  },
+  "probe_id": "invalid.thin.empty_channels",
+  "fixture_id": "invalid.thin.empty_channels",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {},
+      "meta": {
+        "seed": 0,
+        "config_id": "thin",
+        "epsilon": 0.05
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {},
+      "meta": {
+        "seed": 1,
+        "config_id": "thin",
+        "epsilon": 0.05
+      }
+    }
+  ]
+}

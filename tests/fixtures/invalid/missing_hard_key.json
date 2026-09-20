@@ -1,0 +1,36 @@
+{
+  "diptych_schema": "0.2",
+  "source": "aomb",
+  "operator": "SIGNFLIP",
+  "probe_id": "invalid.missing_hard_key",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "score_margin": {
+          "values": [1.0, -1.0]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "signflip_channel": "score_margin"
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "score_margin": {
+          "values": [-1.0, 1.0]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "signflip_channel": "score_margin"
+      }
+    }
+  ]
+}
