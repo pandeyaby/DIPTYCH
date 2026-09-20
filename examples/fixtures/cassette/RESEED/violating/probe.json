@@ -1,0 +1,62 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.reseed.violating",
+  "fixture_id": "cassette.reseed.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "config_id": "stability_smoke_v0",
+        "epsilon": 0.05
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [
+            0.0,
+            0.5,
+            1.0,
+            1.5,
+            2.0,
+            2.5,
+            3.0,
+            3.5
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "config_id": "stability_smoke_v0",
+        "epsilon": 0.05
+      }
+    }
+  ]
+}

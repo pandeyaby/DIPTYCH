@@ -1,0 +1,115 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "TRAJSWAP",
+  "coupling": "crn_closed_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.trajswap.violating",
+  "fixture_id": "cassette.trajswap.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "trajectory": {
+          "values": [
+            -0.14409032957792836,
+            -0.0729036003315193,
+            0.08868413843233755,
+            1.0019837250988632,
+            0.2724117162171129,
+            -0.9973534143409575,
+            0.9323183440677154,
+            0.43266252150283185
+          ]
+        },
+        "swapped_trajectory": {
+          "values": [
+            -0.14409032957792836,
+            -0.0729036003315193,
+            0.08868413843233755,
+            1.0019837250988632,
+            0.2724117162171129,
+            -0.9973534143409575,
+            0.9323183440677154,
+            0.43266252150283185
+          ]
+        },
+        "closed_loop_residual": {
+          "values": [
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "crn_stream_id": "06f55b8e171e",
+        "crn_closed_loop": true,
+        "crn_drift": 0.1,
+        "residual_bound": 1.0
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "trajectory": {
+          "values": [
+            4.855909670422071,
+            5.027096399668481,
+            5.2886841384323375,
+            6.301983725098863,
+            5.672411716217113,
+            4.5026465856590425,
+            6.532318344067716,
+            6.132662521502832
+          ]
+        },
+        "swapped_trajectory": {
+          "values": [
+            -0.14409032957792836,
+            0.02709639966848071,
+            0.28868413843233753,
+            1.301983725098863,
+            0.6724117162171129,
+            -0.4973534143409575,
+            1.5323183440677155,
+            1.1326625215028319
+          ]
+        },
+        "closed_loop_residual": {
+          "values": [
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0,
+            10.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "crn_stream_id": "06f55b8e171e",
+        "crn_closed_loop": true,
+        "crn_drift": 0.2,
+        "residual_bound": 1.0
+      }
+    }
+  ],
+  "crn_closed_loop": true
+}

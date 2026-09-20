@@ -1,0 +1,74 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "VARSCALE",
+  "coupling": "crn_closed_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.varscale.inconclusive_crn",
+  "fixture_id": "cassette.varscale.inconclusive_crn",
+  "control_role": "conforming",
+  "expected_verdict": "inconclusive",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "variance_proxy": {
+          "values": [
+            9.449777302259397,
+            10.379118326978483,
+            10.326927286595044,
+            10.681398497295092,
+            10.047170761849072,
+            9.240914512425702,
+            8.873198984446992,
+            11.017988194665874
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "crn_stream_id": "758a62c05fda",
+        "crn_closed_loop": true,
+        "var_scale": 1.0,
+        "crn_mean": 10.0,
+        "var_scale_bound": 5.0,
+        "mean_match_eps": 0.0001
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "variance_proxy": {
+          "values": [
+            8.899554604518794,
+            10.758236653956967,
+            10.65385457319009,
+            11.362796994590186,
+            10.094341523698144,
+            8.481829024851404,
+            7.7463979688939855,
+            12.035976389331747
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "crn_stream_id": "cafebabe1111",
+        "crn_closed_loop": true,
+        "var_scale": 2.0,
+        "crn_mean": 10.0,
+        "var_scale_bound": 5.0,
+        "mean_match_eps": 0.0001
+      }
+    }
+  ],
+  "crn_closed_loop": true,
+  "meta": {
+    "inconclusive_reason": "traces incomparable under shared prefix rule: crn_stream_id mismatch"
+  }
+}

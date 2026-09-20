@@ -119,6 +119,7 @@ def build_poc_report(report: Report | None = None) -> dict[str, Any]:
                 "mutated_reason": power.get("mutated_reason"),
                 "semantic_witness": power.get("semantic_witness"),
                 "probe_tree_branch": power.get("probe_tree_branch"),
+                "amortization": power.get("amortization"),
             },
             "diptych_core": cell.get("diptych_core"),
             "axis_power": bool(cell.get("axis_power")),

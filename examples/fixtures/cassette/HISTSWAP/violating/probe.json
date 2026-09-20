@@ -1,0 +1,102 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "HISTSWAP",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.histswap.violating",
+  "fixture_id": "cassette.histswap.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "history": {
+          "values": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8
+          ]
+        },
+        "alt_history": {
+          "values": [
+            0.8,
+            0.7,
+            0.6,
+            0.5,
+            0.4,
+            0.3,
+            0.2,
+            0.1
+          ]
+        },
+        "present": {
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "history_corrupt": true,
+        "hist_splice_at": 4
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "history": {
+          "values": [
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0
+          ]
+        },
+        "alt_history": {
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "present": {
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "history_corrupt": true,
+        "hist_splice_at": 4
+      }
+    }
+  ]
+}

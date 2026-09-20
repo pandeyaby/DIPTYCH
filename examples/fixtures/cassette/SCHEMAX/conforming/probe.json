@@ -1,0 +1,70 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "SCHEMAX",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.schemax.conforming",
+  "fixture_id": "cassette.schemax.conforming",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "schema": {
+          "keys": [
+            "trace_id",
+            "span_id",
+            "start_time",
+            "duration_ms",
+            "service_name",
+            "status_code"
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "required_schema_keys": [
+          "trace_id",
+          "span_id",
+          "start_time",
+          "duration_ms",
+          "service_name",
+          "status_code"
+        ]
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "schema": {
+          "keys": [
+            "trace_id",
+            "span_id",
+            "start_time",
+            "duration_ms",
+            "service_name",
+            "status_code"
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "required_schema_keys": [
+          "trace_id",
+          "span_id",
+          "start_time",
+          "duration_ms",
+          "service_name",
+          "status_code"
+        ]
+      }
+    }
+  ]
+}

@@ -8,3 +8,4 @@ description: |
 inconclusive_when:
   - traces incomparable under shared prefix rule
   - missing twin role
+  - crn_stream_id mismatch
