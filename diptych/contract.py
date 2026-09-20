@@ -131,8 +131,16 @@ def reject_thin_envelope(doc: dict[str, Any]) -> None:
             raise ContractError(f"stub marker {banned} forbidden in envelope")
 
     traces = doc.get("traces") or []
-    if not isinstance(traces, list) or len(traces) < 2:
+    # Honest inconclusive / missing-twin path may carry a single trace when
+    # meta.inconclusive_reason documents ops/*/spec.yaml "missing twin role".
+    allow_short_twin = (
+        doc.get("expected_verdict") == "inconclusive"
+        and bool(_inconclusive_reason(doc))
+    )
+    if not isinstance(traces, list) or (len(traces) < 2 and not allow_short_twin):
         raise ContractError("thin envelope: traces length < 2")
+    if allow_short_twin and len(traces) < 1:
+        raise ContractError("thin envelope: inconclusive missing-twin still needs >=1 trace")
     for i, tr in enumerate(traces):
         if not isinstance(tr, dict):
             raise ContractError(f"thin envelope: traces[{i}] not object")
@@ -198,8 +206,14 @@ def validate_envelope(
     elif doc["control_role"] == "violating" and doc["expected_verdict"] != "fail":
         raise ContractError("violating must expected_verdict=fail")
     traces = doc["traces"]
-    if not isinstance(traces, list) or len(traces) < 2:
+    allow_short_twin = (
+        doc["expected_verdict"] == "inconclusive"
+        and bool(_inconclusive_reason(doc))
+    )
+    if not isinstance(traces, list) or (len(traces) < 2 and not allow_short_twin):
         raise ContractError("traces length >= 2 required")
+    if allow_short_twin and (not isinstance(traces, list) or len(traces) < 1):
+        raise ContractError("inconclusive missing-twin requires >=1 trace")
     for i, tr in enumerate(traces):
         if not isinstance(tr, dict):
             raise ContractError(f"traces[{i}] must be object")

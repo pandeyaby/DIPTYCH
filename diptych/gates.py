@@ -292,6 +292,15 @@ def gate_axis_mutate(
             "expected_axis": branch.get("expected_axis"),
             "channel": branch.get("channel"),
         }
+        # Structural prefix-share counters (protocol fields; not $ / timing).
+        horizon = conf.get("horizon") if isinstance(conf.get("horizon"), dict) else {}
+        try:
+            hlen = int(horizon.get("length", 0) or 0)
+        except (TypeError, ValueError):
+            hlen = 0
+        from diptych.probe_tree import prefix_share_amortization
+
+        evidence["amortization"] = prefix_share_amortization(hlen)
     except Exception:  # noqa: BLE001
         evidence["probe_tree_branch"] = None
 

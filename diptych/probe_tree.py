@@ -21,6 +21,28 @@ from diptych.mutate_axis import (
 )
 
 
+
+def prefix_share_amortization(horizon_length: int) -> dict[str, int]:
+    """Protocol node counts for shared-prefix amortization (not $ or timing).
+
+    A conforming root spine of ``horizon_length`` nodes is shared by the
+    mutate-axis and wrong-axis branches; only the branch suffixes are unique.
+    These are structural counters for the probe-tree protocol — not measured
+    wall-clock, dollars, or invented performance claims.
+    """
+    shared = max(int(horizon_length), 0)
+    branch_suffixes = 2  # mutate_axis + wrong_axis
+    naive = 2 * shared  # two full probes without sharing
+    amortized = shared + branch_suffixes
+    return {
+        "shared_prefix_nodes": shared,
+        "branch_suffix_nodes": branch_suffixes,
+        "nodes_naive_two_probes": naive,
+        "nodes_with_prefix_share": amortized,
+        "nodes_saved_by_prefix_share": max(naive - amortized, 0),
+    }
+
+
 def execute_mutate_axis_branch(
     op: str,
     conf: dict[str, Any],
@@ -109,6 +131,12 @@ def execute_operator_probe_tree(op: str, conf: dict[str, Any]) -> dict[str, Any]
     """Full probe-tree for one operator: correct-axis + wrong-axis branches."""
     correct = execute_mutate_axis_branch(op, conf)
     wrong = execute_wrong_axis_branch(op, conf)
+    horizon = conf.get("horizon") if isinstance(conf.get("horizon"), dict) else {}
+    length = horizon.get("length", 0)
+    try:
+        length_i = int(length)
+    except (TypeError, ValueError):
+        length_i = 0
     return {
         "operator": op,
         "root": "conforming",
@@ -116,8 +144,10 @@ def execute_operator_probe_tree(op: str, conf: dict[str, Any]) -> dict[str, Any]
             "mutate_axis": correct,
             "wrong_axis": wrong,
         },
+        "amortization": prefix_share_amortization(length_i),
         "ok": bool(correct.get("power_ok")) and not wrong.get("falsely_flipped"),
     }
+
 
 
 def execute_full8_probe_trees(

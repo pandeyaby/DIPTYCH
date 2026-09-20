@@ -1,0 +1,60 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "SIGNFLIP",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.signflip.inconclusive_prefix",
+  "fixture_id": "cassette.signflip.inconclusive_prefix",
+  "control_role": "conforming",
+  "expected_verdict": "inconclusive",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "signal": {
+          "values": [
+            1.0,
+            -2.0,
+            3.5,
+            -4.0,
+            0.5,
+            -0.5,
+            2.0,
+            -1.0
+          ]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "signflip_channel": "signal",
+        "sign_normalized_fingerprint": "sha256:4530d1039180bb1a00bc413e5e0a25d42b6c1f513c4396b633e503c81a2ea37e"
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "signal": {
+          "values": [
+            -1.0,
+            2.0,
+            -3.5
+          ]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "signflip_channel": "signal",
+        "sign_normalized_fingerprint": "sha256:4530d1039180bb1a00bc413e5e0a25d42b6c1f513c4396b633e503c81a2ea37e"
+      }
+    }
+  ],
+  "meta": {
+    "inconclusive_reason": "traces incomparable under shared prefix rule: channel lengths differ"
+  }
+}

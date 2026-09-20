@@ -41,6 +41,9 @@ class GradeResult:
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
         d["matches_expected"] = self.matches_expected
+        # Protocol field for honest inconclusive (ops/*/spec.yaml hooks).
+        if self.actual_verdict == "inconclusive":
+            d["meta"] = {"inconclusive_reason": self.reason}
         return d
 
 
@@ -394,6 +397,8 @@ def _grade_entry(
         "reason": result.reason,
         "evidence": result.evidence,
     }
+    if result.actual_verdict == "inconclusive":
+        entry["meta"] = {"inconclusive_reason": result.reason}
     if env.horizon is not None:
         entry["horizon"] = env.horizon.to_dict()
     if with_axis_mutate and env.control_role == "conforming" and result.actual_verdict == "pass":
@@ -404,6 +409,8 @@ def _grade_entry(
             "mutated_verdict": evidence.get("mutated_verdict"),
             "semantic_witness": evidence.get("semantic_witness"),
             "failures": evidence.get("failures") or [],
+            "probe_tree_branch": evidence.get("probe_tree_branch"),
+            "amortization": evidence.get("amortization"),
         }
     elif with_axis_mutate:
         entry["gate_axis_mutate"] = {
