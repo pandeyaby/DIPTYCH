@@ -1,6 +1,9 @@
 """DIPTYCH core — diptych_schema 0.2 full-8 hyperproperty grading harness."""
 from __future__ import annotations
 
+# Keep in lockstep with [project].version in pyproject.toml (tested).
+__version__ = "0.2.0"
+
 OPERATORS: tuple[str, ...] = (
     "SIGNFLIP",
     "TRAJSWAP",
@@ -60,6 +63,7 @@ __all__ = [
     "SemanticWitness",
     "Trace",
     "VERDICTS",
+    "__version__",
     "envelope_round_trip",
     "grade_operator",
     "parse_probe",

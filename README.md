@@ -17,14 +17,17 @@ IEEE artifact harness. Schema `0.2`. Eight operators + `gate_axis_mutate`.
 
 ## Quick PoC (≈5 minutes, first clone)
 
-**Need:** Git + **Python ≥ 3.10**. Core is stdlib-only (no `pip install` for the
-gate). Optional: `pip install pytest` for CI-parity tests.
+**Need:** Git + **Python ≥ 3.10**. Core is stdlib-only. Optional editable install
+exposes console scripts (`diptych`, `diptych-poc`, …); `pip install -e ".[dev]"`
+also pulls pytest for CI-parity tests.
 
 ```bash
 git clone https://github.com/pandeyaby/DIPTYCH.git
 cd DIPTYCH
-python -m diptych          # unified smoke (schema → grade → matrix → poc → thin)
-# or: make smoke
+pip install -e ".[dev]"    # console scripts + pytest
+diptych                    # unified smoke (schema → grade → matrix → poc → thin)
+# or: diptych smoke
+# or: python -m diptych / make smoke
 ./scripts/run_poc.sh       # classic full-8 PoC + unit tests
 # or: make poc
 ```
@@ -42,7 +45,7 @@ MATRIX CHECK OK (green×8×3; axis_power=true; matches examples/poc snippet)
 PoC OK
 ```
 
-Details: [`examples/poc/`](examples/poc/). Unified smoke: `python -m diptych` / `make smoke` (optional `--json`). Refresh/print only: `make matrix`. Fixture→`diptych_core` matrix loop: `python -m diptych.matrix --check` (or `make refresh-matrix` to rewrite core cells from cassette/probes; zeroday/aomb columns stay pin-documented). Adapter grade path: `python -m diptych.grade --input <probe|dir>` (JSON default; `--sarif` / `--format sarif` for SARIF 2.1.0). Executable CONTRACT schema: `python -m diptych.schema --check <probe|dir>` ([`docs/adapters/diptych_schema_0.2.json`](docs/adapters/diptych_schema_0.2.json)).
+Details: [`examples/poc/`](examples/poc/). Unified smoke: `diptych` / `diptych smoke` / `python -m diptych` / `make smoke` (optional `--json`). Console scripts after `pip install -e .`: `diptych-poc`, `diptych-grade`, `diptych-matrix`, `diptych-schema`, `diptych-full8` (same as `python -m diptych.*`). Refresh/print only: `make matrix`. Fixture→`diptych_core` matrix loop: `diptych-matrix --check` (or `make refresh-matrix` to rewrite core cells from cassette/probes; zeroday/aomb columns stay pin-documented). Adapter grade path: `diptych-grade --input <probe|dir>` (JSON default; `--sarif` / `--format sarif` for SARIF 2.1.0). Executable CONTRACT schema: `diptych-schema --check <probe|dir>` ([`docs/adapters/diptych_schema_0.2.json`](docs/adapters/diptych_schema_0.2.json)).
 
 **green×8×3 does not claim** accuracy, AUROC, model quality, or vulnerability
 finding — only harness coverage + `gate_axis_mutate` axis power at the adapter

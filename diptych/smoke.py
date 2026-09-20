@@ -12,8 +12,10 @@ Machine-readable report via ``--json``. No AUROC / invented model scores.
 
 Stranger path::
 
-    python -m diptych
-    python -m diptych smoke
+    pip install -e ".[dev]"
+    diptych
+    diptych smoke
+    python -m diptych          # still works
     make smoke
 """
 
@@ -248,10 +250,18 @@ def _print_human(report: dict[str, Any]) -> None:
         print(f"SMOKE FAIL ({', '.join(report.get('failures') or [])})")
 
 
+def _cli_prog() -> str:
+    """Prefer console-script name when installed; else ``python -m diptych``."""
+    name = Path(sys.argv[0]).name
+    if name in ("diptych", "diptych.exe"):
+        return "diptych"
+    return "python -m diptych"
+
+
 def main(argv: list[str] | None = None) -> int:
-    """CLI: ``python -m diptych`` / ``python -m diptych smoke``."""
+    """CLI: ``diptych`` / ``diptych smoke`` / ``python -m diptych``."""
     p = argparse.ArgumentParser(
-        prog="python -m diptych",
+        prog=_cli_prog(),
         description=(
             "DIPTYCH unified stranger smoke: schema freshness, cassette grade, "
             "matrix check, poc json, thin reject. Stdlib-only; no invented scores."
