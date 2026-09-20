@@ -1,0 +1,45 @@
+# Citation metadata for DIPTYCH (harness + paper).
+# No DOI assigned yet — do not invent one. Prefer repository-code until published.
+cff-version: 1.2.0
+title: "One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems"
+message: >-
+  If you use DIPTYCH or this paper draft, please cite it using the metadata below
+  (APA/BibTeX exporters honor preferred-citation when present).
+type: software
+authors:
+  - family-names: Pandey
+    given-names: Abhinav
+    email: pandey.aby@gmail.com
+  - family-names: Pandey
+    given-names: Abhishek
+    email: pandeyabhi1987@gmail.com
+repository-code: "https://github.com/pandeyaby/DIPTYCH"
+url: "https://github.com/pandeyaby/DIPTYCH"
+license: MIT
+keywords:
+  - agentic benchmarks
+  - hyperproperties
+  - metamorphic testing
+  - evaluation methodology
+  - autonomic control
+  - LLM code generation
+abstract: >-
+  Agentic coding benchmarks grade artifacts from single execution traces.
+  Many requirements on agent-authored control systems are hyperproperties
+  (predicates over sets of traces). DIPTYCH is a paired-trace grading harness
+  with eight perturbation operators, coupling discipline, and an evaluation
+  protocol. Offline green×8×3 reports harness coverage and axis power only;
+  no accuracy, AUROC, or model ranking scores are claimed.
+preferred-citation:
+  type: article
+  title: "One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems"
+  authors:
+    - family-names: Pandey
+      given-names: Abhinav
+    - family-names: Pandey
+      given-names: Abhishek
+  year: 2026
+  notes: >-
+    IEEE conference submission draft (living source:
+    paper/one-trace-is-not-enough.tex). Venue TBD. No DOI yet.
+  url: "https://github.com/pandeyaby/DIPTYCH"

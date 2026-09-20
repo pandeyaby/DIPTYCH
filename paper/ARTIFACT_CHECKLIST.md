@@ -87,6 +87,7 @@ the pins above—never invented model scores.
 |------|------|
 | Authoritative IEEEtran | `paper/one-trace-is-not-enough.tex` |
 | Bibliography (BibTeX) | `paper/refs.bib` |
+| Citation file (no DOI) | `CITATION.cff` (root; preferred-citation → paper title) |
 | Compile notes | `paper/README.md` |
 | Submission / camera-ready package | `paper/SUBMISSION.md` |
 | Open items | `paper/NOTES.md` |
@@ -111,8 +112,8 @@ RQ scaffolding (results N/A): [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md).
 Double-blind switch: [`ANON.md`](ANON.md).
 
 **Pack reviewer zip:** `make artifact` (or `./scripts/pack_artifact.sh`) →
-`dist/DIPTYCH-<shortsha>.zip`. If the PDF is not local, attach CI artifact
-`one-trace-is-not-enough-pdf` per `ARTIFACT_NOTES.txt` in the zip.
+`dist/DIPTYCH-<shortsha>.zip` (includes `CITATION.cff`). If the PDF is not local,
+attach CI artifact `one-trace-is-not-enough-pdf` per `ARTIFACT_NOTES.txt` in the zip.
 
 ### Download the CI PDF artifact
 

@@ -4,7 +4,8 @@ Living source: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)
 Artifact checklist: [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 Submission package: [`SUBMISSION.md`](SUBMISSION.md)  
 RQ scaffolding: [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md)  
-Anonymization switch: [`ANON.md`](ANON.md)
+Anonymization switch: [`ANON.md`](ANON.md)  
+Cite: [`CITATION.cff`](../CITATION.cff) (no DOI)
 
 ## Status
 
@@ -24,7 +25,10 @@ Anonymization switch: [`ANON.md`](ANON.md)
 - Camera-ready packaging notes live in `SUBMISSION.md` (venue TODOs; HOLD for
   Abhinav merge yes).
 - Artifact pack: `make artifact` / `./scripts/pack_artifact.sh` → `dist/DIPTYCH-<sha>.zip`
-  (CI dry-runs after PoC); inventory listed in `SUBMISSION.md` §3.
+  (CI dry-runs after PoC); inventory listed in `SUBMISSION.md` §3 (includes
+  `CITATION.cff`).
+- Abstract ≤250 words; IEEE keywords block present; operator names via
+  `\textsc{SignFlip}` etc. (not ALLCAPS).
 - ANON dry-run verified (comment named `\author`, uncomment anonymous block;
   PDF shows Anonymous Author(s); no author-email leaks). CI stays named-only.
 - Stranger PoC: `./scripts/run_poc.sh` prints green×8×3 and checks
@@ -35,8 +39,8 @@ Anonymization switch: [`ANON.md`](ANON.md)
 
 | When | Command | Pages | Note |
 |------|---------|------:|------|
-| This polish draft | `make paper` / `latexmk` | **9** | ≈8pp body+appendix; refs start p8, ~6-line spill to p9 |
-| Post-#8 baseline | (prior) | ~10 | Trimmed related-work / duplicate pins / compact `tab:placeholder` |
+| This polish draft (#10) | `make paper` / `latexmk` | **8** | Abstract ≤250w; related-work + pin-prose trim; tab:ops resizebox; coverage headers shortened |
+| Post-#9 baseline | (prior) | **9** | ≈8pp body+appendix; refs spill to p9 |
 
 Venue page limit is still **TODO** in `SUBMISSION.md` §0. Further trim only
 after the CFP limit is known; do not invent AUROC/model scores to fill space
@@ -46,6 +50,7 @@ or to force a 6pp cut that would gut honest protocol scaffolding.
 
 | Claim | Source |
 |-------|--------|
+| Cite / badge path | `CITATION.cff` + README cite snippet (no DOI) |
 | Adapter pins | `adapters/PINS.md`, root `README.md` |
 | Coverage cells | `coverage/matrix.json` |
 | Coupling enums | `ops/*/spec.yaml`, `docs/adapters/OPERATOR_TABLE.md` |
@@ -58,10 +63,12 @@ or to force a 6pp cut that would gut honest protocol scaffolding.
 
 ## Open (post-protocol)
 
-- [x] Record PDF page count after latexmk (`NOTES` + `SUBMISSION` §2)
+- [x] Record PDF page count after latexmk (`NOTES` + `SUBMISSION` §2) — refresh after #10 build
 - [x] ANON dry-run documented (`ANON.md` §2)
-- [x] Artifact zip inventory matches `make artifact` (`SUBMISSION` §3)
+- [x] Artifact zip inventory matches `make artifact` (`SUBMISSION` §3; +`CITATION.cff`)
 - [x] Pin freeze line (main `84930b24`)
+- [x] Abstract ≤250 words; IEEE keywords present
+- [x] `CITATION.cff` → pandeyaby/DIPTYCH + paper title (no fake DOI)
 - [ ] Discussion / threats still honest on green×8×3 vs RQ N/A after any edit
 - [ ] Witness appendix paths resolve (`docs/adapters/WITNESSES.md`)
 - [ ] Fill Table `tab:placeholder` only after model-study completion (power / sep.).

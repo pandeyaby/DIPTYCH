@@ -46,6 +46,21 @@ Details: [`examples/poc/`](examples/poc/). Refresh/print only: `make matrix`.
 finding — only harness coverage + `gate_axis_mutate` axis power at the adapter
 pins below.
 
+## Cite
+
+```bibtex
+@misc{diptych2026,
+  title        = {One Trace Is Not Enough: Hyperproperty Grading for
+                  Agent-Authored Control Systems},
+  author       = {Pandey, Abhinav and Pandey, Abhishek},
+  year         = {2026},
+  howpublished = {\url{https://github.com/pandeyaby/DIPTYCH}},
+  note         = {IEEE conference submission draft; no DOI yet}
+}
+```
+
+Machine-readable: [`CITATION.cff`](CITATION.cff) (no invented DOI).
+
 ## Paper
 
 Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
@@ -96,6 +111,7 @@ bump. Details: [`adapters/PINS.md`](adapters/PINS.md).
 
 ```
 paper/             # living IEEEtran + SUBMISSION / RQ_PROTOCOL / ANON
+CITATION.cff       # cite metadata (pandeyaby/DIPTYCH; no DOI)
 diptych/           # core package (contract, grade, gates, axis mutate)
 ops/<op>/          # spec.yaml + operator.py
 controls/<op>/     # conforming.py + violating.py

@@ -52,6 +52,7 @@ require_file "paper/SUBMISSION.md"
 require_file "paper/ARTIFACT_CHECKLIST.md"
 require_file "LICENSE"
 require_file "README.md"
+require_file "CITATION.cff"
 require_file "scripts/run_poc.sh"
 
 cp -a "$ROOT/coverage/matrix.json" "$DEST/coverage/"
@@ -59,6 +60,7 @@ cp -a "$ROOT/examples/poc/expected_matrix_snippet.json" "$DEST/examples/poc/"
 cp -a "$ROOT/adapters/PINS.md" "$DEST/adapters/"
 cp -a "$ROOT/LICENSE" "$DEST/"
 cp -a "$ROOT/README.md" "$DEST/"
+cp -a "$ROOT/CITATION.cff" "$DEST/"
 cp -a "$ROOT/scripts/run_poc.sh" "$DEST/scripts/"
 cp -a "$ROOT/scripts/print_matrix.py" "$DEST/scripts/" 2>/dev/null || true
 cp -a "$ROOT/scripts/pack_artifact.sh" "$DEST/scripts/"
@@ -128,6 +130,7 @@ Non-claims
 - ZeroDay / AOMB product trees are NOT vendored (pins only: adapters/PINS.md)
 
 See paper/SUBMISSION.md and paper/ARTIFACT_CHECKLIST.md.
+Cite: CITATION.cff (https://github.com/pandeyaby/DIPTYCH; no DOI yet).
 EOF
 
 # Capture a short matrix snapshot into artifact/ (not a PoC log substitute)

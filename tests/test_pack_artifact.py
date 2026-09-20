@@ -59,6 +59,7 @@ class TestPackArtifact(unittest.TestCase):
                 "docs/adapters/GATING.md",
                 "scripts/run_poc.sh",
                 "LICENSE",
+                "CITATION.cff",
             )
 
             if archive.suffix == ".zip":

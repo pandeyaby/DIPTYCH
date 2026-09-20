@@ -84,8 +84,9 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 `tab:placeholder` stays blank (`---`) until real data exists.
 
 **PDF page count:** after `make paper`, record pages in
-[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft ≈9pp;
-venue limit TBD). Anonymization dry-run: [`ANON.md`](ANON.md) (CI stays named).
+[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**;
+venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff). Anonymization dry-run:
+[`ANON.md`](ANON.md) (CI stays named).
 
 ## Section map (authoritative)
 
