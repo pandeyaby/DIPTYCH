@@ -25,6 +25,7 @@ EXPECTED_SCRIPTS: dict[str, str] = {
     "diptych-grade": "diptych.grade:main",
     "diptych-matrix": "diptych.matrix:main",
     "diptych-schema": "diptych.schema:main",
+    "diptych-pins": "diptych.pins:main",
 }
 
 

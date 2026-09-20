@@ -34,6 +34,7 @@ diptych-full8 = "diptych.run_full8:main"
 diptych-grade = "diptych.grade:main"
 diptych-matrix = "diptych.matrix:main"
 diptych-schema = "diptych.schema:main"
+diptych-pins = "diptych.pins:main"
 
 [project.urls]
 Homepage = "https://github.com/pandeyaby/DIPTYCH"
