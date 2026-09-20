@@ -26,6 +26,7 @@ dependencies = []
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 
+# Stranger CLIs after: pip install -e ".[dev]"  (python -m diptych* still works)
 [project.scripts]
 diptych = "diptych.smoke:main"
 diptych-poc = "diptych.poc:main"
