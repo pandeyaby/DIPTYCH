@@ -17,10 +17,13 @@ from diptych import ADAPTER_PINS, CRN_REQUIRED, OPERATORS, SCHEMA, SOURCES, STUB
 from diptych.contract import ContractError, load_probe, validate_envelope
 from diptych.grade import GradeResult, grade_document
 from diptych.mutate_axis import (
+    AXIS_SPECS,
     MUTATION_DESCRIPTIONS,
     axis_fingerprint,
+    build_semantic_witness,
     mutate_axis,
 )
+from diptych.probe_tree import execute_mutate_axis_branch
 
 # Adapter columns are green at these pins only (merge facts, not invented scores):
 # ZeroDay fb5b39da = merged #41+#42; AOMB 667e475 = merged #18. Product trees stay out of repo.
@@ -167,16 +170,22 @@ def gate_axis_mutate(
 ) -> tuple[list[Failure], dict[str, Any]]:
     """Power-on-axis: mutate only the operator axis on conforming; grader must flip.
 
-    Rejects cosmetic edits (expected_verdict-only / non-axis fingerprint unchanged).
+    Requires a semantic witness (expected_axis + channel + before/after) matching
+    AXIS_SPECS[op]. Rejects cosmetic edits and wrong-axis distractors.
     """
     failures: list[Failure] = []
+    spec = AXIS_SPECS.get(op, {})
     evidence: dict[str, Any] = {
         "operator": op,
         "mutation": MUTATION_DESCRIPTIONS.get(op, ""),
+        "expected_axis": spec.get("expected_axis"),
+        "channel": spec.get("channel"),
         "baseline_verdict": None,
         "mutated_verdict": None,
         "axis_changed": False,
         "power_ok": False,
+        "semantic_witness": None,
+        "probe_tree_branch": None,
     }
     try:
         validate_envelope(conf)
@@ -216,6 +225,37 @@ def gate_axis_mutate(
         )
         return failures, evidence
 
+    claimed = (mutated.get("meta") or {}).get("claimed_axis")
+    try:
+        witness = build_semantic_witness(op, conf, mutated, claimed_axis=claimed)
+    except Exception as e:  # noqa: BLE001
+        failures.append(Failure("axis_mutate", f"{op}: semantic witness error: {e}"))
+        return failures, evidence
+
+    evidence["semantic_witness"] = witness.to_dict()
+    evidence["expected_axis"] = witness.expected_axis
+    evidence["channel"] = witness.channel
+
+    if not witness.axis_match:
+        failures.append(
+            Failure(
+                "axis_mutate",
+                f"{op}: wrong-axis mutate (claimed={witness.details.get('claimed_axis')!r} "
+                f"expected={witness.expected_axis!r}); semantic witness rejected",
+            )
+        )
+        return failures, evidence
+
+    if not witness.changed:
+        failures.append(
+            Failure(
+                "axis_mutate",
+                f"{op}: semantic witness before==after on axis {witness.expected_axis!r} "
+                f"(channel={witness.channel})",
+            )
+        )
+        return failures, evidence
+
     try:
         if op in CRN_REQUIRED and mutated.get("coupling") != "crn_closed_loop":
             failures.append(
@@ -242,6 +282,18 @@ def gate_axis_mutate(
             )
         )
         return failures, evidence
+
+    # Probe-tree branch mirror (same mutator path) for structured execution evidence.
+    try:
+        branch = execute_mutate_axis_branch(op, conf, mutator=apply, claimed_axis=claimed)
+        evidence["probe_tree_branch"] = {
+            "branch": branch.get("branch"),
+            "power_ok": branch.get("power_ok"),
+            "expected_axis": branch.get("expected_axis"),
+            "channel": branch.get("channel"),
+        }
+    except Exception:  # noqa: BLE001
+        evidence["probe_tree_branch"] = None
 
     evidence["power_ok"] = True
     return failures, evidence
