@@ -93,12 +93,16 @@ def build_poc_report(report: Report | None = None) -> dict[str, Any]:
             "violating": _role_from_results(report.results, op, "violating"),
             "gate_axis_mutate": {
                 "mutation": power.get("mutation", ""),
+                "expected_axis": power.get("expected_axis"),
+                "channel": power.get("channel"),
                 "baseline_verdict": power.get("baseline_verdict"),
                 "mutated_verdict": power.get("mutated_verdict"),
                 "axis_changed": bool(power.get("axis_changed")),
                 "power_ok": bool(power.get("power_ok")),
                 "baseline_reason": power.get("baseline_reason"),
                 "mutated_reason": power.get("mutated_reason"),
+                "semantic_witness": power.get("semantic_witness"),
+                "probe_tree_branch": power.get("probe_tree_branch"),
             },
             "diptych_core": cell.get("diptych_core"),
             "axis_power": bool(cell.get("axis_power")),
@@ -174,6 +178,8 @@ def report_to_sarif(poc: dict[str, Any]) -> dict[str, Any]:
                     "baseline_verdict": power.get("baseline_verdict"),
                     "mutated_verdict": power.get("mutated_verdict"),
                     "axis_changed": bool(power.get("axis_changed")),
+                    "expected_axis": power.get("expected_axis"),
+                    "channel": power.get("channel"),
                 },
             }
         )

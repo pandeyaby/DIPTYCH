@@ -1,12 +1,14 @@
 """Axis-only mutations for DIPTYCH power-on-axis CI.
 
 Each mutator edits *only* the operator's hyperproperty axis on a conforming
-probe copy so the grader must flip pass → fail.
+probe copy so the grader must flip pass → fail, and emits a structured
+semantic witness (expected_axis + channel + before/after).
 """
 
 from __future__ import annotations
 
 import copy
+from dataclasses import asdict, dataclass, field
 from typing import Any, Callable
 
 from diptych import OPERATORS
@@ -16,6 +18,162 @@ Mutator = Callable[[dict[str, Any]], dict[str, Any]]
 
 def _deep(doc: dict[str, Any]) -> dict[str, Any]:
     return copy.deepcopy(doc)
+
+
+# Canonical axis registry (aligned with docs/adapters/OPERATOR_TABLE.md + WITNESSES.md).
+# expected_axis is the hyperproperty axis name; channel is the primary graded path.
+AXIS_SPECS: dict[str, dict[str, Any]] = {
+    "RESEED": {
+        "expected_axis": "stability_epsilon",
+        "channel": "traces[*].channels.stability.values",
+        "coupling": "open_loop",
+    },
+    "SCHEMAX": {
+        "expected_axis": "schema_keys",
+        "channel": "traces[*].channels.schema.keys",
+        "coupling": "open_loop",
+    },
+    "FREEZEDRY": {
+        "expected_axis": "freeze_fingerprint",
+        "channel": "traces[*].meta.freeze_channels+decision_fingerprint+channels.graded",
+        "coupling": "open_loop",
+    },
+    "SIGNFLIP": {
+        "expected_axis": "sign_polarity",
+        "channel": "traces[*].channels.<signflip_channel>.values",
+        "coupling": "open_loop",
+    },
+    "SATEXTEND": {
+        "expected_axis": "saturation_legal_band",
+        "channel": "traces[*].channels.<sat_channel>.values",
+        "coupling": "open_loop",
+    },
+    "HISTSWAP": {
+        "expected_axis": "history_splice",
+        "channel": "traces[*].channels.history.values",
+        "coupling": "open_loop",
+    },
+    "TRAJSWAP": {
+        "expected_axis": "trajectory_residual_crn",
+        "channel": "traces[*].channels.trajectory+closed_loop_residual.values",
+        "coupling": "crn_closed_loop",
+    },
+    "VARSCALE": {
+        "expected_axis": "var_scale_bound",
+        "channel": "traces[*].meta.var_scale",
+        "coupling": "crn_closed_loop",
+    },
+}
+
+
+@dataclass
+class SemanticWitness:
+    """Structured proof that only the named operator axis changed."""
+
+    operator: str
+    expected_axis: str
+    channel: str
+    before: Any
+    after: Any
+    axis_match: bool = True
+    details: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+    @property
+    def changed(self) -> bool:
+        return self.before != self.after
+
+
+def _axis_snapshot(op: str, doc: dict[str, Any]) -> Any:
+    """Extract the graded-axis payload for before/after comparison."""
+    traces = doc.get("traces") or []
+    if op == "RESEED":
+        return {
+            "stability": [tr["channels"]["stability"]["values"] for tr in traces],
+            "epsilon": [tr["meta"].get("epsilon") for tr in traces],
+            "seeds": [tr["meta"].get("seed") for tr in traces],
+        }
+    if op == "SCHEMAX":
+        return {"keys": [list(tr["channels"]["schema"]["keys"]) for tr in traces]}
+    if op == "FREEZEDRY":
+        return {
+            "freeze_channels": [list(tr["meta"].get("freeze_channels") or []) for tr in traces],
+            "frozen": [tr["meta"].get("frozen") for tr in traces],
+            "decision_fingerprint": [tr["meta"].get("decision_fingerprint") for tr in traces],
+            "graded": [tr["channels"]["graded"]["values"] for tr in traces],
+        }
+    if op == "SIGNFLIP":
+        target = traces[0]["meta"]["signflip_channel"]
+        return {
+            "signflip_channel": target,
+            "values": [tr["channels"][target]["values"] for tr in traces],
+            "sign_normalized_fingerprint": [
+                tr["meta"].get("sign_normalized_fingerprint") for tr in traces
+            ],
+        }
+    if op == "SATEXTEND":
+        target = traces[0]["meta"].get("sat_channel", "actuator")
+        return {
+            "sat_channel": target,
+            "values": [tr["channels"][target]["values"] for tr in traces],
+            "sat": [[tr["meta"].get("sat_lo"), tr["meta"].get("sat_hi")] for tr in traces],
+            "legal": [[tr["meta"].get("legal_lo"), tr["meta"].get("legal_hi")] for tr in traces],
+        }
+    if op == "HISTSWAP":
+        return {
+            "history": [tr["channels"]["history"]["values"] for tr in traces],
+            "alt_history": [tr["channels"]["alt_history"]["values"] for tr in traces],
+            "hist_splice_at": [tr["meta"].get("hist_splice_at") for tr in traces],
+            "history_corrupt": [tr["meta"].get("history_corrupt") for tr in traces],
+        }
+    if op == "TRAJSWAP":
+        return {
+            "trajectory": [tr["channels"]["trajectory"]["values"] for tr in traces],
+            "swapped_trajectory": [
+                tr["channels"]["swapped_trajectory"]["values"] for tr in traces
+            ],
+            "closed_loop_residual": [
+                tr["channels"]["closed_loop_residual"]["values"] for tr in traces
+            ],
+            "residual_bound": [tr["meta"].get("residual_bound") for tr in traces],
+        }
+    if op == "VARSCALE":
+        return {
+            "var_scale": [tr["meta"].get("var_scale") for tr in traces],
+            "var_scale_bound": [tr["meta"].get("var_scale_bound") for tr in traces],
+            "variance_proxy": [tr["channels"]["variance_proxy"]["values"] for tr in traces],
+        }
+    raise KeyError(f"no axis snapshot for {op!r}")
+
+
+def build_semantic_witness(
+    op: str,
+    before_doc: dict[str, Any],
+    after_doc: dict[str, Any],
+    *,
+    claimed_axis: str | None = None,
+) -> SemanticWitness:
+    """Compare axis snapshots; require claimed_axis to match AXIS_SPECS[op]."""
+    spec = AXIS_SPECS[op]
+    expected = spec["expected_axis"]
+    claimed = claimed_axis if claimed_axis is not None else expected
+    before = _axis_snapshot(op, before_doc)
+    after = _axis_snapshot(op, after_doc)
+    return SemanticWitness(
+        operator=op,
+        expected_axis=expected,
+        channel=spec["channel"],
+        before=before,
+        after=after,
+        axis_match=(claimed == expected),
+        details={
+            "claimed_axis": claimed,
+            "coupling": spec["coupling"],
+            "mutation_tag": (after_doc.get("meta") or {}).get("axis_mutation"),
+        },
+    )
 
 
 def mutate_reseed(doc: dict[str, Any]) -> dict[str, Any]:
@@ -173,6 +331,125 @@ MUTATION_DESCRIPTIONS: dict[str, str] = {
 }
 
 
+# Off-axis distractors: change traces payload so fingerprint moves, but leave the
+# operator's graded axis intact so the conforming grade must still pass.
+def _wrong_axis_reseed(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    # Inject / mutate a SCHEMAX-looking channel the RESEED grader ignores.
+    for tr in out["traces"]:
+        tr["channels"]["schema"] = {"keys": ["distractor_key", "noise"]}
+        tr["meta"]["distractor_note"] = "wrong_axis_schema_noise"
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_schema_distractor",
+        "claimed_axis": "schema_keys",
+    }
+    return out
+
+
+def _wrong_axis_schemax(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["distractor_seed"] = int(tr["meta"].get("seed", 0)) + 99
+        tr["channels"]["stability"] = {"values": [9.9] * 8}
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_stability_distractor",
+        "claimed_axis": "stability_epsilon",
+    }
+    return out
+
+
+def _wrong_axis_freezedry(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 7
+        tr["meta"]["distractor_note"] = "seed_bump_off_freeze_axis"
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_seed_distractor",
+        "claimed_axis": "stability_epsilon",
+    }
+    return out
+
+
+def _wrong_axis_signflip(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 3
+        tr["channels"]["stability"] = {"values": [0.0] * 8}
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_stability_distractor",
+        "claimed_axis": "stability_epsilon",
+    }
+    return out
+
+
+def _wrong_axis_satextend(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 5
+        tr["meta"]["distractor_note"] = "seed_only"
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_seed_distractor",
+        "claimed_axis": "stability_epsilon",
+    }
+    return out
+
+
+def _wrong_axis_histswap(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 11
+        tr["channels"]["schema"] = {"keys": ["hist_distractor"]}
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_schema_distractor",
+        "claimed_axis": "schema_keys",
+    }
+    return out
+
+
+def _wrong_axis_trajswap(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 13
+        tr["meta"]["distractor_note"] = "off_traj_axis"
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_seed_distractor",
+        "claimed_axis": "var_scale_bound",
+    }
+    return out
+
+
+def _wrong_axis_varscale(doc: dict[str, Any]) -> dict[str, Any]:
+    out = _deep(doc)
+    for tr in out["traces"]:
+        tr["meta"]["seed"] = int(tr["meta"].get("seed", 0)) + 17
+        tr["meta"]["distractor_note"] = "off_var_axis"
+    out["meta"] = {
+        **(out.get("meta") or {}),
+        "axis_mutation": "wrong_axis_seed_distractor",
+        "claimed_axis": "trajectory_residual_crn",
+    }
+    return out
+
+
+WRONG_AXIS_MUTATORS: dict[str, Mutator] = {
+    "RESEED": _wrong_axis_reseed,
+    "SCHEMAX": _wrong_axis_schemax,
+    "FREEZEDRY": _wrong_axis_freezedry,
+    "SIGNFLIP": _wrong_axis_signflip,
+    "SATEXTEND": _wrong_axis_satextend,
+    "HISTSWAP": _wrong_axis_histswap,
+    "TRAJSWAP": _wrong_axis_trajswap,
+    "VARSCALE": _wrong_axis_varscale,
+}
+
+
 def mutate_axis(doc: dict[str, Any], operator: str | None = None) -> dict[str, Any]:
     """Return a deep-copied probe with only the operator axis mutated."""
     op = (operator or doc.get("operator") or "").upper()
@@ -181,6 +458,14 @@ def mutate_axis(doc: dict[str, Any], operator: str | None = None) -> dict[str, A
     if op not in OPERATORS:
         raise KeyError(f"unknown operator {op!r}")
     return MUTATORS[op](doc)
+
+
+def mutate_wrong_axis(doc: dict[str, Any], operator: str | None = None) -> dict[str, Any]:
+    """Mutate an off-axis distractor; graded axis must stay intact (no false flip)."""
+    op = (operator or doc.get("operator") or "").upper()
+    if op not in WRONG_AXIS_MUTATORS:
+        raise KeyError(f"no wrong-axis mutator for {op!r}")
+    return WRONG_AXIS_MUTATORS[op](doc)
 
 
 def axis_fingerprint(doc: dict[str, Any]) -> str:

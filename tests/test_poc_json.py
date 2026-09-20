@@ -57,7 +57,7 @@ class TestPocJsonCli(unittest.TestCase):
             self.assertEqual(viol["actual_verdict"], "fail", op)
             self.assertTrue(viol["matches_expected"], op)
 
-            # Existing gate_axis_mutate evidence
+            # Existing gate_axis_mutate evidence + semantic witness (#14)
             power = cell["gate_axis_mutate"]
             self.assertEqual(power["baseline_verdict"], "pass", op)
             self.assertEqual(power["mutated_verdict"], "fail", op)
@@ -65,6 +65,14 @@ class TestPocJsonCli(unittest.TestCase):
             self.assertTrue(power["power_ok"], op)
             self.assertTrue(cell["axis_power"], op)
             self.assertEqual(cell["diptych_core"], "green", op)
+            self.assertTrue(power.get("expected_axis"), op)
+            self.assertTrue(power.get("channel"), op)
+            wit = power.get("semantic_witness")
+            self.assertIsInstance(wit, dict, op)
+            self.assertEqual(wit.get("expected_axis"), power["expected_axis"], op)
+            self.assertIn("before", wit)
+            self.assertIn("after", wit)
+            self.assertNotEqual(wit["before"], wit["after"], op)
 
         # No invented score *fields* (notes may mention AUROC as a non-claim)
         blob = json.dumps(poc)
