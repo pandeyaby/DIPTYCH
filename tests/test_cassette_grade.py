@@ -231,5 +231,38 @@ class TestGradeCliModule(unittest.TestCase):
         self.assertFalse(report["ok"])
 
 
+
+class TestFull8InconclusiveCoverage(unittest.TestCase):
+    """Every operator has ≥1 cassette inconclusive_* that grades inconclusive."""
+
+    def test_each_operator_has_inconclusive_fixture(self):
+        from diptych import OPERATORS, grade_operator, parse_probe
+
+        root = FIXTURES / "cassette"
+        for op in OPERATORS:
+            with self.subTest(operator=op):
+                paths = sorted((root / op).glob("inconclusive_*/probe.json"))
+                self.assertGreaterEqual(
+                    len(paths),
+                    1,
+                    f"{op}: missing inconclusive_* cassette fixture",
+                )
+                for path in paths:
+                    env = parse_probe(path)
+                    self.assertEqual(env.operator, op)
+                    self.assertEqual(env.expected_verdict, "inconclusive")
+                    result = grade_operator(env)
+                    self.assertEqual(
+                        result.actual_verdict,
+                        "inconclusive",
+                        msg=f"{path}: {result.reason}",
+                    )
+                    self.assertTrue(result.matches_expected, result.reason)
+                    self.assertTrue(
+                        (result.reason or "").strip(),
+                        f"{path}: empty inconclusive reason",
+                    )
+
+
 if __name__ == "__main__":
     unittest.main()
