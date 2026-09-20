@@ -15,7 +15,8 @@ and model-study cells remain open / N/A.
 
 | PR | Milestone |
 |----|-----------|
-| #21 (draft) | Executable CONTRACT v0.2 JSON Schema (`docs/adapters/diptych_schema_0.2.json`) + `python -m diptych.schema --check` / `--dump-schema` |
+| #22 (draft) | Unified stranger smoke (`python -m diptych` / `make smoke`) — schema + cassette grade + matrix + poc + thin reject |
+| #21 | Executable CONTRACT v0.2 JSON Schema (`docs/adapters/diptych_schema_0.2.json`) + `python -m diptych.schema --check` / `--dump-schema` |
 
 ---
 

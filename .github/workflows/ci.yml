@@ -26,6 +26,11 @@ jobs:
       - name: pytest
         run: python -m pytest -q
 
+      - name: Unified stranger smoke
+        run: make smoke
+        # python -m diptych: schema freshness → cassette grade → matrix --check →
+        # poc json → thin reject (cheap in-process; ~sub-second).
+
       - name: CONTRACT schema (fresh + valid fixtures)
         run: make schema-check
         # Executable docs/adapters/diptych_schema_0.2.json must match live enums;
