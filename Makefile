@@ -1,4 +1,4 @@
-.PHONY: poc poc-json grade test full8 matrix paper artifact clean
+.PHONY: poc poc-json grade test full8 matrix refresh-matrix paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -27,6 +27,15 @@ full8:
 
 matrix: full8
 	@python3 scripts/print_matrix.py
+
+
+# Derive/verify coverage/matrix.json diptych_core from fixture grades (adapter pins untouched).
+# Check (CI): python -m diptych.matrix --check
+# Write:      make refresh-matrix   OR   python -m diptych.matrix --write
+refresh-matrix:
+	PYTHONPATH=. python3 -m diptych.matrix --write
+	@python3 scripts/print_matrix.py
+
 
 # Build IEEEtran PDF when latexmk + TeX Live (IEEEtran) are installed.
 # CI fallback: .github/workflows/ci.yml job "paper-pdf" uploads the artifact

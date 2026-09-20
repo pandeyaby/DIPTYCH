@@ -40,7 +40,7 @@ MATRIX CHECK OK (green×8×3; axis_power=true; matches examples/poc snippet)
 PoC OK
 ```
 
-Details: [`examples/poc/`](examples/poc/). Refresh/print only: `make matrix`.
+Details: [`examples/poc/`](examples/poc/). Refresh/print only: `make matrix`. Fixture→`diptych_core` matrix loop: `python -m diptych.matrix --check` (or `make refresh-matrix` to rewrite core cells from cassette/probes; zeroday/aomb columns stay pin-documented).
 
 **green×8×3 does not claim** accuracy, AUROC, model quality, or vulnerability
 finding — only harness coverage + `gate_axis_mutate` axis power at the adapter
