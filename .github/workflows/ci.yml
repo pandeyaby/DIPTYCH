@@ -26,6 +26,11 @@ jobs:
       - name: pytest
         run: python -m pytest -q
 
+      - name: CONTRACT schema (fresh + valid fixtures)
+        run: make schema-check
+        # Executable docs/adapters/diptych_schema_0.2.json must match live enums;
+        # cassette + diptych-probes must pass python -m diptych.schema --check.
+
       - name: PoC (full-8 gate)
         run: ./scripts/run_poc.sh
         # Fail the job on any non-zero exit (default shell behavior).

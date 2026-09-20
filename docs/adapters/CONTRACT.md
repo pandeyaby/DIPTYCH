@@ -1,5 +1,7 @@
 # DIPTYCH adapter contracts (v0.2 — full-8 gate)
 
+**Executable schema:** [`diptych_schema_0.2.json`](diptych_schema_0.2.json) (also `diptych/schema/v0_2.json`). Validate without prose: `python -m diptych.schema --check path/to/probe.json`.
+
 **Escalation (GRAX / Abhinav):** ZeroDay and AOMB each implement **all 8** operators as substantive product probes — not stubs, not a 2-operator slice.
 
 Operators (every one, real conforming + violating controls):

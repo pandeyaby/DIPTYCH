@@ -1,4 +1,4 @@
-.PHONY: poc poc-json grade test full8 matrix refresh-matrix paper artifact clean
+.PHONY: poc poc-json grade test full8 matrix refresh-matrix schema schema-check paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -38,6 +38,19 @@ matrix: full8
 refresh-matrix:
 	PYTHONPATH=. python3 -m diptych.matrix --write
 	@python3 scripts/print_matrix.py
+
+
+# Executable CONTRACT v0.2 JSON Schema (adapters validate without prose).
+# Check:  make schema-check   OR   python -m diptych.schema --check PATH
+# Dump:   make schema         OR   python -m diptych.schema --dump-schema
+schema:
+	PYTHONPATH=. python3 -m diptych.schema --dump-schema
+	PYTHONPATH=. python3 -m diptych.schema --check-fresh
+
+schema-check:
+	PYTHONPATH=. python3 -m diptych.schema --check-fresh
+	PYTHONPATH=. python3 -m diptych.schema --check examples/fixtures/cassette
+	PYTHONPATH=. python3 -m diptych.schema --check diptych-probes
 
 
 # Build IEEEtran PDF when latexmk + TeX Live (IEEEtran) are installed.

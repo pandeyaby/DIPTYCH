@@ -1,6 +1,7 @@
 # DIPTYCH adapter specs (pinned Origin sources)
 
 **Schema:** `diptych_schema="0.2"`  
+**Executable JSON Schema:** [`diptych_schema_0.2.json`](diptych_schema_0.2.json) — `python -m diptych.schema --check <probe|dir>` / `--dump-schema`  
 **Upstream repo:** https://origin.cursor.com/abhinavpandey/tmp-c44b600dec44401a
 
 Local Markdown copies in this directory are offline mirrors for CI/review. When specs drift, prefer the **pinned Origin raw URLs** below.

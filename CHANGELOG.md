@@ -11,6 +11,14 @@ and model-study cells remain open / N/A.
 
 ---
 
+## Unreleased (CODE-FIRST harness)
+
+| PR | Milestone |
+|----|-----------|
+| #21 (draft) | Executable CONTRACT v0.2 JSON Schema (`docs/adapters/diptych_schema_0.2.json`) + `python -m diptych.schema --check` / `--dump-schema` |
+
+---
+
 ## Merged IEEE polish (#2–#11)
 
 | PR | Merge SHA | Milestone |

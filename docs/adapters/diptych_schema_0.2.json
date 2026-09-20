@@ -1,0 +1,647 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pandeyaby/DIPTYCH/docs/adapters/diptych_schema_0.2.json",
+  "title": "DIPTYCH CONTRACT v0.2 probe-pair envelope",
+  "description": "Executable CONTRACT for adapter emitters. Enums are generated from diptych.OPERATORS / COUPLINGS / CONTROL_ROLES / VERDICTS / SOURCES. Rejected top-level keys include invented score fields (auroc, etc.). Thin / stub / axis semantics are additionally enforced by diptych.contract.validate_envelope (also on python -m diptych.grade).",
+  "type": "object",
+  "required": [
+    "diptych_schema",
+    "source",
+    "operator",
+    "coupling",
+    "probe_id",
+    "control_role",
+    "traces",
+    "expected_verdict"
+  ],
+  "properties": {
+    "diptych_schema": {
+      "const": "0.2"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "aomb",
+        "diptych_core",
+        "zeroday"
+      ]
+    },
+    "operator": {
+      "type": "string",
+      "enum": [
+        "SIGNFLIP",
+        "TRAJSWAP",
+        "VARSCALE",
+        "SATEXTEND",
+        "HISTSWAP",
+        "FREEZEDRY",
+        "RESEED",
+        "SCHEMAX"
+      ]
+    },
+    "coupling": {
+      "type": "string",
+      "enum": [
+        "crn_closed_loop",
+        "open_loop"
+      ]
+    },
+    "probe_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "control_role": {
+      "type": "string",
+      "enum": [
+        "conforming",
+        "violating"
+      ]
+    },
+    "expected_verdict": {
+      "type": "string",
+      "enum": [
+        "fail",
+        "inconclusive",
+        "pass"
+      ]
+    },
+    "traces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "trace_id",
+          "channels",
+          "meta"
+        ],
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "events": {
+            "type": "array"
+          },
+          "channels": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "values": {
+                  "type": "array",
+                  "minItems": 1
+                },
+                "keys": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "meta": {
+            "type": "object",
+            "required": [
+              "seed"
+            ],
+            "properties": {
+              "seed": true,
+              "crn_stream_id": {
+                "type": "string"
+              },
+              "crn_closed_loop": {
+                "type": "boolean"
+              },
+              "epsilon": {
+                "type": "number"
+              },
+              "inconclusive_reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "horizon": {
+      "type": "object",
+      "required": [
+        "unit",
+        "length"
+      ],
+      "properties": {
+        "unit": {
+          "type": "string",
+          "enum": [
+            "steps",
+            "ms",
+            "events"
+          ]
+        },
+        "length": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "fixture_id": {
+      "type": "string"
+    },
+    "crn_closed_loop": {
+      "type": "boolean"
+    },
+    "meta": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "auroc"
+        ]
+      },
+      {
+        "required": [
+          "AUROC"
+        ]
+      },
+      {
+        "required": [
+          "lab_auroc"
+        ]
+      },
+      {
+        "required": [
+          "model_grade"
+        ]
+      },
+      {
+        "required": [
+          "hardcoded_pass"
+        ]
+      }
+    ]
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "TRAJSWAP"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "coupling": {
+            "const": "crn_closed_loop"
+          }
+        },
+        "required": [
+          "coupling"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "VARSCALE"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "coupling": {
+            "const": "crn_closed_loop"
+          }
+        },
+        "required": [
+          "coupling"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "RESEED"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "stability"
+                  ],
+                  "properties": {
+                    "stability": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "FREEZEDRY"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "graded"
+                  ],
+                  "properties": {
+                    "graded": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "HISTSWAP"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "history"
+                  ],
+                  "properties": {
+                    "history": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "TRAJSWAP"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "trajectory",
+                    "closed_loop_residual"
+                  ],
+                  "properties": {
+                    "trajectory": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    },
+                    "closed_loop_residual": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "VARSCALE"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "variance_proxy"
+                  ],
+                  "properties": {
+                    "variance_proxy": {
+                      "type": "object",
+                      "required": [
+                        "values"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operator": {
+            "const": "SCHEMAX"
+          }
+        },
+        "required": [
+          "operator"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "channels": {
+                  "type": "object",
+                  "required": [
+                    "schema"
+                  ],
+                  "properties": {
+                    "schema": {
+                      "type": "object",
+                      "required": [
+                        "keys"
+                      ],
+                      "properties": {
+                        "keys": {
+                          "type": "array",
+                          "minItems": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "expected_verdict": {
+            "const": "inconclusive"
+          }
+        },
+        "required": [
+          "expected_verdict"
+        ]
+      },
+      "then": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "traces": {
+            "type": "array",
+            "minItems": 2
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "channel_block": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "minItems": 1
+        },
+        "keys": {
+          "type": "array",
+          "minItems": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "trace": {
+      "type": "object",
+      "required": [
+        "trace_id",
+        "channels",
+        "meta"
+      ],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "events": {
+          "type": "array"
+        },
+        "channels": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "values": {
+                "type": "array",
+                "minItems": 1
+              },
+              "keys": {
+                "type": "array",
+                "minItems": 1
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "meta": {
+          "type": "object",
+          "required": [
+            "seed"
+          ],
+          "properties": {
+            "seed": true,
+            "crn_stream_id": {
+              "type": "string"
+            },
+            "crn_closed_loop": {
+              "type": "boolean"
+            },
+            "epsilon": {
+              "type": "number"
+            },
+            "inconclusive_reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "rejected_keys": {
+      "description": "Top-level keys adapters must not emit",
+      "enum": [
+        "auroc",
+        "AUROC",
+        "lab_auroc",
+        "model_grade",
+        "hardcoded_pass"
+      ]
+    },
+    "operators": {
+      "enum": [
+        "SIGNFLIP",
+        "TRAJSWAP",
+        "VARSCALE",
+        "SATEXTEND",
+        "HISTSWAP",
+        "FREEZEDRY",
+        "RESEED",
+        "SCHEMAX"
+      ]
+    },
+    "couplings": {
+      "enum": [
+        "crn_closed_loop",
+        "open_loop"
+      ]
+    }
+  }
+}
