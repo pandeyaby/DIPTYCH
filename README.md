@@ -25,7 +25,7 @@ also pulls pytest for CI-parity tests.
 git clone https://github.com/pandeyaby/DIPTYCH.git
 cd DIPTYCH
 pip install -e ".[dev]"    # console scripts + pytest
-diptych                    # unified smoke (schema → grade → matrix → poc → thin)
+diptych                    # unified smoke (schema → pins → grade → matrix → poc → thin)
 # or: diptych smoke
 # or: python -m diptych / make smoke
 ./scripts/run_poc.sh       # classic full-8 PoC + unit tests

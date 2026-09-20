@@ -3,10 +3,11 @@
 Runs in order (exit non-zero on any failure)::
 
     1. schema-check freshness (CONTRACT JSON Schema ↔ live enums)
-    2. grade cassette fixtures (JSON)
-    3. matrix --check (diptych_core from fixtures)
-    4. poc --json (full-8 structured report)
-    5. thin corpus reject sanity (must reject loudly)
+    2. adapter pins --check (PINS.md ↔ README ↔ paper header)
+    3. grade cassette fixtures (JSON)
+    4. matrix --check (diptych_core from fixtures)
+    5. poc --json (full-8 structured report)
+    6. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -30,10 +31,11 @@ from typing import Any, Callable
 from diptych import OPERATORS, SCHEMA
 from diptych.grade import build_grade_report
 from diptych.matrix import verify_matrix
+from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.0"
+SMOKE_SCHEMA = "1.1"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -42,6 +44,7 @@ DEFAULT_JSON_OUT = ROOT / "reports" / "paired-probes" / "smoke_report.json"
 
 # Stable step ids (order = run order).
 STEP_SCHEMA_FRESH = "schema_fresh"
+STEP_PINS_CHECK = "pins_check"
 STEP_GRADE_CASSETTE = "grade_cassette"
 STEP_MATRIX_CHECK = "matrix_check"
 STEP_POC_JSON = "poc_json"
@@ -49,6 +52,7 @@ STEP_THIN_REJECT = "thin_reject"
 
 SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_SCHEMA_FRESH,
+    STEP_PINS_CHECK,
     STEP_GRADE_CASSETTE,
     STEP_MATRIX_CHECK,
     STEP_POC_JSON,
@@ -95,6 +99,24 @@ def _run_schema_fresh() -> dict[str, Any]:
         ok=True,
         detail={"path": str(SCHEMA_JSON_RELPATH), "status": "fresh"},
     )
+
+
+
+def _run_pins_check() -> dict[str, Any]:
+    """Adapter pin integrity: PINS.md ↔ README ↔ paper (no invented scores)."""
+    code, messages, pins = check_paths()
+    detail: dict[str, Any] = {
+        "exit_code": code,
+        "messages": list(messages),
+    }
+    if pins is not None:
+        detail["zeroday_short"] = pins.zeroday.short
+        detail["aomb_short"] = pins.aomb.short
+    ok = code == PINS_EXIT_OK
+    error = None if ok else (
+        f"pins check failed (exit {code}): " + "; ".join(messages)
+    )
+    return _step(STEP_PINS_CHECK, ok=ok, detail=detail, error=error)
 
 
 def _run_grade_cassette(cassette: Path) -> dict[str, Any]:
@@ -199,6 +221,7 @@ def run_smoke(
 
     runners: list[tuple[str, Callable[[], dict[str, Any]]]] = [
         (STEP_SCHEMA_FRESH, _run_schema_fresh),
+        (STEP_PINS_CHECK, _run_pins_check),
         (STEP_GRADE_CASSETTE, lambda: _run_grade_cassette(cassette_path)),
         (STEP_MATRIX_CHECK, _run_matrix_check),
         (STEP_POC_JSON, _run_poc_json),
@@ -220,8 +243,9 @@ def run_smoke(
         "cassette": str(cassette_path.resolve()),
         "thin": str(thin_path.resolve()),
         "notes": (
-            "Smoke proves harness public surface (schema freshness, cassette grade, "
-            "matrix check, poc json, thin reject). Not AUROC / accuracy / vuln-finding."
+            "Smoke proves harness public surface (schema freshness, adapter pins, "
+            "cassette grade, matrix check, poc json, thin reject). "
+            "Not AUROC / accuracy / vuln-finding."
         ),
     }
 
@@ -238,7 +262,16 @@ def _print_human(report: dict[str, Any]) -> None:
             d = step["detail"]
             # Compact, no fake metrics — only counts / status already measured.
             bits: list[str] = []
-            for key in ("status", "count", "graded", "rejected", "operator_count", "error_count"):
+            for key in (
+                "status",
+                "count",
+                "graded",
+                "rejected",
+                "operator_count",
+                "error_count",
+                "zeroday_short",
+                "aomb_short",
+            ):
                 if key in d:
                     bits.append(f"{key}={d[key]}")
             if bits:
@@ -263,8 +296,9 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         prog=_cli_prog(),
         description=(
-            "DIPTYCH unified stranger smoke: schema freshness, cassette grade, "
-            "matrix check, poc json, thin reject. Stdlib-only; no invented scores."
+            "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
+            "cassette grade, matrix check, poc json, thin reject. "
+            "Stdlib-only; no invented scores."
         ),
     )
     p.add_argument(

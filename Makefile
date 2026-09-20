@@ -1,4 +1,4 @@
-.PHONY: poc poc-json grade test full8 matrix refresh-matrix schema schema-check smoke paper artifact clean
+.PHONY: poc poc-json grade test full8 matrix refresh-matrix schema schema-check pins-check smoke paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -8,11 +8,16 @@ poc:
 poc-json:
 	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
 
-# Unified stranger smoke: schema freshness → cassette grade → matrix --check →
-# poc json → thin reject. Exit non-zero on any failure.
+# Unified stranger smoke: schema freshness → pins --check → cassette grade →
+# matrix --check → poc json → thin reject. Exit non-zero on any failure.
 # Machine report: make smoke JSON=1   OR   python -m diptych smoke --json
 smoke:
 	PYTHONPATH=. python3 -m diptych smoke $(if $(JSON),--json,)
+
+# Adapter pin integrity alone (also folded into `make smoke`).
+# CI / PRs: `make pins-check` or `python -m diptych.pins --check`
+pins-check:
+	PYTHONPATH=. python3 -m diptych.pins --check
 
 # Adapter cassette/fixture ingest: grade CONTRACT JSON from disk (no product imports)
 # Usage: make grade INPUT=examples/fixtures/zeroday/RESEED
