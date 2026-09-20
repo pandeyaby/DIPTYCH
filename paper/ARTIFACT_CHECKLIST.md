@@ -14,9 +14,10 @@ It lists **what ships**, **how to reproduce**, and **what we refuse to claim**.
 
 | Item | Path |
 |------|------|
-| Core package (contract, grade, gates, `gate_axis_mutate`) | `diptych/` |
+| Core package (contract, grade, gates, `gate_axis_mutate`, typed API) | `diptych/` |
 | Operator specs + implementations | `ops/<OP>/spec.yaml`, `ops/<OP>/operator.py` |
 | Full-8 fixture twins (`source=diptych_core`) | `diptych-probes/<OP>/{conforming,violating}/` |
+| CONTRACT v0.2 cassette fixtures (grade CLI) | `examples/fixtures/` |
 | Adapter pins (read-only SHAs) | `adapters/PINS.md` |
 | CI (pytest + PoC + PDF build) | `.github/workflows/ci.yml` |
 
@@ -40,11 +41,15 @@ Controls establish **probe power** before any model is scored (paper §VII).
 | Live matrix (authoritative cells) | `coverage/matrix.json` |
 | Expected PoC snippet (green×8×3) | `examples/poc/expected_matrix_snippet.json` |
 | Refresh matrix + full-8 gate + matrix check | `./scripts/run_poc.sh` (or `make poc`) |
+| Machine-readable PoC JSON (optional SARIF) | `python -m diptych.poc --json` (or `make poc-json`; `--sarif`) |
+| Grade CONTRACT v0.2 fixtures from disk | `python -m diptych.grade --input <file\|dir>` (or `make grade INPUT=…`) |
+| Editable install + typed API | `pip install -e ".[dev]"`; `from diptych import parse_probe, grade_operator, run_gate_axis_mutate, ProbeEnvelope` |
 | Print matrix only | `make matrix` |
 | Unit tests | `PYTHONPATH=. python -m pytest -q` (or `make test`) |
 
 **Green rule (same as paper Table `tab:coverage`):** conforming→`pass`,
-violating→`fail`, and `gate_axis_mutate` reports axis power.
+violating→`fail`, and `gate_axis_mutate` reports axis power with a semantic
+witness (`expected_axis` + `channel` + before/after); wrong-axis must not flip.
 `inconclusive` ≠ green. Cells are categorical + boolean `axis_power` only.
 
 ### Pins cited by the paper / matrix notes
@@ -54,7 +59,7 @@ violating→`fail`, and `gate_axis_mutate` reports axis power.
 | ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
-Pins frozen as of main `84930b24`. Do not bump unless the matrix requires.
+Pins frozen as of main `f606cfe4` (post-#16). Do not bump unless the matrix requires.
 
 Source of truth: `adapters/PINS.md` (mirrored in root `README.md`).
 Record the git commit you graded against (paper cites these shorts; full SHAs above).
@@ -64,10 +69,13 @@ Record the git commit you graded against (paper cites these shorts; full SHAs ab
 ```bash
 git clone https://github.com/pandeyaby/DIPTYCH.git
 cd DIPTYCH
-# Python ≥ 3.10; stdlib-only core
+# Python ≥ 3.10; stdlib-only core (optional editable install)
+pip install -e ".[dev]"   # optional; enables pytest + typed imports
 ./scripts/run_poc.sh
 # expect exit 0; refreshes coverage/matrix.json; prints green×8×3; MATRIX CHECK OK
-PYTHONPATH=. python -m pytest -q   # optional CI parity (pip install pytest)
+python -m diptych.poc --json          # machine path (optional --sarif / make poc-json)
+python -m diptych.grade --input examples/fixtures/zeroday/RESEED
+PYTHONPATH=. python -m pytest -q      # optional CI parity
 ```
 
 Exit `0` means full-8 cells are green on `diptych_core` / `zeroday` / `aomb`
@@ -151,14 +159,15 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 - **Protocol + handwritten controls first**; model study is in progress.
 - **Pins only** for ZeroDay / AOMB; no product-tree edits in this repo.
 - **green×8×3** = harness coverage + axis power (`gate_axis_mutate` +
-  conforming/violating controls) — **not** vulnerability-finding or accuracy.
+  conforming/violating controls + semantic witnesses) — **not** vulnerability-finding or accuracy.
 
 ## 6. Reviewer smoke path
 
 1. Read abstract + §VII (evaluation **protocol**, not results); skim `RQ_PROTOCOL.md`.
 2. Confirm Table `tab:coverage` matches `coverage/matrix.json`.
 3. Confirm pins match `adapters/PINS.md` / README.
-4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK`.
+4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK` (optional:
+   `python -m diptych.poc --json`; `python -m diptych.grade --input examples/fixtures/zeroday/RESEED`).
 5. Confirm Table `tab:placeholder` has no numeric model scores; RQ cells N/A.
 6. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
 7. (Optional) `make artifact` → inspect zip for CODE_SHA + matrix + notes.

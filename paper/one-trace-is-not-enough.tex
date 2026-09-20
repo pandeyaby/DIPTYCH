@@ -2,7 +2,7 @@
 %% IEEE conference submission draft (AUTHORITATIVE living source)
 %% STATUS: readiness frozen as of main@4576506a after #11; CHANGELOG.md (#2–#11); Section VII = PROTOCOL (no model scores).
 %% Artifact: https://github.com/pandeyaby/DIPTYCH · Cite: CITATION.cff (no DOI yet) · License: LICENSE (MIT)
-%% Adapter pins (read-only, frozen as of main 84930b24): ZeroDay@fb5b39da · AOMB@667e475
+%% Adapter pins (read-only, frozen as of main f606cfe4 post-#16): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
 %% Readiness: paper/READINESS.md · Changelog: CHANGELOG.md · Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md
 %% RQ: paper/RQ_PROTOCOL.md · Witnesses: paper/WITNESSES.md · docs/adapters/WITNESSES.md · Notes: paper/NOTES.md
@@ -605,11 +605,14 @@
 	\texttt{gate\_axis\_mutate}: on each conforming twin, mutate \emph{only} the
 	operator's graded axis (seed, freeze mask, schema key, polarity channel,
 	saturation bound, history splice, trajectory segment, or variance scale) and
-	demand that the grader flip \texttt{pass}$\to$\texttt{fail}. Cosmetic edits
-	--- flipping the expected verdict alone, renaming a SARIF level, or injecting
-	an AUROC field --- leave the axis fingerprint unchanged and fail the gate.
-	A coverage cell is green only when conforming$\to$\texttt{pass},
-	violating$\to$\texttt{fail}, and \texttt{gate\_axis\_mutate} reports power.
+	demand that the grader flip \texttt{pass}$\to$\texttt{fail}. Each successful
+	flip carries a semantic witness with \texttt{expected\_axis},
+	\texttt{channel}, and before/after snapshots; a wrong-axis mutation must
+	\emph{not} flip the conforming twin. Cosmetic edits---flipping the expected
+	verdict alone, renaming a SARIF level, or injecting an AUROC field---leave
+	the axis fingerprint unchanged and fail the gate. A coverage cell is green
+	only when conforming$\to$\texttt{pass}, violating$\to$\texttt{fail}, and
+	\texttt{gate\_axis\_mutate} reports power.
 	
 	\section{Perturbation Operators}
 	\label{sec:operators}
@@ -712,19 +715,27 @@
 	
 	The public artifact implements schema-\texttt{0.2} envelopes, the eight
 	operators of Table~\ref{tab:ops}, handwritten controls, and
-	\texttt{gate\_axis\_mutate}. Reproduce offline with
-	\texttt{./scripts/run\_poc.sh} (exit~$0$; detail in
-	\texttt{paper/ARTIFACT\_CHECKLIST.md}): live cells go to
+	\texttt{gate\_axis\_mutate}. Reproduce offline (exit~$0$; detail in
+	\texttt{paper/ARTIFACT\_CHECKLIST.md}):
+	\texttt{./scripts/run\_poc.sh}; machine-readable
+	\texttt{python -m diptych.poc --json} (optional \texttt{--sarif} /
+	\texttt{make poc-json}); cassette ingest
+	\texttt{python -m diptych.grade --input}~\texttt{<file|dir>} over
+	CONTRACT v0.2 fixtures under \texttt{examples/fixtures/}; optional install
+	\texttt{pip install -e ".[dev]"} with
+	\texttt{from diptych import parse\_probe, grade\_operator,
+	run\_gate\_axis\_mutate, ProbeEnvelope}. Live cells go to
 	\texttt{coverage/matrix.json} as categorical green status and boolean
 	\texttt{axis\_power} only---never AUROC, accuracy, or model grades.
 	
 	\textbf{Adapter pins (read-only).} Product emitters are not vendored
 	(Figure~\ref{fig:stack}); they emit schema-\texttt{0.2} twins at pinned SHAs
 	and \sys{} grades. Pins match \texttt{adapters/PINS.md} (frozen as of main
-	\texttt{84930b24}): ZeroDay@\texttt{fb5b39da} and AOMB@\texttt{667e475}
-	(full SHAs in the pin file; CRN required for \textsc{TrajSwap}/\textsc{VarScale};
-	exploit/AUROC fields rejected). Table~\ref{tab:coverage} is harness coverage
-	+ axis power at those pins---not a vulnerability or model-quality claim.
+	\texttt{f606cfe4}, post-\#16): ZeroDay@\texttt{fb5b39da} and
+	AOMB@\texttt{667e475} (full SHAs in the pin file; CRN required for
+	\textsc{TrajSwap}/\textsc{VarScale}; exploit/AUROC fields rejected).
+	Table~\ref{tab:coverage} is harness coverage + axis power at those
+	pins---not a vulnerability or model-quality claim.
 	
 	\begin{figure}[t]
 		\centering
@@ -948,10 +959,13 @@
 	\texttt{docs/adapters/WITNESSES.md}, \texttt{docs/adapters/GATING.md},
 	\texttt{adapters/PINS.md} (ZeroDay@\texttt{fb5b39da}, AOMB@\texttt{667e475}).
 	\texttt{gate\_axis\_mutate} needs conforming \texttt{pass}, a named-axis-only
-	mutation, and flipped \texttt{fail}. Reproduce:
-	\texttt{./scripts/run\_poc.sh}; inspect \texttt{coverage/matrix.json}.
-	Witnesses establish probe power only---not vuln finding or model accuracy
-	(Section~\ref{sec:discussion}).
+	mutation with semantic witness
+	(\texttt{expected\_axis}+\texttt{channel}+before/after), flipped
+	\texttt{fail}, and no flip on a wrong-axis distractor. Reproduce:
+	\texttt{./scripts/run\_poc.sh} or \texttt{python -m diptych.poc --json};
+	grade fixtures with \texttt{python -m diptych.grade --input};
+	inspect \texttt{coverage/matrix.json}. Witnesses establish probe power
+	only---not vuln finding or model accuracy (Section~\ref{sec:discussion}).
 	
 	\balance
 	
