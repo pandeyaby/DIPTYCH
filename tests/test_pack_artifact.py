@@ -52,6 +52,7 @@ class TestPackArtifact(unittest.TestCase):
                 "examples/poc/expected_matrix_snippet.json",
                 "adapters/PINS.md",
                 "paper/SUBMISSION.md",
+                "paper/READINESS.md",
                 "paper/RQ_PROTOCOL.md",
                 "paper/ANON.md",
                 "paper/WITNESSES.md",

@@ -94,5 +94,5 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 Fill this ledger only from a completed model study with real artifacts and
 scenarios. Do not back-fill from green×8×3.
 
-See also: [`SUBMISSION.md`](SUBMISSION.md), [`NOTES.md`](NOTES.md),
-[`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md).
+See also: [`READINESS.md`](READINESS.md), [`SUBMISSION.md`](SUBMISSION.md),
+[`NOTES.md`](NOTES.md), [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md).

@@ -7,12 +7,14 @@
 
 **Authors:** Abhinav Pandey, Abhishek Pandey (Meta)
 
+**Readiness scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs; baseline main `98eb0efa`)  
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
 **Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
 **RQ scaffolding:** [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) (RQ1–RQ5; results N/A)  
 **Witnesses:** [`WITNESSES.md`](WITNESSES.md) · [`docs/adapters/WITNESSES.md`](../docs/adapters/WITNESSES.md)  
 **Anonymization switch:** [`ANON.md`](ANON.md)  
-**Open items:** [`NOTES.md`](NOTES.md)
+**Open items:** [`NOTES.md`](NOTES.md)  
+**License / cite:** root [`LICENSE`](../LICENSE) (MIT) · [`CITATION.cff`](../CITATION.cff) (no DOI)
 
 ## Compile locally
 
@@ -84,9 +86,10 @@ accuracy, AUROC, or vulnerability-finding claim. Model-study Table
 `tab:placeholder` stays blank (`---`) until real data exists.
 
 **PDF page count:** after `make paper`, record pages in
-[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**;
-venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff). Anonymization dry-run:
-[`ANON.md`](ANON.md) (CI stays named).
+[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**
+as of main `98eb0efa`; venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff).
+License: [`LICENSE`](../LICENSE). Readiness: [`READINESS.md`](READINESS.md).
+Anonymization dry-run: [`ANON.md`](ANON.md) (CI stays named).
 
 ## Section map (authoritative)
 

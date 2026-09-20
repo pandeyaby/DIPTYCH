@@ -50,6 +50,7 @@ require_file "examples/poc/expected_matrix_snippet.json"
 require_file "adapters/PINS.md"
 require_file "paper/SUBMISSION.md"
 require_file "paper/ARTIFACT_CHECKLIST.md"
+require_file "paper/READINESS.md"
 require_file "LICENSE"
 require_file "README.md"
 require_file "CITATION.cff"
@@ -66,8 +67,8 @@ cp -a "$ROOT/scripts/print_matrix.py" "$DEST/scripts/" 2>/dev/null || true
 cp -a "$ROOT/scripts/pack_artifact.sh" "$DEST/scripts/"
 
 # Key paper / protocol docs (no fabricated scores)
-for f in SUBMISSION.md ARTIFACT_CHECKLIST.md NOTES.md README.md RQ_PROTOCOL.md ANON.md \
-         WITNESSES.md one-trace-is-not-enough.tex refs.bib; do
+for f in READINESS.md SUBMISSION.md ARTIFACT_CHECKLIST.md NOTES.md README.md \
+         RQ_PROTOCOL.md ANON.md WITNESSES.md one-trace-is-not-enough.tex refs.bib; do
   if [[ -f "$ROOT/paper/$f" ]]; then
     cp -a "$ROOT/paper/$f" "$DEST/paper/"
   fi
@@ -129,8 +130,8 @@ Non-claims
 - inconclusive != green
 - ZeroDay / AOMB product trees are NOT vendored (pins only: adapters/PINS.md)
 
-See paper/SUBMISSION.md and paper/ARTIFACT_CHECKLIST.md.
-Cite: CITATION.cff (https://github.com/pandeyaby/DIPTYCH; no DOI yet).
+See paper/READINESS.md, paper/SUBMISSION.md, and paper/ARTIFACT_CHECKLIST.md.
+License: LICENSE (MIT). Cite: CITATION.cff (https://github.com/pandeyaby/DIPTYCH; no DOI yet).
 EOF
 
 # Capture a short matrix snapshot into artifact/ (not a PoC log substitute)
