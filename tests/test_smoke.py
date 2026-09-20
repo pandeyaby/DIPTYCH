@@ -85,8 +85,8 @@ class TestSmokeReport(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         report = json.loads(proc.stdout)
         self.assertTrue(report["ok"])
-        self.assertEqual(report["smoke_schema"], "1.0")
-        self.assertEqual(len(report["steps"]), 5)
+        self.assertEqual(report["smoke_schema"], "1.1")
+        self.assertEqual(len(report["steps"]), 6)
 
     def test_cli_smoke_subcommand_and_write(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -122,6 +122,39 @@ class TestSmokeReport(unittest.TestCase):
         self.assertTrue(callable(matrix.main))
         self.assertTrue(callable(schema.main))
         self.assertTrue(callable(smoke.main))
+
+
+    def test_smoke_report_includes_pins_section(self):
+        from diptych.smoke import STEP_PINS_CHECK, run_smoke
+
+        report = run_smoke()
+        by_id = {s["id"]: s for s in report["steps"]}
+        self.assertIn(STEP_PINS_CHECK, by_id)
+        pins = by_id[STEP_PINS_CHECK]
+        self.assertTrue(pins["ok"], msg=pins)
+        detail = pins["detail"]
+        self.assertEqual(detail["exit_code"], 0)
+        self.assertIn("zeroday_short", detail)
+        self.assertIn("aomb_short", detail)
+        self.assertEqual(len(detail["zeroday_short"]), 8)
+        self.assertEqual(len(detail["aomb_short"]), 7)
+
+    def test_smoke_fails_on_pin_mismatch(self):
+        from unittest.mock import patch
+
+        from diptych.pins import EXIT_MISMATCH
+        from diptych.smoke import STEP_PINS_CHECK, run_smoke
+
+        def boom():
+            return EXIT_MISMATCH, ["pins mismatch (test)"], None
+
+        with patch("diptych.smoke.check_paths", side_effect=lambda: boom()):
+            report = run_smoke()
+        self.assertFalse(report["ok"])
+        self.assertIn(STEP_PINS_CHECK, report["failures"])
+        pins = next(s for s in report["steps"] if s["id"] == STEP_PINS_CHECK)
+        self.assertFalse(pins["ok"])
+        self.assertIn("pins check failed", pins["error"])
 
 
 if __name__ == "__main__":
