@@ -61,6 +61,7 @@ class TestPackArtifact(unittest.TestCase):
                 "scripts/run_poc.sh",
                 "LICENSE",
                 "CITATION.cff",
+                "CHANGELOG.md",
             )
 
             if archive.suffix == ".zip":

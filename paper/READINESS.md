@@ -3,17 +3,27 @@
 One-page honest gate for IEEE upload. **Harness-only.** No invented AUROC /
 model scores. No venue name or DOI invented here.
 
-**Baseline:** main after #10 @ `98eb0efa` (8pp PDF, `CITATION.cff`, abstract
-polish). Adapter pins remain frozen as of main `84930b24`
+**As of:** main after #11 @ `4576506a6611ab02457190b7132fde412c21a8c6`
+(scorecard + LICENSE/cross-link sync; 8pp PDF and `CITATION.cff` from #10).
+Adapter pins remain frozen as of main `84930b24`
 (ZeroDay@`fb5b39da` · AOMB@`667e475`).
 
 **HOLD for Abhinav merge yes** before treating any upload as submission-final.
 
-Companion docs: [`SUBMISSION.md`](SUBMISSION.md) ·
-[`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md) ·
+Milestone log: root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11). Companion docs:
+[`SUBMISSION.md`](SUBMISSION.md) · [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md) ·
 [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) · [`ANON.md`](ANON.md) ·
 [`NOTES.md`](NOTES.md) · root [`LICENSE`](../LICENSE) ·
 [`CITATION.cff`](../CITATION.cff)
+
+---
+
+## Stop condition
+
+Engineering polish is at **diminishing returns**. The next material unlock is
+Abhinav filling venue / author fields (`SUBMISSION.md` §0) or a real model-study
+data drop (RQ / `tab:placeholder` still **N/A**). Do not invent venue, DOI, or
+scores to force progress. See [`NOTES.md`](NOTES.md) and [`CHANGELOG.md`](../CHANGELOG.md).
 
 ---
 
@@ -76,4 +86,5 @@ make artifact                 # LICENSE + CITATION.cff + paper/READINESS.md in z
 make paper                    # or download CI one-trace-is-not-enough-pdf
 ```
 
-See also: root [`README.md`](../README.md) · [`paper/README.md`](README.md).
+See also: root [`README.md`](../README.md) · [`paper/README.md`](README.md) ·
+[`CHANGELOG.md`](../CHANGELOG.md).
