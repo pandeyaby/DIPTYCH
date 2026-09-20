@@ -1,0 +1,44 @@
+{
+  "diptych_schema": "0.2",
+  "source": "aomb",
+  "operator": "SIGNFLIP",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 5
+  },
+  "probe_id": "aomb.fixture.signflip_margin.violating",
+  "fixture_id": "aomb.fixture.signflip_margin.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "pos",
+      "events": [],
+      "channels": {
+        "score_margin": {
+          "values": [1.25, -0.75, 2.0, -1.5, 0.5]
+        }
+      },
+      "meta": {
+        "seed": 7,
+        "signflip_channel": "score_margin",
+        "sign_normalized_fingerprint": "sha256:aomb_signflip_cassette_fp_v1"
+      }
+    },
+    {
+      "trace_id": "neg",
+      "events": [],
+      "channels": {
+        "score_margin": {
+          "values": [1.25, 0.75, 2.0, 1.5, 0.5]
+        }
+      },
+      "meta": {
+        "seed": 8,
+        "signflip_channel": "score_margin",
+        "sign_normalized_fingerprint": "sha256:aomb_signflip_broken_fp"
+      }
+    }
+  ]
+}

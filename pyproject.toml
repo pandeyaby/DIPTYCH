@@ -29,6 +29,7 @@ dev = ["pytest>=7"]
 [project.scripts]
 diptych-poc = "diptych.poc:main"
 diptych-full8 = "diptych.run_full8:main"
+diptych-grade = "diptych.grade:main"
 
 [project.urls]
 Homepage = "https://github.com/pandeyaby/DIPTYCH"

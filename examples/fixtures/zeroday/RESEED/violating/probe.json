@@ -1,0 +1,44 @@
+{
+  "diptych_schema": "0.2",
+  "source": "zeroday",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 6
+  },
+  "probe_id": "zeroday.cassette.reseed_stability.violating",
+  "fixture_id": "zeroday.cassette.reseed_stability.violating",
+  "control_role": "violating",
+  "expected_verdict": "fail",
+  "traces": [
+    {
+      "trace_id": "seed0",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [0.50, 0.51, 0.49, 0.50, 0.505, 0.495]
+        }
+      },
+      "meta": {
+        "seed": 101,
+        "config_id": "zeroday_reseed_cassette_v1",
+        "epsilon": 0.05
+      }
+    },
+    {
+      "trace_id": "seed1",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [0.10, 0.90, 0.20, 0.80, 0.15, 0.85]
+        }
+      },
+      "meta": {
+        "seed": 202,
+        "config_id": "zeroday_reseed_cassette_v1",
+        "epsilon": 0.05
+      }
+    }
+  ]
+}

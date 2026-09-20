@@ -1,0 +1,47 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "RESEED",
+  "coupling": "open_loop",
+  "horizon": {
+    "unit": "steps",
+    "length": 8
+  },
+  "probe_id": "cassette.reseed.inconclusive_horizon",
+  "fixture_id": "cassette.reseed.inconclusive_horizon",
+  "control_role": "conforming",
+  "expected_verdict": "inconclusive",
+  "meta": {
+    "inconclusive_reason": "traces incomparable under shared prefix rule: channel lengths differ"
+  },
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+        }
+      },
+      "meta": {
+        "seed": 0,
+        "config_id": "horizon_mismatch_v0",
+        "epsilon": 0.05
+      }
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {
+        "stability": {
+          "values": [1.0, 1.01, 0.99]
+        }
+      },
+      "meta": {
+        "seed": 1,
+        "config_id": "horizon_mismatch_v0",
+        "epsilon": 0.05
+      }
+    }
+  ]
+}

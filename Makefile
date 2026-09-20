@@ -1,4 +1,4 @@
-.PHONY: poc poc-json test full8 matrix paper artifact clean
+.PHONY: poc poc-json grade test full8 matrix paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -7,6 +7,13 @@ poc:
 # Optional SARIF: make poc-json SARIF=1
 poc-json:
 	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
+
+# Adapter cassette/fixture ingest: grade CONTRACT JSON from disk (no product imports)
+# Usage: make grade INPUT=examples/fixtures/zeroday/RESEED
+# Optional: WITH_AXIS=1 make grade INPUT=examples/fixtures/aomb/SIGNFLIP/conforming
+grade:
+	@test -n "$(INPUT)" || (echo "usage: make grade INPUT=path/to/probe.json|dir"; exit 2)
+	PYTHONPATH=. python3 -m diptych.grade --input "$(INPUT)" $(if $(WITH_AXIS),--with-axis-mutate,)
 
 test:
 	@if python3 -c "import pytest" 2>/dev/null; then \
