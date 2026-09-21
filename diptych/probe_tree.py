@@ -165,3 +165,149 @@ def execute_full8_probe_trees(
         "trees": trees,
         "ok": all(t.get("ok") for t in trees.values()),
     }
+
+
+# ---------------------------------------------------------------------------
+# Stranger CLI: full-8 probe trees from cassette conforming probes
+# ---------------------------------------------------------------------------
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from diptych.contract import load_probe
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
+
+EXIT_OK = 0
+EXIT_FAIL = 1
+
+
+def load_cassette_conforming(op: str, cassette: Path | None = None) -> dict:
+    """Load ``{cassette}/{OP}/conforming/probe.json`` (diptych_core harness)."""
+    root = Path(cassette) if cassette is not None else DEFAULT_CASSETTE
+    path = root / op.upper() / "conforming" / "probe.json"
+    return load_probe(path)
+
+
+def build_probe_tree_report(
+    *,
+    cassette: Path | None = None,
+) -> dict:
+    """Machine-readable full-8 probe-tree report (mutate-axis + wrong-axis).
+
+    Amortization fields are structural node counts only — not $ or timing.
+    """
+    cassette_path = Path(cassette) if cassette is not None else DEFAULT_CASSETTE
+
+    def load_conf(op: str) -> dict:
+        return load_cassette_conforming(op, cassette_path)
+
+    raw = execute_full8_probe_trees(load_conf)
+    operators: dict[str, Any] = {}
+    failures: list[str] = []
+    for op in OPERATORS:
+        tree = raw["trees"].get(op) or {"operator": op, "ok": False, "error": "missing"}
+        mutate = (tree.get("branches") or {}).get("mutate_axis") or {}
+        wrong = (tree.get("branches") or {}).get("wrong_axis") or {}
+        power_ok = bool(mutate.get("power_ok"))
+        falsely = bool(wrong.get("falsely_flipped"))
+        op_ok = bool(tree.get("ok")) and power_ok and not falsely
+        if not power_ok:
+            failures.append(f"{op}:mutate_axis.power_ok")
+        if falsely:
+            failures.append(f"{op}:wrong_axis.falsely_flipped")
+        if tree.get("error"):
+            failures.append(f"{op}:error")
+        operators[op] = {
+            "ok": op_ok,
+            "mutate_axis": {
+                "power_ok": power_ok,
+                "baseline_verdict": (mutate.get("baseline") or {}).get("verdict"),
+                "mutated_verdict": (mutate.get("mutated") or {}).get("verdict"),
+            },
+            "wrong_axis": {
+                "falsely_flipped": falsely,
+                "baseline_verdict": wrong.get("baseline_verdict"),
+                "mutated_verdict": wrong.get("mutated_verdict"),
+                "axis_intact": wrong.get("axis_intact"),
+            },
+            "amortization": tree.get("amortization") or {},
+            "error": tree.get("error"),
+        }
+
+    ok = bool(raw.get("ok")) and not failures
+    return {
+        "ok": ok,
+        "operator_count": len(OPERATORS),
+        "cassette": str(cassette_path.resolve()),
+        "operators": operators,
+        "failures": failures,
+        "notes": (
+            "Probe-tree: mutate-axis must flip conforming→fail (power_ok); "
+            "wrong-axis must not falsely flip pass→fail. "
+            "Amortization = structural shared-prefix node counts only "
+            "(not $, timing, or invented scores)."
+        ),
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    """CLI: ``python -m diptych.probe_tree`` / ``diptych-probe-tree``."""
+    p = argparse.ArgumentParser(
+        prog="diptych-probe-tree",
+        description=(
+            "Run full-8 probe trees from cassette conforming probes: "
+            "mutate-axis power + wrong-axis negative controls. "
+            "Amortization counters are structural only (not $ / timing)."
+        ),
+    )
+    p.add_argument(
+        "--cassette",
+        type=Path,
+        default=DEFAULT_CASSETTE,
+        help=f"Cassette root with {{OP}}/conforming/probe.json (default: {DEFAULT_CASSETTE})",
+    )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON report on stdout",
+    )
+    args = p.parse_args(list(argv) if argv is not None else None)
+
+    report = build_probe_tree_report(cassette=args.cassette)
+    if args.json:
+        sys.stdout.write(json.dumps(report, indent=2) + "\n")
+    else:
+        print("== DIPTYCH probe-tree ==")
+        print(f"cassette={report['cassette']}")
+        print(f"operator_count={report['operator_count']}")
+        for op, cell in report["operators"].items():
+            status = "OK  " if cell["ok"] else "FAIL"
+            ma = cell["mutate_axis"]
+            wa = cell["wrong_axis"]
+            print(
+                f"  {status} {op:12} "
+                f"mutate_axis.power_ok={ma['power_ok']} "
+                f"wrong_axis.falsely_flipped={wa['falsely_flipped']}"
+            )
+            am = cell.get("amortization") or {}
+            if am:
+                print(
+                    f"           amortization nodes_with_prefix_share="
+                    f"{am.get('nodes_with_prefix_share')} "
+                    f"nodes_saved={am.get('nodes_saved_by_prefix_share')}"
+                )
+            if cell.get("error"):
+                print(f"           error={cell['error']}")
+        if report["ok"]:
+            print("PROBE-TREE OK")
+        else:
+            print(f"PROBE-TREE FAIL ({', '.join(report['failures'])})")
+    return EXIT_OK if report["ok"] else EXIT_FAIL
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
