@@ -6,9 +6,10 @@ Runs in order (exit non-zero on any failure)::
     2. adapter pins --check (PINS.md ↔ README ↔ paper header)
     3. grade cassette fixtures (JSON)
     4. matrix --check (diptych_core from fixtures)
-    5. probe-tree (mutate-axis power + wrong-axis negative controls)
-    6. poc --json (full-8 structured report)
-    7. thin corpus reject sanity (must reject loudly)
+    5. coupling_check (ops/*/spec.yaml + cassette probe.json vs canonical map)
+    6. probe-tree (mutate-axis power + wrong-axis negative controls)
+    7. poc --json (full-8 structured report)
+    8. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -36,7 +37,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.2"
+SMOKE_SCHEMA = "1.3"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -48,6 +49,7 @@ STEP_SCHEMA_FRESH = "schema_fresh"
 STEP_PINS_CHECK = "pins_check"
 STEP_GRADE_CASSETTE = "grade_cassette"
 STEP_MATRIX_CHECK = "matrix_check"
+STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
@@ -57,6 +59,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_PINS_CHECK,
     STEP_GRADE_CASSETTE,
     STEP_MATRIX_CHECK,
+    STEP_COUPLING_CHECK,
     STEP_PROBE_TREE,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
@@ -246,6 +249,28 @@ def _run_probe_tree(cassette: Path) -> dict[str, Any]:
     return _step(STEP_PROBE_TREE, ok=ok, detail=detail, error=error)
 
 
+def _run_coupling_check(cassette: Path) -> dict[str, Any]:
+    """ops/*/spec.yaml + cassette probe.json vs canonical open_loop/crn map."""
+    from diptych.coupling import build_coupling_report
+
+    report = build_coupling_report(cassette=cassette)
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "check_count": report.get("check_count"),
+        "mismatch_count": report.get("mismatch_count"),
+        "failures": list(report.get("failures") or []),
+        "canonical": report.get("canonical"),
+    }
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        fails = report.get("failures") or []
+        shown = ", ".join(fails[:8])
+        if len(fails) > 8:
+            shown += "…"
+        error = "coupling_check failed: " + (shown or "see checks")
+    return _step(STEP_COUPLING_CHECK, ok=ok, detail=detail, error=error)
+
 
 def run_smoke(
     *,
@@ -261,6 +286,7 @@ def run_smoke(
         (STEP_PINS_CHECK, _run_pins_check),
         (STEP_GRADE_CASSETTE, lambda: _run_grade_cassette(cassette_path)),
         (STEP_MATRIX_CHECK, _run_matrix_check),
+        (STEP_COUPLING_CHECK, lambda: _run_coupling_check(cassette_path)),
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
@@ -282,8 +308,8 @@ def run_smoke(
         "thin": str(thin_path.resolve()),
         "notes": (
             "Smoke proves harness public surface (schema freshness, adapter pins, "
-            "cassette grade, matrix check, probe-tree mutate-axis/wrong-axis, "
-            "poc json, thin reject). "
+            "cassette grade, matrix check, coupling discipline, "
+            "probe-tree mutate-axis/wrong-axis, poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
             "Probe-tree amortization = structural node counts only."
         ),
@@ -310,6 +336,8 @@ def _print_human(report: dict[str, Any]) -> None:
                 "operator_count",
                 "error_count",
                 "failure_count",
+                "check_count",
+                "mismatch_count",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -338,8 +366,8 @@ def main(argv: list[str] | None = None) -> int:
         prog=_cli_prog(),
         description=(
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
-            "probe-tree (mutate-axis / wrong-axis), "
-            "cassette grade, matrix check, poc json, thin reject. "
+            "cassette grade, matrix check, coupling discipline, "
+            "probe-tree (mutate-axis / wrong-axis), poc json, thin reject. "
             "Stdlib-only; no invented scores."
         ),
     )

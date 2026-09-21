@@ -1,0 +1,23 @@
+{
+  "diptych_schema": "0.2",
+  "source": "diptych_core",
+  "operator": "FREEZEDRY",
+  "coupling": "crn_closed_loop",
+  "probe_id": "mismatch.freezedry",
+  "control_role": "conforming",
+  "expected_verdict": "pass",
+  "traces": [
+    {
+      "trace_id": "a",
+      "events": [],
+      "channels": {},
+      "meta": {}
+    },
+    {
+      "trace_id": "b",
+      "events": [],
+      "channels": {},
+      "meta": {}
+    }
+  ]
+}
