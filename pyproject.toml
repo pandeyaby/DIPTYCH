@@ -35,6 +35,7 @@ diptych-grade = "diptych.grade:main"
 diptych-matrix = "diptych.matrix:main"
 diptych-schema = "diptych.schema:main"
 diptych-pins = "diptych.pins:main"
+diptych-probe-tree = "diptych.probe_tree:main"
 
 [project.urls]
 Homepage = "https://github.com/pandeyaby/DIPTYCH"

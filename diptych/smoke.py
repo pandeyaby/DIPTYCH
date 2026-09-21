@@ -6,8 +6,9 @@ Runs in order (exit non-zero on any failure)::
     2. adapter pins --check (PINS.md ↔ README ↔ paper header)
     3. grade cassette fixtures (JSON)
     4. matrix --check (diptych_core from fixtures)
-    5. poc --json (full-8 structured report)
-    6. thin corpus reject sanity (must reject loudly)
+    5. probe-tree (mutate-axis power + wrong-axis negative controls)
+    6. poc --json (full-8 structured report)
+    7. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -35,7 +36,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.1"
+SMOKE_SCHEMA = "1.2"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -47,6 +48,7 @@ STEP_SCHEMA_FRESH = "schema_fresh"
 STEP_PINS_CHECK = "pins_check"
 STEP_GRADE_CASSETTE = "grade_cassette"
 STEP_MATRIX_CHECK = "matrix_check"
+STEP_PROBE_TREE = "probe_tree"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -55,6 +57,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_PINS_CHECK,
     STEP_GRADE_CASSETTE,
     STEP_MATRIX_CHECK,
+    STEP_PROBE_TREE,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -210,6 +213,40 @@ def _run_thin_reject(thin: Path) -> dict[str, Any]:
     return _step(STEP_THIN_REJECT, ok=ok, detail=detail, error=error)
 
 
+def _run_probe_tree(cassette: Path) -> dict[str, Any]:
+    """Mutate-axis power + wrong-axis negative controls (structural amortization only)."""
+    from diptych.probe_tree import build_probe_tree_report
+
+    report = build_probe_tree_report(cassette=cassette)
+    detail: dict[str, Any] = {
+        "operator_count": report.get("operator_count"),
+        "ok": report.get("ok"),
+        "failure_count": len(report.get("failures") or []),
+        "failures": list(report.get("failures") or []),
+    }
+    # Compact per-op flags for the smoke JSON (no invented scores).
+    ops_summary: dict[str, Any] = {}
+    for op, cell in (report.get("operators") or {}).items():
+        ops_summary[op] = {
+            "ok": cell.get("ok"),
+            "mutate_axis_power_ok": (cell.get("mutate_axis") or {}).get("power_ok"),
+            "wrong_axis_falsely_flipped": (cell.get("wrong_axis") or {}).get(
+                "falsely_flipped"
+            ),
+            "amortization": cell.get("amortization") or {},
+        }
+    detail["operators"] = ops_summary
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        error = (
+            "probe_tree failed: "
+            + (", ".join(report.get("failures") or []) or "see operators")
+        )
+    return _step(STEP_PROBE_TREE, ok=ok, detail=detail, error=error)
+
+
+
 def run_smoke(
     *,
     cassette: Path | None = None,
@@ -224,6 +261,7 @@ def run_smoke(
         (STEP_PINS_CHECK, _run_pins_check),
         (STEP_GRADE_CASSETTE, lambda: _run_grade_cassette(cassette_path)),
         (STEP_MATRIX_CHECK, _run_matrix_check),
+        (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -244,8 +282,10 @@ def run_smoke(
         "thin": str(thin_path.resolve()),
         "notes": (
             "Smoke proves harness public surface (schema freshness, adapter pins, "
-            "cassette grade, matrix check, poc json, thin reject). "
-            "Not AUROC / accuracy / vuln-finding."
+            "cassette grade, matrix check, probe-tree mutate-axis/wrong-axis, "
+            "poc json, thin reject). "
+            "Not AUROC / accuracy / vuln-finding. "
+            "Probe-tree amortization = structural node counts only."
         ),
     }
 
@@ -269,6 +309,7 @@ def _print_human(report: dict[str, Any]) -> None:
                 "rejected",
                 "operator_count",
                 "error_count",
+                "failure_count",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -297,6 +338,7 @@ def main(argv: list[str] | None = None) -> int:
         prog=_cli_prog(),
         description=(
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
+            "probe-tree (mutate-axis / wrong-axis), "
             "cassette grade, matrix check, poc json, thin reject. "
             "Stdlib-only; no invented scores."
         ),
