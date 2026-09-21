@@ -15,6 +15,7 @@ and model-study cells remain open / N/A.
 
 | PR | Milestone |
 |----|-----------|
+| (draft) | Unified RQ1–RQ5 protocol report CLI — `diptych.protocol` / `diptych-protocol`: one stranger command aggregates separation / ablation / predictive / amortization / inconclusive into a single JSON (per-RQ ok/status/key metrics or N/A; overall ok iff all subreports ok; loud non_claims; RQ3 protocol_only/N/A without held-out is ok); smoke schema **1.9** folds prior per-RQ steps into one `protocol` step |
 | (draft) | RQ3 protocol harness — `diptych.predictive` / `diptych-predictive`: predictive validity scaffolding (probe scores vs held-out robustness; baseline = trace-only; result cells stay N/A without `--held-out`; bad/empty held-out fails closed; structural rank-corr placeholders only, not AUROC / model ranks / not empirical RQ3); smoke schema **1.8** + predictive step |
 | (draft) | RQ4 protocol harness — `diptych.amortization` / `diptych-amortization`: probe-tree amortization counters on cassette conforming probes (`shared_prefix_nodes` / `nodes_naive_two_probes` / protocol α; structural node counts only, not $ / wall-clock / AUROC / not empirical RQ4); smoke schema **1.7** + amortization step |
 | (draft) | RQ5 protocol harness — `diptych.inconclusive` / `diptych-inconclusive`: inconclusive rate on cassette fixtures (`n_inconclusive/n_probes`, reason-needle strata; structural counts only, not AUROC / not empirical RQ5); smoke schema **1.6** + inconclusive step |

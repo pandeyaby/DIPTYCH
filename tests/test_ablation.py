@@ -146,28 +146,26 @@ class TestAblationFailureCases(unittest.TestCase):
 
 
 class TestSmokeAblationStep(unittest.TestCase):
-    def test_smoke_includes_ablation_step(self):
+    def test_smoke_protocol_covers_rq2_ablation(self):
         from diptych.smoke import SMOKE_SCHEMA, SMOKE_STEP_IDS, run_smoke
 
-        self.assertEqual(SMOKE_SCHEMA, "1.8")
-        self.assertIn("ablation", SMOKE_STEP_IDS)
+        self.assertEqual(SMOKE_SCHEMA, "1.9")
+        self.assertIn("protocol", SMOKE_STEP_IDS)
         report = run_smoke()
         self.assertTrue(report["ok"], report.get("failures"))
-        self.assertEqual(report["smoke_schema"], "1.8")
-        ids = [s["id"] for s in report["steps"]]
-        self.assertEqual(ids, list(SMOKE_STEP_IDS))
+        self.assertEqual(report["smoke_schema"], "1.9")
         by_id = {s["id"]: s for s in report["steps"]}
-        abl = by_id["ablation"]
-        self.assertTrue(abl["ok"], abl)
-        detail = abl["detail"]
-        self.assertEqual(detail["operator_count"], 8)
-        self.assertTrue(detail["full8_ok"])
-        self.assertEqual(detail["full8_hyper_separates_count"], 8)
-        self.assertEqual(detail["control_separation_index"], 1.0)
-        for op, cell in detail["ablations"].items():
-            self.assertTrue(cell["marginal_necessary"], op)
-            self.assertTrue(cell["redundancy_with_peers"], op)
-            self.assertTrue(cell["remaining_bank_separates"], op)
+        proto = by_id["protocol"]
+        self.assertTrue(proto["ok"], proto)
+        rq2 = proto["detail"]["rqs"]["RQ2"]
+        self.assertTrue(rq2["ok"], rq2)
+        self.assertEqual(rq2["harness"], "ablation")
+        self.assertEqual(rq2["metrics"]["operator_count"], 8)
+        self.assertTrue(rq2["metrics"]["full8_ok"])
+        self.assertEqual(rq2["metrics"]["full8_hyper_separates_count"], 8)
+        self.assertEqual(rq2["metrics"]["control_separation_index"], 1.0)
+        self.assertEqual(rq2["metrics"]["ops_marginal_necessary"], 8)
+        self.assertEqual(rq2["metrics"]["ops_redundancy_with_peers"], 8)
         blob = json.dumps(report).lower()
         self.assertNotIn('"auroc"', blob)
         self.assertNotIn('"lab_auroc"', blob)

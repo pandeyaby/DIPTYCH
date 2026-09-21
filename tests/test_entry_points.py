@@ -33,6 +33,7 @@ EXPECTED_SCRIPTS: dict[str, str] = {
     "diptych-inconclusive": "diptych.inconclusive:main",
     "diptych-amortization": "diptych.amortization:main",
     "diptych-predictive": "diptych.predictive:main",
+    "diptych-protocol": "diptych.protocol:main",
 }
 
 

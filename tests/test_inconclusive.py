@@ -137,29 +137,26 @@ class TestInconclusiveFailureCases(unittest.TestCase):
 
 
 class TestSmokeInconclusiveStep(unittest.TestCase):
-    def test_smoke_includes_inconclusive_step(self):
+    def test_smoke_protocol_covers_rq5_inconclusive(self):
         from diptych.smoke import SMOKE_SCHEMA, SMOKE_STEP_IDS, run_smoke
 
-        self.assertEqual(SMOKE_SCHEMA, "1.8")
-        self.assertIn("inconclusive", SMOKE_STEP_IDS)
+        self.assertEqual(SMOKE_SCHEMA, "1.9")
+        self.assertIn("protocol", SMOKE_STEP_IDS)
         report = run_smoke()
         self.assertTrue(report["ok"], report.get("failures"))
-        self.assertEqual(report["smoke_schema"], "1.8")
-        ids = [s["id"] for s in report["steps"]]
-        self.assertEqual(ids, list(SMOKE_STEP_IDS))
+        self.assertEqual(report["smoke_schema"], "1.9")
         by_id = {s["id"]: s for s in report["steps"]}
-        inc = by_id["inconclusive"]
-        self.assertTrue(inc["ok"], inc)
-        detail = inc["detail"]
-        self.assertEqual(detail["operator_count"], 8)
-        self.assertEqual(detail["ops_with_working_inconclusive"], 8)
-        self.assertEqual(detail["n_inconclusive"], 8)
-        self.assertEqual(detail["n_probes"], 24)
-        self.assertAlmostEqual(detail["inconclusive_rate"], 8 / 24)
-        for op, cell in detail["operators"].items():
-            self.assertTrue(cell["has_working_inconclusive"], op)
-            self.assertGreaterEqual(cell["n_inconclusive"], 1, op)
-        self.assertIn("NOT AUROC", detail["non_claims"])
+        proto = by_id["protocol"]
+        self.assertTrue(proto["ok"], proto)
+        rq5 = proto["detail"]["rqs"]["RQ5"]
+        self.assertTrue(rq5["ok"], rq5)
+        self.assertEqual(rq5["harness"], "inconclusive")
+        self.assertEqual(rq5["metrics"]["operator_count"], 8)
+        self.assertEqual(rq5["metrics"]["ops_with_working_inconclusive"], 8)
+        self.assertEqual(rq5["metrics"]["n_inconclusive"], 8)
+        self.assertEqual(rq5["metrics"]["n_probes"], 24)
+        self.assertAlmostEqual(rq5["metrics"]["inconclusive_rate"], 8 / 24)
+        self.assertIn("NOT AUROC", rq5.get("non_claims") or proto["detail"]["non_claims"])
         blob = json.dumps(report).lower()
         self.assertNotIn('"auroc"', blob)
         self.assertNotIn('"lab_auroc"', blob)

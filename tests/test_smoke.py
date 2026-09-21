@@ -85,8 +85,8 @@ class TestSmokeReport(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         report = json.loads(proc.stdout)
         self.assertTrue(report["ok"])
-        self.assertEqual(report["smoke_schema"], "1.8")
-        self.assertEqual(len(report["steps"]), 13)
+        self.assertEqual(report["smoke_schema"], "1.9")
+        self.assertEqual(len(report["steps"]), 9)
 
     def test_cli_smoke_subcommand_and_write(self):
         with tempfile.TemporaryDirectory() as tmp:
