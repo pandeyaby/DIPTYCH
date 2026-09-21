@@ -9,7 +9,7 @@ poc-json:
 	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
 
 # Unified stranger smoke: schema freshness → pins --check → cassette grade →
-# matrix --check → coupling_check → probe-tree → poc json → thin reject.
+# matrix --check → coupling_check → probe-tree → separation → poc json → thin reject.
 # Exit non-zero on any failure.
 # Machine report: make smoke JSON=1   OR   python -m diptych smoke --json
 smoke:
