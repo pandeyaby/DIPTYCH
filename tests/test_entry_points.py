@@ -31,6 +31,7 @@ EXPECTED_SCRIPTS: dict[str, str] = {
     "diptych-separation": "diptych.separation:main",
     "diptych-ablation": "diptych.ablation:main",
     "diptych-inconclusive": "diptych.inconclusive:main",
+    "diptych-amortization": "diptych.amortization:main",
 }
 
 
