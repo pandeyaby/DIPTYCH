@@ -9,8 +9,9 @@ Runs in order (exit non-zero on any failure)::
     5. coupling_check (ops/*/spec.yaml + cassette probe.json vs canonical map)
     6. probe-tree (mutate-axis power + wrong-axis negative controls)
     7. separation (single-trace baseline vs hyperproperty on cassette controls)
-    8. poc --json (full-8 structured report)
-    9. thin corpus reject sanity (must reject loudly)
+    8. ablation (RQ2 leave-one-out on cassette control bank)
+    9. poc --json (full-8 structured report)
+    10. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -38,7 +39,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.4"
+SMOKE_SCHEMA = "1.5"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -53,6 +54,7 @@ STEP_MATRIX_CHECK = "matrix_check"
 STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
 STEP_SEPARATION = "separation"
+STEP_ABLATION = "ablation"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -64,6 +66,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_COUPLING_CHECK,
     STEP_PROBE_TREE,
     STEP_SEPARATION,
+    STEP_ABLATION,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -282,6 +285,41 @@ def _run_separation(cassette: Path) -> dict[str, Any]:
     return _step(STEP_SEPARATION, ok=ok, detail=detail, error=error)
 
 
+def _run_ablation(cassette: Path) -> dict[str, Any]:
+    """RQ2 leave-one-out ablation on cassette control bank (structural only)."""
+    from diptych.ablation import build_ablation_report
+
+    report = build_ablation_report(cassette=cassette)
+    full8 = report.get("full8") or {}
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "operator_count": report.get("operator_count"),
+        "full8_ok": full8.get("ok"),
+        "full8_hyper_separates_count": full8.get("hyper_separates_count"),
+        "control_separation_index": full8.get("control_separation_index"),
+        "failures": list(report.get("failures") or []),
+        "non_claims": list(report.get("non_claims") or []),
+    }
+    ops_summary: dict[str, Any] = {}
+    for op, cell in (report.get("ablations") or {}).items():
+        ops_summary[op] = {
+            "marginal_necessary": cell.get("marginal_necessary"),
+            "redundancy_with_peers": cell.get("redundancy_with_peers"),
+            "remaining_bank_separates": cell.get("remaining_bank_separates"),
+            "coupling": cell.get("coupling"),
+        }
+    detail["ablations"] = ops_summary
+    detail["coupling_strata"] = report.get("coupling_strata") or {}
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        error = (
+            "ablation failed: "
+            + (", ".join(report.get("failures") or []) or "full-8 bank did not separate")
+        )
+    return _step(STEP_ABLATION, ok=ok, detail=detail, error=error)
+
+
 def _run_coupling_check(cassette: Path) -> dict[str, Any]:
     """ops/*/spec.yaml + cassette probe.json vs canonical open_loop/crn map."""
     from diptych.coupling import build_coupling_report
@@ -322,6 +360,7 @@ def run_smoke(
         (STEP_COUPLING_CHECK, lambda: _run_coupling_check(cassette_path)),
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
         (STEP_SEPARATION, lambda: _run_separation(cassette_path)),
+        (STEP_ABLATION, lambda: _run_ablation(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -344,10 +383,13 @@ def run_smoke(
             "Smoke proves harness public surface (schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree mutate-axis/wrong-axis, RQ1 separation protocol on "
-            "cassette controls, poc json, thin reject). "
+            "cassette controls, RQ2 leave-one-out ablation on cassette controls, "
+            "poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
             "Probe-tree amortization = structural node counts only. "
-            "control_separation_index = structural control-bank fraction only."
+            "control_separation_index = structural control-bank fraction only. "
+            "Ablation marginal_necessary / redundancy_with_peers = structural "
+            "flags only (not empirical RQ2 / not AUROC)."
         ),
     }
 
@@ -376,6 +418,7 @@ def _print_human(report: dict[str, Any]) -> None:
                 "mismatch_count",
                 "separates_count",
                 "control_separation_index",
+                "full8_hyper_separates_count",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -406,8 +449,8 @@ def main(argv: list[str] | None = None) -> int:
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
-            "on cassette controls, poc json, thin reject. "
-            "Stdlib-only; no invented scores."
+            "on cassette controls, RQ2 leave-one-out ablation, poc json, "
+            "thin reject. Stdlib-only; no invented scores."
         ),
     )
     p.add_argument(

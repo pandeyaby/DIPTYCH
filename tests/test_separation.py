@@ -153,11 +153,11 @@ class TestSmokeSeparationStep(unittest.TestCase):
     def test_smoke_includes_separation_step(self):
         from diptych.smoke import SMOKE_SCHEMA, SMOKE_STEP_IDS, run_smoke
 
-        self.assertEqual(SMOKE_SCHEMA, "1.4")
+        self.assertEqual(SMOKE_SCHEMA, "1.5")
         self.assertIn("separation", SMOKE_STEP_IDS)
         report = run_smoke()
         self.assertTrue(report["ok"], report.get("failures"))
-        self.assertEqual(report["smoke_schema"], "1.4")
+        self.assertEqual(report["smoke_schema"], "1.5")
         ids = [s["id"] for s in report["steps"]]
         self.assertEqual(ids, list(SMOKE_STEP_IDS))
         by_id = {s["id"]: s for s in report["steps"]}

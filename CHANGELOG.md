@@ -15,6 +15,7 @@ and model-study cells remain open / N/A.
 
 | PR | Milestone |
 |----|-----------|
+| (draft) | RQ2 protocol harness — `diptych.ablation` / `diptych-ablation`: operator leave-one-out on cassette controls; `marginal_necessary` / `redundancy_with_peers` (structural flags only, not AUROC / not empirical RQ2); smoke schema **1.5** + ablation step |
 | (draft) | RQ1 protocol harness — `diptych.separation` / `diptych-separation`: single-trace baseline vs hyperproperty on cassette controls; `control_separation_index` (structural control-bank fraction only, not AUROC); smoke schema **1.4** + separation step |
 | #23 (draft) | Installable console scripts (`diptych`, `diptych-poc` / `grade` / `matrix` / `schema` / `full8`) + `__version__` 0.2.0 aligned with pyproject; entry-point tests |
 | #22 | Unified stranger smoke (`python -m diptych` / `make smoke`) — schema + cassette grade + matrix + poc + thin reject |
