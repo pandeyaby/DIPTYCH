@@ -12,8 +12,9 @@ Runs in order (exit non-zero on any failure)::
     8. ablation (RQ2 leave-one-out on cassette control bank)
     9. amortization (RQ4 probe-tree amortization counters on conforming probes)
     10. inconclusive (RQ5 inconclusive rate on cassette fixtures)
-    11. poc --json (full-8 structured report)
-    12. thin corpus reject sanity (must reject loudly)
+    11. predictive (RQ3 predictive validity scaffolding; N/A without held-out)
+    12. poc --json (full-8 structured report)
+    13. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -41,7 +42,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.7"
+SMOKE_SCHEMA = "1.8"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -59,6 +60,7 @@ STEP_SEPARATION = "separation"
 STEP_ABLATION = "ablation"
 STEP_AMORTIZATION = "amortization"
 STEP_INCONCLUSIVE = "inconclusive"
+STEP_PREDICTIVE = "predictive"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -73,6 +75,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_ABLATION,
     STEP_AMORTIZATION,
     STEP_INCONCLUSIVE,
+    STEP_PREDICTIVE,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -406,6 +409,40 @@ def _run_inconclusive(cassette: Path) -> dict[str, Any]:
     return _step(STEP_INCONCLUSIVE, ok=ok, detail=detail, error=error)
 
 
+
+def _run_predictive() -> dict[str, Any]:
+    """RQ3 predictive-validity scaffolding (N/A without held-out; no invented scores)."""
+    from diptych.predictive import build_predictive_report
+
+    report = build_predictive_report()  # protocol_only — no held-out in smoke
+    results = report.get("results") or {}
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "status": report.get("status"),
+        "held_out": report.get("held_out"),
+        "n_pairs": report.get("n_pairs"),
+        "results": {
+            "probe_held_out_rank_corr": results.get("probe_held_out_rank_corr"),
+            "trace_only_rank_corr": results.get("trace_only_rank_corr"),
+            "probe_beats_trace_baseline": results.get("probe_beats_trace_baseline"),
+            "n_pairs_usable": results.get("n_pairs_usable"),
+        },
+        "failures": list(report.get("failures") or []),
+        "non_claims": list(report.get("non_claims") or []),
+    }
+    ok = bool(report.get("ok")) and report.get("status") == "protocol_only"
+    error = None
+    if not ok:
+        error = (
+            "predictive failed: "
+            + (
+                ", ".join(report.get("failures") or [])
+                or "expected protocol_only N/A scaffolding"
+            )
+        )
+    return _step(STEP_PREDICTIVE, ok=ok, detail=detail, error=error)
+
+
 def _run_coupling_check(cassette: Path) -> dict[str, Any]:
     """ops/*/spec.yaml + cassette probe.json vs canonical open_loop/crn map."""
     from diptych.coupling import build_coupling_report
@@ -449,6 +486,7 @@ def run_smoke(
         (STEP_ABLATION, lambda: _run_ablation(cassette_path)),
         (STEP_AMORTIZATION, lambda: _run_amortization(cassette_path)),
         (STEP_INCONCLUSIVE, lambda: _run_inconclusive(cassette_path)),
+        (STEP_PREDICTIVE, _run_predictive),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -474,6 +512,7 @@ def run_smoke(
             "cassette controls, RQ2 leave-one-out ablation on cassette controls, "
             "RQ4 probe-tree amortization counters on conforming probes, "
             "RQ5 inconclusive rate on cassette fixtures, "
+            "RQ3 predictive validity scaffolding (N/A without held-out), "
             "poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
             "Probe-tree amortization = structural node counts only "
@@ -482,7 +521,9 @@ def run_smoke(
             "Ablation marginal_necessary / redundancy_with_peers = structural "
             "flags only (not empirical RQ2 / not AUROC). "
             "inconclusive_rate = n_inconclusive/n_probes structural counts only "
-            "(not empirical RQ5 / not AUROC)."
+            "(not empirical RQ5 / not AUROC). "
+            "RQ3 predictive result cells stay N/A without held-out "
+            "(not AUROC / model ranks / empirical RQ3)."
         ),
     }
 
@@ -516,6 +557,8 @@ def _print_human(report: dict[str, Any]) -> None:
                 "n_inconclusive",
                 "inconclusive_rate",
                 "ops_with_working_inconclusive",
+                "status",
+                "n_pairs",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -548,7 +591,8 @@ def main(argv: list[str] | None = None) -> int:
             "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
             "on cassette controls, RQ2 leave-one-out ablation, RQ4 "
             "probe-tree amortization counters, RQ5 inconclusive rate on "
-            "cassette fixtures, poc json, thin reject. Stdlib-only; "
+            "cassette fixtures, RQ3 predictive validity scaffolding "
+            "(N/A without held-out), poc json, thin reject. Stdlib-only; "
             "no invented scores."
         ),
     )
