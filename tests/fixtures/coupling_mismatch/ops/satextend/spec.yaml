@@ -1,0 +1,10 @@
+operator: SATEXTEND
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Extend saturation bounds on a channel
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role

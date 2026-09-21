@@ -1,0 +1,7 @@
+operator: FREEZEDRY
+coupling: crn_closed_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Deliberate mismatch fixture — FREEZEDRY must be open_loop

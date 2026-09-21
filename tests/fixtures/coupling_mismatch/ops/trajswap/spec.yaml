@@ -1,0 +1,7 @@
+operator: TRAJSWAP
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Deliberate mismatch fixture — TRAJSWAP must be crn_closed_loop

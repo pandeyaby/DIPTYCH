@@ -1,0 +1,10 @@
+operator: HISTSWAP
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Swap/splice history buffers between traces
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role

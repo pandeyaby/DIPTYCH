@@ -1,0 +1,10 @@
+operator: SIGNFLIP
+coupling: open_loop
+horizon:
+  unit: steps
+  length: 8
+description: |
+  Flip sign/polarity of designated channel
+inconclusive_when:
+  - traces incomparable under shared prefix rule
+  - missing twin role
