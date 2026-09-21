@@ -109,7 +109,9 @@ class TestInconclusiveFailureCases(unittest.TestCase):
             with redirect_stdout(buf):
                 rc = main(["--cassette", str(broken), "--json"])
             self.assertNotEqual(rc, 0)
-            self.assertIn('"ok": false', buf.getvalue().lower().replace(" ", ""))
+            cli_report = json.loads(buf.getvalue())
+            self.assertFalse(cli_report["ok"])
+            self.assertTrue(cli_report["failures"])
 
     def test_inconclusive_grade_mismatch_fails(self):
         from diptych.inconclusive import build_inconclusive_report
