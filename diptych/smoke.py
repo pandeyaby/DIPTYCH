@@ -8,8 +8,9 @@ Runs in order (exit non-zero on any failure)::
     4. matrix --check (diptych_core from fixtures)
     5. coupling_check (ops/*/spec.yaml + cassette probe.json vs canonical map)
     6. probe-tree (mutate-axis power + wrong-axis negative controls)
-    7. poc --json (full-8 structured report)
-    8. thin corpus reject sanity (must reject loudly)
+    7. separation (single-trace baseline vs hyperproperty on cassette controls)
+    8. poc --json (full-8 structured report)
+    9. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -37,7 +38,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.3"
+SMOKE_SCHEMA = "1.4"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -51,6 +52,7 @@ STEP_GRADE_CASSETTE = "grade_cassette"
 STEP_MATRIX_CHECK = "matrix_check"
 STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
+STEP_SEPARATION = "separation"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -61,6 +63,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_MATRIX_CHECK,
     STEP_COUPLING_CHECK,
     STEP_PROBE_TREE,
+    STEP_SEPARATION,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -249,6 +252,36 @@ def _run_probe_tree(cassette: Path) -> dict[str, Any]:
     return _step(STEP_PROBE_TREE, ok=ok, detail=detail, error=error)
 
 
+def _run_separation(cassette: Path) -> dict[str, Any]:
+    """Single-trace baseline vs hyperproperty separation on cassette controls."""
+    from diptych.separation import build_separation_report
+
+    report = build_separation_report(cassette=cassette)
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "operator_count": report.get("operator_count"),
+        "separates_count": report.get("separates_count"),
+        "control_separation_index": report.get("control_separation_index"),
+        "failures": list(report.get("failures") or []),
+    }
+    ops_summary: dict[str, Any] = {}
+    for op, cell in (report.get("operators") or {}).items():
+        ops_summary[op] = {
+            "single_trace_equiv": cell.get("single_trace_equiv"),
+            "hyper_separates": cell.get("hyper_separates"),
+            "separates": cell.get("separates"),
+        }
+    detail["operators"] = ops_summary
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        error = (
+            "separation failed: "
+            + (", ".join(report.get("failures") or []) or "see operators")
+        )
+    return _step(STEP_SEPARATION, ok=ok, detail=detail, error=error)
+
+
 def _run_coupling_check(cassette: Path) -> dict[str, Any]:
     """ops/*/spec.yaml + cassette probe.json vs canonical open_loop/crn map."""
     from diptych.coupling import build_coupling_report
@@ -288,6 +321,7 @@ def run_smoke(
         (STEP_MATRIX_CHECK, _run_matrix_check),
         (STEP_COUPLING_CHECK, lambda: _run_coupling_check(cassette_path)),
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
+        (STEP_SEPARATION, lambda: _run_separation(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -309,9 +343,11 @@ def run_smoke(
         "notes": (
             "Smoke proves harness public surface (schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
-            "probe-tree mutate-axis/wrong-axis, poc json, thin reject). "
+            "probe-tree mutate-axis/wrong-axis, RQ1 separation protocol on "
+            "cassette controls, poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
-            "Probe-tree amortization = structural node counts only."
+            "Probe-tree amortization = structural node counts only. "
+            "control_separation_index = structural control-bank fraction only."
         ),
     }
 
@@ -338,6 +374,8 @@ def _print_human(report: dict[str, Any]) -> None:
                 "failure_count",
                 "check_count",
                 "mismatch_count",
+                "separates_count",
+                "control_separation_index",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -367,7 +405,8 @@ def main(argv: list[str] | None = None) -> int:
         description=(
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
-            "probe-tree (mutate-axis / wrong-axis), poc json, thin reject. "
+            "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
+            "on cassette controls, poc json, thin reject. "
             "Stdlib-only; no invented scores."
         ),
     )

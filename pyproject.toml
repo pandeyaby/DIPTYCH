@@ -37,6 +37,7 @@ diptych-schema = "diptych.schema:main"
 diptych-pins = "diptych.pins:main"
 diptych-probe-tree = "diptych.probe_tree:main"
 diptych-coupling = "diptych.coupling:main"
+diptych-separation = "diptych.separation:main"
 
 [project.urls]
 Homepage = "https://github.com/pandeyaby/DIPTYCH"
