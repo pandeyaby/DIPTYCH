@@ -10,8 +10,9 @@ Runs in order (exit non-zero on any failure)::
     6. probe-tree (mutate-axis power + wrong-axis negative controls)
     7. separation (single-trace baseline vs hyperproperty on cassette controls)
     8. ablation (RQ2 leave-one-out on cassette control bank)
-    9. poc --json (full-8 structured report)
-    10. thin corpus reject sanity (must reject loudly)
+    9. inconclusive (RQ5 inconclusive rate on cassette fixtures)
+    10. poc --json (full-8 structured report)
+    11. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -39,7 +40,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.5"
+SMOKE_SCHEMA = "1.6"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -55,6 +56,7 @@ STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
 STEP_SEPARATION = "separation"
 STEP_ABLATION = "ablation"
+STEP_INCONCLUSIVE = "inconclusive"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -67,6 +69,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_PROBE_TREE,
     STEP_SEPARATION,
     STEP_ABLATION,
+    STEP_INCONCLUSIVE,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -320,6 +323,45 @@ def _run_ablation(cassette: Path) -> dict[str, Any]:
     return _step(STEP_ABLATION, ok=ok, detail=detail, error=error)
 
 
+def _run_inconclusive(cassette: Path) -> dict[str, Any]:
+    """RQ5 inconclusive rate on cassette fixtures (structural counts only)."""
+    from diptych.inconclusive import build_inconclusive_report
+
+    report = build_inconclusive_report(cassette=cassette)
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "operator_count": report.get("operator_count"),
+        "ops_with_working_inconclusive": report.get("ops_with_working_inconclusive"),
+        "n_probes": report.get("n_probes"),
+        "n_inconclusive": report.get("n_inconclusive"),
+        "inconclusive_rate": report.get("inconclusive_rate"),
+        "by_reason_needle": report.get("by_reason_needle") or {},
+        "failures": list(report.get("failures") or []),
+        "non_claims": list(report.get("non_claims") or []),
+    }
+    ops_summary: dict[str, Any] = {}
+    for op, cell in (report.get("operators") or {}).items():
+        ops_summary[op] = {
+            "n_probes": cell.get("n_probes"),
+            "n_inconclusive": cell.get("n_inconclusive"),
+            "inconclusive_rate": cell.get("inconclusive_rate"),
+            "has_working_inconclusive": cell.get("has_working_inconclusive"),
+            "by_reason_needle": cell.get("by_reason_needle") or {},
+        }
+    detail["operators"] = ops_summary
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        error = (
+            "inconclusive failed: "
+            + (
+                ", ".join(report.get("failures") or [])
+                or "missing working inconclusive coverage"
+            )
+        )
+    return _step(STEP_INCONCLUSIVE, ok=ok, detail=detail, error=error)
+
+
 def _run_coupling_check(cassette: Path) -> dict[str, Any]:
     """ops/*/spec.yaml + cassette probe.json vs canonical open_loop/crn map."""
     from diptych.coupling import build_coupling_report
@@ -361,6 +403,7 @@ def run_smoke(
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
         (STEP_SEPARATION, lambda: _run_separation(cassette_path)),
         (STEP_ABLATION, lambda: _run_ablation(cassette_path)),
+        (STEP_INCONCLUSIVE, lambda: _run_inconclusive(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -384,12 +427,15 @@ def run_smoke(
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree mutate-axis/wrong-axis, RQ1 separation protocol on "
             "cassette controls, RQ2 leave-one-out ablation on cassette controls, "
+            "RQ5 inconclusive rate on cassette fixtures, "
             "poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
             "Probe-tree amortization = structural node counts only. "
             "control_separation_index = structural control-bank fraction only. "
             "Ablation marginal_necessary / redundancy_with_peers = structural "
-            "flags only (not empirical RQ2 / not AUROC)."
+            "flags only (not empirical RQ2 / not AUROC). "
+            "inconclusive_rate = n_inconclusive/n_probes structural counts only "
+            "(not empirical RQ5 / not AUROC)."
         ),
     }
 
@@ -419,6 +465,9 @@ def _print_human(report: dict[str, Any]) -> None:
                 "separates_count",
                 "control_separation_index",
                 "full8_hyper_separates_count",
+                "n_inconclusive",
+                "inconclusive_rate",
+                "ops_with_working_inconclusive",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -449,7 +498,8 @@ def main(argv: list[str] | None = None) -> int:
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
-            "on cassette controls, RQ2 leave-one-out ablation, poc json, "
+            "on cassette controls, RQ2 leave-one-out ablation, RQ5 "
+            "inconclusive rate on cassette fixtures, poc json, "
             "thin reject. Stdlib-only; no invented scores."
         ),
     )
