@@ -10,9 +10,10 @@ Runs in order (exit non-zero on any failure)::
     6. probe-tree (mutate-axis power + wrong-axis negative controls)
     7. separation (single-trace baseline vs hyperproperty on cassette controls)
     8. ablation (RQ2 leave-one-out on cassette control bank)
-    9. inconclusive (RQ5 inconclusive rate on cassette fixtures)
-    10. poc --json (full-8 structured report)
-    11. thin corpus reject sanity (must reject loudly)
+    9. amortization (RQ4 probe-tree amortization counters on conforming probes)
+    10. inconclusive (RQ5 inconclusive rate on cassette fixtures)
+    11. poc --json (full-8 structured report)
+    12. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -40,7 +41,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.6"
+SMOKE_SCHEMA = "1.7"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -56,6 +57,7 @@ STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
 STEP_SEPARATION = "separation"
 STEP_ABLATION = "ablation"
+STEP_AMORTIZATION = "amortization"
 STEP_INCONCLUSIVE = "inconclusive"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
@@ -69,6 +71,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_PROBE_TREE,
     STEP_SEPARATION,
     STEP_ABLATION,
+    STEP_AMORTIZATION,
     STEP_INCONCLUSIVE,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
@@ -323,6 +326,47 @@ def _run_ablation(cassette: Path) -> dict[str, Any]:
     return _step(STEP_ABLATION, ok=ok, detail=detail, error=error)
 
 
+def _run_amortization(cassette: Path) -> dict[str, Any]:
+    """RQ4 probe-tree amortization counters (structural node counts only)."""
+    from diptych.amortization import build_amortization_report
+
+    report = build_amortization_report(cassette=cassette)
+    agg = report.get("aggregate") or {}
+    detail: dict[str, Any] = {
+        "ok": report.get("ok"),
+        "operator_count": report.get("operator_count"),
+        "alpha": agg.get("alpha"),
+        "aggregate": {
+            "amortization": (agg.get("amortization") or {}),
+            "alpha": agg.get("alpha"),
+            "counters_consistent": agg.get("counters_consistent"),
+        },
+        "failures": list(report.get("failures") or []),
+        "non_claims": list(report.get("non_claims") or []),
+    }
+    ops_summary: dict[str, Any] = {}
+    for op, cell in (report.get("operators") or {}).items():
+        ops_summary[op] = {
+            "ok": cell.get("ok"),
+            "tree_ok": cell.get("tree_ok"),
+            "counters_consistent": cell.get("counters_consistent"),
+            "alpha": cell.get("alpha"),
+            "amortization": cell.get("amortization") or {},
+        }
+    detail["operators"] = ops_summary
+    ok = bool(report.get("ok"))
+    error = None
+    if not ok:
+        error = (
+            "amortization failed: "
+            + (
+                ", ".join(report.get("failures") or [])
+                or "tree not ok or counters inconsistent"
+            )
+        )
+    return _step(STEP_AMORTIZATION, ok=ok, detail=detail, error=error)
+
+
 def _run_inconclusive(cassette: Path) -> dict[str, Any]:
     """RQ5 inconclusive rate on cassette fixtures (structural counts only)."""
     from diptych.inconclusive import build_inconclusive_report
@@ -403,6 +447,7 @@ def run_smoke(
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
         (STEP_SEPARATION, lambda: _run_separation(cassette_path)),
         (STEP_ABLATION, lambda: _run_ablation(cassette_path)),
+        (STEP_AMORTIZATION, lambda: _run_amortization(cassette_path)),
         (STEP_INCONCLUSIVE, lambda: _run_inconclusive(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
@@ -427,10 +472,12 @@ def run_smoke(
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree mutate-axis/wrong-axis, RQ1 separation protocol on "
             "cassette controls, RQ2 leave-one-out ablation on cassette controls, "
+            "RQ4 probe-tree amortization counters on conforming probes, "
             "RQ5 inconclusive rate on cassette fixtures, "
             "poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
-            "Probe-tree amortization = structural node counts only. "
+            "Probe-tree amortization = structural node counts only "
+            "(protocol α; not measured dollar cost / wall-clock / empirical RQ4). "
             "control_separation_index = structural control-bank fraction only. "
             "Ablation marginal_necessary / redundancy_with_peers = structural "
             "flags only (not empirical RQ2 / not AUROC). "
@@ -465,6 +512,7 @@ def _print_human(report: dict[str, Any]) -> None:
                 "separates_count",
                 "control_separation_index",
                 "full8_hyper_separates_count",
+                "alpha",
                 "n_inconclusive",
                 "inconclusive_rate",
                 "ops_with_working_inconclusive",
@@ -498,9 +546,10 @@ def main(argv: list[str] | None = None) -> int:
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
             "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
-            "on cassette controls, RQ2 leave-one-out ablation, RQ5 "
-            "inconclusive rate on cassette fixtures, poc json, "
-            "thin reject. Stdlib-only; no invented scores."
+            "on cassette controls, RQ2 leave-one-out ablation, RQ4 "
+            "probe-tree amortization counters, RQ5 inconclusive rate on "
+            "cassette fixtures, poc json, thin reject. Stdlib-only; "
+            "no invented scores."
         ),
     )
     p.add_argument(

@@ -15,6 +15,7 @@ and model-study cells remain open / N/A.
 
 | PR | Milestone |
 |----|-----------|
+| (draft) | RQ4 protocol harness — `diptych.amortization` / `diptych-amortization`: probe-tree amortization counters on cassette conforming probes (`shared_prefix_nodes` / `nodes_naive_two_probes` / protocol α; structural node counts only, not $ / wall-clock / AUROC / not empirical RQ4); smoke schema **1.7** + amortization step |
 | (draft) | RQ5 protocol harness — `diptych.inconclusive` / `diptych-inconclusive`: inconclusive rate on cassette fixtures (`n_inconclusive/n_probes`, reason-needle strata; structural counts only, not AUROC / not empirical RQ5); smoke schema **1.6** + inconclusive step |
 | (draft) | RQ2 protocol harness — `diptych.ablation` / `diptych-ablation`: operator leave-one-out on cassette controls; `marginal_necessary` / `redundancy_with_peers` (structural flags only, not AUROC / not empirical RQ2); smoke schema **1.5** + ablation step |
 | (draft) | RQ1 protocol harness — `diptych.separation` / `diptych-separation`: single-trace baseline vs hyperproperty on cassette controls; `control_separation_index` (structural control-bank fraction only, not AUROC); smoke schema **1.4** + separation step |

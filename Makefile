@@ -10,7 +10,7 @@ poc-json:
 
 # Unified stranger smoke: schema freshness → pins --check → cassette grade →
 # matrix --check → coupling_check → probe-tree → separation → ablation →
-# inconclusive → poc json → thin reject.
+# amortization → inconclusive → poc json → thin reject.
 # Exit non-zero on any failure.
 # Machine report: make smoke JSON=1   OR   python -m diptych smoke --json
 smoke:
