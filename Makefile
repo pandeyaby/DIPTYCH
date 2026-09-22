@@ -1,4 +1,4 @@
-.PHONY: poc poc-json grade test full8 matrix refresh-matrix schema schema-check pins-check smoke paper artifact clean
+.PHONY: poc poc-json grade test full8 matrix refresh-matrix schema schema-check pins-check smoke protocol paper artifact clean
 
 poc:
 	./scripts/run_poc.sh
@@ -9,12 +9,17 @@ poc-json:
 	./scripts/run_poc.sh --json $(if $(SARIF),--sarif,)
 
 # Unified stranger smoke: schema freshness → pins --check → cassette grade →
-# matrix --check → coupling_check → probe-tree → separation → ablation →
-# amortization → inconclusive → predictive → poc json → thin reject.
+# matrix --check → coupling_check → probe-tree → protocol (RQ1–RQ5) →
+# poc json → thin reject.
 # Exit non-zero on any failure.
 # Machine report: make smoke JSON=1   OR   python -m diptych smoke --json
 smoke:
 	PYTHONPATH=. python3 -m diptych smoke $(if $(JSON),--json,)
+
+# Unified RQ1–RQ5 protocol report (one JSON aggregate; no invented scores).
+# Stranger: python -m diptych.protocol [--json]  OR  diptych-protocol
+protocol:
+	PYTHONPATH=. python3 -m diptych.protocol $(if $(JSON),--json --stdout-only,)
 
 # Adapter pin integrity alone (also folded into `make smoke`).
 # CI / PRs: `make pins-check` or `python -m diptych.pins --check`

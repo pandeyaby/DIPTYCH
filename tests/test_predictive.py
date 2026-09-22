@@ -222,25 +222,25 @@ class TestPredictiveUsablePairsStayHonest(unittest.TestCase):
 
 
 class TestSmokePredictiveStep(unittest.TestCase):
-    def test_smoke_includes_predictive_step(self):
+    def test_smoke_protocol_covers_rq3_predictive(self):
         from diptych.smoke import SMOKE_SCHEMA, SMOKE_STEP_IDS, run_smoke
 
-        self.assertEqual(SMOKE_SCHEMA, "1.8")
-        self.assertIn("predictive", SMOKE_STEP_IDS)
+        self.assertEqual(SMOKE_SCHEMA, "1.9")
+        self.assertIn("protocol", SMOKE_STEP_IDS)
         report = run_smoke()
         self.assertTrue(report["ok"], report.get("failures"))
-        self.assertEqual(report["smoke_schema"], "1.8")
-        ids = [s["id"] for s in report["steps"]]
-        self.assertEqual(ids, list(SMOKE_STEP_IDS))
+        self.assertEqual(report["smoke_schema"], "1.9")
         by_id = {s["id"]: s for s in report["steps"]}
-        pred = by_id["predictive"]
-        self.assertTrue(pred["ok"], pred)
-        detail = pred["detail"]
-        self.assertEqual(detail["status"], "protocol_only")
-        self.assertEqual(detail["n_pairs"], 0)
-        self.assertEqual(detail["results"]["probe_held_out_rank_corr"], "N/A")
-        self.assertEqual(detail["results"]["trace_only_rank_corr"], "N/A")
-        self.assertIn("NOT AUROC", detail["non_claims"])
+        proto = by_id["protocol"]
+        self.assertTrue(proto["ok"], proto)
+        rq3 = proto["detail"]["rqs"]["RQ3"]
+        self.assertTrue(rq3["ok"], rq3)
+        self.assertEqual(rq3["harness"], "predictive")
+        self.assertEqual(rq3["status"], "protocol_only")
+        self.assertEqual(rq3["metrics"]["n_pairs"], 0)
+        self.assertEqual(rq3["metrics"]["probe_held_out_rank_corr"], "N/A")
+        self.assertEqual(rq3["metrics"]["trace_only_rank_corr"], "N/A")
+        self.assertIn("NOT AUROC", rq3.get("non_claims") or proto["detail"]["non_claims"])
         blob = json.dumps(report).lower()
         self.assertNotIn('"auroc"', blob)
         self.assertNotIn('"lab_auroc"', blob)

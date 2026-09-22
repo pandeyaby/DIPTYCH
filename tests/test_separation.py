@@ -150,27 +150,23 @@ class TestSeparationFailureCases(unittest.TestCase):
 
 
 class TestSmokeSeparationStep(unittest.TestCase):
-    def test_smoke_includes_separation_step(self):
+    def test_smoke_protocol_covers_rq1_separation(self):
         from diptych.smoke import SMOKE_SCHEMA, SMOKE_STEP_IDS, run_smoke
 
-        self.assertEqual(SMOKE_SCHEMA, "1.8")
-        self.assertIn("separation", SMOKE_STEP_IDS)
+        self.assertEqual(SMOKE_SCHEMA, "1.9")
+        self.assertIn("protocol", SMOKE_STEP_IDS)
         report = run_smoke()
         self.assertTrue(report["ok"], report.get("failures"))
-        self.assertEqual(report["smoke_schema"], "1.8")
-        ids = [s["id"] for s in report["steps"]]
-        self.assertEqual(ids, list(SMOKE_STEP_IDS))
+        self.assertEqual(report["smoke_schema"], "1.9")
         by_id = {s["id"]: s for s in report["steps"]}
-        sep = by_id["separation"]
-        self.assertTrue(sep["ok"], sep)
-        detail = sep["detail"]
-        self.assertEqual(detail["operator_count"], 8)
-        self.assertEqual(detail["separates_count"], 8)
-        self.assertEqual(detail["control_separation_index"], 1.0)
-        for op, cell in detail["operators"].items():
-            self.assertTrue(cell["single_trace_equiv"], op)
-            self.assertTrue(cell["hyper_separates"], op)
-            self.assertTrue(cell["separates"], op)
+        proto = by_id["protocol"]
+        self.assertTrue(proto["ok"], proto)
+        rq1 = proto["detail"]["rqs"]["RQ1"]
+        self.assertTrue(rq1["ok"], rq1)
+        self.assertEqual(rq1["harness"], "separation")
+        self.assertEqual(rq1["metrics"]["operator_count"], 8)
+        self.assertEqual(rq1["metrics"]["separates_count"], 8)
+        self.assertEqual(rq1["metrics"]["control_separation_index"], 1.0)
         blob = json.dumps(report).lower()
         self.assertNotIn('"auroc"', blob)
         self.assertNotIn('"lab_auroc"', blob)

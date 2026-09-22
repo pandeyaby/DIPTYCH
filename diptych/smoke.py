@@ -8,13 +8,10 @@ Runs in order (exit non-zero on any failure)::
     4. matrix --check (diptych_core from fixtures)
     5. coupling_check (ops/*/spec.yaml + cassette probe.json vs canonical map)
     6. probe-tree (mutate-axis power + wrong-axis negative controls)
-    7. separation (single-trace baseline vs hyperproperty on cassette controls)
-    8. ablation (RQ2 leave-one-out on cassette control bank)
-    9. amortization (RQ4 probe-tree amortization counters on conforming probes)
-    10. inconclusive (RQ5 inconclusive rate on cassette fixtures)
-    11. predictive (RQ3 predictive validity scaffolding; N/A without held-out)
-    12. poc --json (full-8 structured report)
-    13. thin corpus reject sanity (must reject loudly)
+    7. protocol (unified RQ1–RQ5: separation / ablation / predictive /
+       amortization / inconclusive)
+    8. poc --json (full-8 structured report)
+    9. thin corpus reject sanity (must reject loudly)
 
 Machine-readable report via ``--json``. No AUROC / invented model scores.
 
@@ -42,7 +39,7 @@ from diptych.pins import EXIT_OK as PINS_EXIT_OK, check_paths
 from diptych.poc import POC_SCHEMA, build_poc_report
 from diptych.schema import SCHEMA_JSON_RELPATH, SchemaError, assert_committed_schema_fresh
 
-SMOKE_SCHEMA = "1.8"
+SMOKE_SCHEMA = "1.9"
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASSETTE = ROOT / "examples" / "fixtures" / "cassette"
@@ -56,11 +53,7 @@ STEP_GRADE_CASSETTE = "grade_cassette"
 STEP_MATRIX_CHECK = "matrix_check"
 STEP_COUPLING_CHECK = "coupling_check"
 STEP_PROBE_TREE = "probe_tree"
-STEP_SEPARATION = "separation"
-STEP_ABLATION = "ablation"
-STEP_AMORTIZATION = "amortization"
-STEP_INCONCLUSIVE = "inconclusive"
-STEP_PREDICTIVE = "predictive"
+STEP_PROTOCOL = "protocol"
 STEP_POC_JSON = "poc_json"
 STEP_THIN_REJECT = "thin_reject"
 
@@ -71,11 +64,7 @@ SMOKE_STEP_IDS: tuple[str, ...] = (
     STEP_MATRIX_CHECK,
     STEP_COUPLING_CHECK,
     STEP_PROBE_TREE,
-    STEP_SEPARATION,
-    STEP_ABLATION,
-    STEP_AMORTIZATION,
-    STEP_INCONCLUSIVE,
-    STEP_PREDICTIVE,
+    STEP_PROTOCOL,
     STEP_POC_JSON,
     STEP_THIN_REJECT,
 )
@@ -264,183 +253,56 @@ def _run_probe_tree(cassette: Path) -> dict[str, Any]:
     return _step(STEP_PROBE_TREE, ok=ok, detail=detail, error=error)
 
 
-def _run_separation(cassette: Path) -> dict[str, Any]:
-    """Single-trace baseline vs hyperproperty separation on cassette controls."""
-    from diptych.separation import build_separation_report
+def _run_protocol(cassette: Path) -> dict[str, Any]:
+    """Unified RQ1–RQ5 protocol report (reuses existing harness builders)."""
+    from diptych.protocol import build_protocol_report
 
-    report = build_separation_report(cassette=cassette)
+    report = build_protocol_report(cassette=cassette)
+    rqs = report.get("rqs") or {}
     detail: dict[str, Any] = {
         "ok": report.get("ok"),
-        "operator_count": report.get("operator_count"),
-        "separates_count": report.get("separates_count"),
-        "control_separation_index": report.get("control_separation_index"),
-        "failures": list(report.get("failures") or []),
-    }
-    ops_summary: dict[str, Any] = {}
-    for op, cell in (report.get("operators") or {}).items():
-        ops_summary[op] = {
-            "single_trace_equiv": cell.get("single_trace_equiv"),
-            "hyper_separates": cell.get("hyper_separates"),
-            "separates": cell.get("separates"),
-        }
-    detail["operators"] = ops_summary
-    ok = bool(report.get("ok"))
-    error = None
-    if not ok:
-        error = (
-            "separation failed: "
-            + (", ".join(report.get("failures") or []) or "see operators")
-        )
-    return _step(STEP_SEPARATION, ok=ok, detail=detail, error=error)
-
-
-def _run_ablation(cassette: Path) -> dict[str, Any]:
-    """RQ2 leave-one-out ablation on cassette control bank (structural only)."""
-    from diptych.ablation import build_ablation_report
-
-    report = build_ablation_report(cassette=cassette)
-    full8 = report.get("full8") or {}
-    detail: dict[str, Any] = {
-        "ok": report.get("ok"),
-        "operator_count": report.get("operator_count"),
-        "full8_ok": full8.get("ok"),
-        "full8_hyper_separates_count": full8.get("hyper_separates_count"),
-        "control_separation_index": full8.get("control_separation_index"),
+        "protocol_schema": report.get("protocol_schema"),
+        "rq_count": report.get("rq_count"),
+        "rqs": rqs,
         "failures": list(report.get("failures") or []),
         "non_claims": list(report.get("non_claims") or []),
     }
-    ops_summary: dict[str, Any] = {}
-    for op, cell in (report.get("ablations") or {}).items():
-        ops_summary[op] = {
-            "marginal_necessary": cell.get("marginal_necessary"),
-            "redundancy_with_peers": cell.get("redundancy_with_peers"),
-            "remaining_bank_separates": cell.get("remaining_bank_separates"),
-            "coupling": cell.get("coupling"),
-        }
-    detail["ablations"] = ops_summary
-    detail["coupling_strata"] = report.get("coupling_strata") or {}
+    # Compact top-level flags for the human smoke table (no invented scores).
+    rq1 = rqs.get("RQ1") or {}
+    rq3 = rqs.get("RQ3") or {}
+    rq4 = rqs.get("RQ4") or {}
+    rq5 = rqs.get("RQ5") or {}
+    m1 = rq1.get("metrics") or {}
+    m3 = rq3.get("metrics") or {}
+    m4 = rq4.get("metrics") or {}
+    m5 = rq5.get("metrics") or {}
+    detail["control_separation_index"] = m1.get("control_separation_index")
+    detail["alpha"] = m4.get("alpha")
+    detail["n_inconclusive"] = m5.get("n_inconclusive")
+    detail["inconclusive_rate"] = m5.get("inconclusive_rate")
+    detail["ops_with_working_inconclusive"] = m5.get(
+        "ops_with_working_inconclusive"
+    )
+    detail["predictive_status"] = rq3.get("status")
+    detail["probe_held_out_rank_corr"] = m3.get("probe_held_out_rank_corr")
+
     ok = bool(report.get("ok"))
+    # Smoke expects RQ3 protocol_only scaffolding (no held-out in smoke).
+    if ok and rq3.get("status") != "protocol_only":
+        ok = False
+        detail["failures"] = list(detail["failures"]) + [
+            "RQ3:expected_protocol_only"
+        ]
     error = None
     if not ok:
         error = (
-            "ablation failed: "
-            + (", ".join(report.get("failures") or []) or "full-8 bank did not separate")
-        )
-    return _step(STEP_ABLATION, ok=ok, detail=detail, error=error)
-
-
-def _run_amortization(cassette: Path) -> dict[str, Any]:
-    """RQ4 probe-tree amortization counters (structural node counts only)."""
-    from diptych.amortization import build_amortization_report
-
-    report = build_amortization_report(cassette=cassette)
-    agg = report.get("aggregate") or {}
-    detail: dict[str, Any] = {
-        "ok": report.get("ok"),
-        "operator_count": report.get("operator_count"),
-        "alpha": agg.get("alpha"),
-        "aggregate": {
-            "amortization": (agg.get("amortization") or {}),
-            "alpha": agg.get("alpha"),
-            "counters_consistent": agg.get("counters_consistent"),
-        },
-        "failures": list(report.get("failures") or []),
-        "non_claims": list(report.get("non_claims") or []),
-    }
-    ops_summary: dict[str, Any] = {}
-    for op, cell in (report.get("operators") or {}).items():
-        ops_summary[op] = {
-            "ok": cell.get("ok"),
-            "tree_ok": cell.get("tree_ok"),
-            "counters_consistent": cell.get("counters_consistent"),
-            "alpha": cell.get("alpha"),
-            "amortization": cell.get("amortization") or {},
-        }
-    detail["operators"] = ops_summary
-    ok = bool(report.get("ok"))
-    error = None
-    if not ok:
-        error = (
-            "amortization failed: "
+            "protocol failed: "
             + (
-                ", ".join(report.get("failures") or [])
-                or "tree not ok or counters inconsistent"
+                ", ".join(detail.get("failures") or [])
+                or "one or more RQ harnesses failed"
             )
         )
-    return _step(STEP_AMORTIZATION, ok=ok, detail=detail, error=error)
-
-
-def _run_inconclusive(cassette: Path) -> dict[str, Any]:
-    """RQ5 inconclusive rate on cassette fixtures (structural counts only)."""
-    from diptych.inconclusive import build_inconclusive_report
-
-    report = build_inconclusive_report(cassette=cassette)
-    detail: dict[str, Any] = {
-        "ok": report.get("ok"),
-        "operator_count": report.get("operator_count"),
-        "ops_with_working_inconclusive": report.get("ops_with_working_inconclusive"),
-        "n_probes": report.get("n_probes"),
-        "n_inconclusive": report.get("n_inconclusive"),
-        "inconclusive_rate": report.get("inconclusive_rate"),
-        "by_reason_needle": report.get("by_reason_needle") or {},
-        "failures": list(report.get("failures") or []),
-        "non_claims": list(report.get("non_claims") or []),
-    }
-    ops_summary: dict[str, Any] = {}
-    for op, cell in (report.get("operators") or {}).items():
-        ops_summary[op] = {
-            "n_probes": cell.get("n_probes"),
-            "n_inconclusive": cell.get("n_inconclusive"),
-            "inconclusive_rate": cell.get("inconclusive_rate"),
-            "has_working_inconclusive": cell.get("has_working_inconclusive"),
-            "by_reason_needle": cell.get("by_reason_needle") or {},
-        }
-    detail["operators"] = ops_summary
-    ok = bool(report.get("ok"))
-    error = None
-    if not ok:
-        error = (
-            "inconclusive failed: "
-            + (
-                ", ".join(report.get("failures") or [])
-                or "missing working inconclusive coverage"
-            )
-        )
-    return _step(STEP_INCONCLUSIVE, ok=ok, detail=detail, error=error)
-
-
-
-def _run_predictive() -> dict[str, Any]:
-    """RQ3 predictive-validity scaffolding (N/A without held-out; no invented scores)."""
-    from diptych.predictive import build_predictive_report
-
-    report = build_predictive_report()  # protocol_only — no held-out in smoke
-    results = report.get("results") or {}
-    detail: dict[str, Any] = {
-        "ok": report.get("ok"),
-        "status": report.get("status"),
-        "held_out": report.get("held_out"),
-        "n_pairs": report.get("n_pairs"),
-        "results": {
-            "probe_held_out_rank_corr": results.get("probe_held_out_rank_corr"),
-            "trace_only_rank_corr": results.get("trace_only_rank_corr"),
-            "probe_beats_trace_baseline": results.get("probe_beats_trace_baseline"),
-            "n_pairs_usable": results.get("n_pairs_usable"),
-        },
-        "failures": list(report.get("failures") or []),
-        "non_claims": list(report.get("non_claims") or []),
-    }
-    ok = bool(report.get("ok")) and report.get("status") == "protocol_only"
-    error = None
-    if not ok:
-        error = (
-            "predictive failed: "
-            + (
-                ", ".join(report.get("failures") or [])
-                or "expected protocol_only N/A scaffolding"
-            )
-        )
-    return _step(STEP_PREDICTIVE, ok=ok, detail=detail, error=error)
+    return _step(STEP_PROTOCOL, ok=ok, detail=detail, error=error)
 
 
 def _run_coupling_check(cassette: Path) -> dict[str, Any]:
@@ -482,11 +344,7 @@ def run_smoke(
         (STEP_MATRIX_CHECK, _run_matrix_check),
         (STEP_COUPLING_CHECK, lambda: _run_coupling_check(cassette_path)),
         (STEP_PROBE_TREE, lambda: _run_probe_tree(cassette_path)),
-        (STEP_SEPARATION, lambda: _run_separation(cassette_path)),
-        (STEP_ABLATION, lambda: _run_ablation(cassette_path)),
-        (STEP_AMORTIZATION, lambda: _run_amortization(cassette_path)),
-        (STEP_INCONCLUSIVE, lambda: _run_inconclusive(cassette_path)),
-        (STEP_PREDICTIVE, _run_predictive),
+        (STEP_PROTOCOL, lambda: _run_protocol(cassette_path)),
         (STEP_POC_JSON, _run_poc_json),
         (STEP_THIN_REJECT, lambda: _run_thin_reject(thin_path)),
     ]
@@ -508,22 +366,13 @@ def run_smoke(
         "notes": (
             "Smoke proves harness public surface (schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
-            "probe-tree mutate-axis/wrong-axis, RQ1 separation protocol on "
-            "cassette controls, RQ2 leave-one-out ablation on cassette controls, "
-            "RQ4 probe-tree amortization counters on conforming probes, "
-            "RQ5 inconclusive rate on cassette fixtures, "
-            "RQ3 predictive validity scaffolding (N/A without held-out), "
+            "probe-tree mutate-axis/wrong-axis, unified RQ1–RQ5 protocol report "
+            "(separation / ablation / predictive / amortization / inconclusive), "
             "poc json, thin reject). "
             "Not AUROC / accuracy / vuln-finding. "
-            "Probe-tree amortization = structural node counts only "
-            "(protocol α; not measured dollar cost / wall-clock / empirical RQ4). "
-            "control_separation_index = structural control-bank fraction only. "
-            "Ablation marginal_necessary / redundancy_with_peers = structural "
-            "flags only (not empirical RQ2 / not AUROC). "
-            "inconclusive_rate = n_inconclusive/n_probes structural counts only "
-            "(not empirical RQ5 / not AUROC). "
-            "RQ3 predictive result cells stay N/A without held-out "
-            "(not AUROC / model ranks / empirical RQ3)."
+            "RQ protocol metrics are structural harness counts / flags or "
+            "explicit N/A (RQ3 without held-out) — never invented AUROC / "
+            "model ranks / dollar costs / matrix greens / empirical RQ answers."
         ),
     }
 
@@ -550,15 +399,14 @@ def _print_human(report: dict[str, Any]) -> None:
                 "failure_count",
                 "check_count",
                 "mismatch_count",
-                "separates_count",
+                "rq_count",
                 "control_separation_index",
-                "full8_hyper_separates_count",
                 "alpha",
                 "n_inconclusive",
                 "inconclusive_rate",
                 "ops_with_working_inconclusive",
-                "status",
-                "n_pairs",
+                "predictive_status",
+                "probe_held_out_rank_corr",
                 "zeroday_short",
                 "aomb_short",
             ):
@@ -588,12 +436,8 @@ def main(argv: list[str] | None = None) -> int:
         description=(
             "DIPTYCH unified stranger smoke: schema freshness, adapter pins, "
             "cassette grade, matrix check, coupling discipline, "
-            "probe-tree (mutate-axis / wrong-axis), RQ1 separation protocol "
-            "on cassette controls, RQ2 leave-one-out ablation, RQ4 "
-            "probe-tree amortization counters, RQ5 inconclusive rate on "
-            "cassette fixtures, RQ3 predictive validity scaffolding "
-            "(N/A without held-out), poc json, thin reject. Stdlib-only; "
-            "no invented scores."
+            "probe-tree (mutate-axis / wrong-axis), unified RQ1–RQ5 protocol "
+            "report, poc json, thin reject. Stdlib-only; no invented scores."
         ),
     )
     p.add_argument(
