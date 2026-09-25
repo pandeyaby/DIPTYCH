@@ -22,7 +22,7 @@ Milestone log: root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11). Companion docs
 
 Engineering polish is at **diminishing returns**. The next material unlock is
 Abhinav filling venue / author fields (`SUBMISSION.md` §0) or a real model-study
-data drop (RQ / `tab:placeholder` still **N/A**). Do not invent venue, DOI, or
+data drop (RQ model-study cells still **N/A**). Do not invent venue, DOI, or
 scores to force progress. See [`NOTES.md`](NOTES.md) and [`CHANGELOG.md`](../CHANGELOG.md).
 
 ---
@@ -34,7 +34,7 @@ scores to force progress. See [`NOTES.md`](NOTES.md) and [`CHANGELOG.md`](../CHA
 | **CI** (pytest + PoC + artifact dry-run + `paper-pdf`) | green on main | `.github/workflows/ci.yml` |
 | **Stranger PoC** | exit 0; `MATRIX CHECK OK` | `./scripts/run_poc.sh` / `make poc` |
 | **Coverage matrix** green×8×3 + `axis_power=true` | live | `coverage/matrix.json` ↔ `examples/poc/expected_matrix_snippet.json` |
-| **PDF build** | **8 pages** (IEEEtran conference) | `make paper` or CI artifact `one-trace-is-not-enough-pdf` |
+| **PDF build** | **8 pages + refs** (IEEEtran conference) | `make paper` or CI artifact `one-trace-is-not-enough-pdf` |
 | **Cite path** | present; **no DOI** | root [`CITATION.cff`](../CITATION.cff) + README BibTeX snippet |
 | **License** | MIT at root; cited | [`LICENSE`](../LICENSE) · README · pack zip |
 | **ANON path** | dry-run documented; CI stays named | [`ANON.md`](ANON.md) |
@@ -53,8 +53,8 @@ frozen pins only — not accuracy, vulnerability finding, or RQ answers.
 |------|--------|-------|
 | **Venue name** | TODO | Fill `SUBMISSION.md` §0 from a real CFP — never invent |
 | **CFP deadline** | TODO | Record YYYY-MM-DD (+ timezone as CFP states) |
-| **Page limit vs 8pp** | TODO | Compare measured 8pp to CFP; trim only after limit known |
-| **Corresponding affiliation line** | TODO | Abhinav emails present; affiliation string for camera-ready TBD |
+| **Page limit vs 8pp** | TODO | Body fits 8pp excl. refs; confirm against chosen CFP |
+| **Corresponding affiliation line** | done | Independent Researcher |
 | **Author / CMT contact confirm** | TODO | Confirm `pandey.aby@gmail.com` in venue form before upload |
 | **Optional Zenodo (or similar) DOI** | optional / skip | Do **not** invent a DOI; mint only if intentionally published |
 | **Bibliography DOI/page polish** | TODO | Verify `refs.bib` for camera-ready |
@@ -68,7 +68,7 @@ frozen pins only — not accuracy, vulnerability finding, or RQ answers.
 | Claim | Status |
 |-------|--------|
 | RQ1–RQ5 measured results | **N/A** — protocol scaffolding only ([`RQ_PROTOCOL.md`](RQ_PROTOCOL.md)) |
-| Table `tab:placeholder` model power / separation | **N/A** — cells stay `---` |
+| Model power / separation on real artifacts | **N/A** — future work (§VIII-E); reserved table removed |
 | AUROC / F1 / `model_grade` / accuracy | **N/A** — contract rejects; not claimed |
 | Measured probe-tree α (tick counts) | **N/A** — Definition `def:cost` is protocol only |
 | Vuln-finding / exploitability from green×8×3 | **N/A** — localization ≠ exploitability |

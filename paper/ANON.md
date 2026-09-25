@@ -101,7 +101,7 @@ upload branch. Keep `main` / default PR drafts named unless Abhinav says otherwi
 
 ## 5. Non-claims (unchanged under anonymity)
 
-- No fabricated LLM / model scores; `tab:placeholder` stays `---`.
+- No fabricated LLM / model scores; the paper evaluates graders only.
 - No AUROC / `model_grade` in envelopes.
 - `inconclusive` ≠ green.
 - ZeroDay / AOMB are pins only; no product-tree edits in this repo.

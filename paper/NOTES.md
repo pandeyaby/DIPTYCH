@@ -13,7 +13,7 @@ Cite: [`CITATION.cff`](../CITATION.cff) (no DOI) · License: [`LICENSE`](../LICE
 
 Engineering polish is at **diminishing returns**. Next material unlock is
 Abhinav filling venue / author fields (`SUBMISSION.md` §0) or a real
-model-study data drop (RQ / `tab:placeholder` still **N/A**). Do not invent
+model-study data drop (RQ model-study cells still **N/A**). Do not invent
 venue, DOI, or scores. Prefer HOLD over cosmetic churn.
 
 ## Status
@@ -29,8 +29,8 @@ venue, DOI, or scores. Prefer HOLD over cosmetic churn.
 - Threats §: pin drift, inconclusive, control bias, open-loop vs CRN (trimmed).
 - Witness appendix + `docs/adapters/WITNESSES.md` / `paper/WITNESSES.md` for
   reviewer audit without product repos.
-- Model study: **in progress** — no scores claimed; Table `tab:placeholder`
-  stays reserved blank (`---`).
+- §VIII is a measured harness evaluation (controls, coverage, mutation-sweep
+  adequacy `tab:adequacy`); model study is future work (§VIII-E), no scores claimed.
 - Camera-ready packaging notes live in `SUBMISSION.md` (venue TODOs; HOLD for
   Abhinav merge yes).
 - Artifact pack: `make artifact` / `./scripts/pack_artifact.sh` → `dist/DIPTYCH-<sha>.zip`
@@ -87,7 +87,7 @@ or to force a 6pp cut that would gut honest protocol scaffolding.
 - [x] `CHANGELOG.md` + READINESS freeze / stop-condition (#12; as of `4576506a`)
 - [ ] Discussion / threats still honest on green×8×3 vs RQ N/A after any edit
 - [ ] Witness appendix paths resolve (`docs/adapters/WITNESSES.md`)
-- [ ] Fill Table `tab:placeholder` only after model-study completion (power / sep.).
+- [ ] Add model-study tables only after a completed study (power / sep.).
 - [ ] Measure RQ1–RQ5 on held-out scenarios; report uncertainty over artifact + scenario sampling only.
 - [ ] Fill venue name + deadline + page limit in `SUBMISSION.md` §0.
 - [ ] Optional Zenodo DOI — mint only if intentionally published (never invent).

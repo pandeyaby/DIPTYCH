@@ -35,7 +35,7 @@ claims to chase a venue metric.
 | **Anonymization** | `TODO — double-blind vs single-blind / open` → see [`ANON.md`](ANON.md) |
 | **Track / topic** | Agentic evaluation, hyperproperties, metamorphic / paired-trace grading |
 | **Corresponding author (CMT/HotCRP)** | **Abhinav Pandey** · `pandey.aby@gmail.com` |
-| **Corresponding affiliation** | `TODO — Independent / affiliation line for camera-ready` |
+| **Corresponding affiliation** | Independent Researcher |
 | **Co-author contact (camera-ready only)** | Abhishek Pandey (Meta) · `pandeyabhi1987@gmail.com` |
 
 **Checklist before upload**
@@ -67,7 +67,8 @@ claims to chase a venue metric.
 
 | Build | Pages | Notes |
 |-------|------:|-------|
-| Local `make paper` / latexmk (this polish draft) | **8** | Body+appendix+refs fit on 8pp after abstract/related-work/pin trim |
+| Local latexmk (harness-evaluation draft) | **8 + refs** | Body ends on p.8; references on p.8–9. Stack figure dropped, appendix folded into Artifact availability |
+| Prior draft (#11 era) | 8 | Body+appendix+refs; protocol-only §VII |
 | Prior living draft (#8 era) | ~10 | Trimmed related-work / pin prose / blank `tab:placeholder` rows |
 | Venue limit | **TODO** (§0) | Compare after CFP is chosen |
 
@@ -86,13 +87,13 @@ Typical IEEE conference limits (confirm against the chosen CFP):
 | Main body | **6–8 pages** | Living draft **8pp** total (abstract trim, related-work density, pin prose, table width); Discussion owns green×8×3 vs RQ N/A |
 | References | Often excluded or +1 page | `\bibliographystyle{IEEEtran}` + `refs.bib` |
 | Figures | Count toward body | Two architecture figures only (`diptych-vs-single-trace`, `stack`) |
-| Tables | Count toward body | `tab:ops`, `tab:coverage`, reserved blank `tab:placeholder`, audit/taxonomy |
+| Tables | Count toward body | `tab:ops`, `tab:coverage`, `tab:adequacy`, audit/taxonomy |
 | Appendix | Often counts toward body | Short witness pointer (`sec:witnesses`); recipes live in `docs/adapters/WITNESSES.md` |
 
 **Trim order if over length (do not invent results):** (1) related-work density,
 (2) duplicate pin/SHA prose (Discussion already states the green rule),
 (3) protocol command blocks → cite `ARTIFACT_CHECKLIST.md`,
-(4) never fill `tab:placeholder` with placeholder numbers.
+(4) never add model-score tables without a completed model study.
 **Markdown drafts** under `drafts/` are stubs; do not re-expand them past the `.tex`.
 
 **Build PDF locally:** `make paper` (requires `latexmk` + TeX Live with
@@ -145,7 +146,7 @@ place the PDF under `paper/` (or submit alongside the zip).
 |---------|-----|
 | ZeroDay / AOMB product trees | Not vendored; pins only |
 | Exploit / attack payloads | Contract forbid |
-| Invented model scores / AUROC tables | Non-claim; `tab:placeholder` stays `---` |
+| Invented model scores / AUROC tables | Non-claim; §VIII evaluates graders only |
 | Secrets, tokens, private emails beyond author block | Privacy |
 
 ### Suggested zip layout
@@ -198,7 +199,7 @@ pip install pytest && PYTHONPATH=. python -m pytest -q
 - [ ] Pins in PDF / checklist match `adapters/PINS.md` (frozen as of main `84930b24`)
 - [ ] Table `tab:ops` coupling + graded channels match
       `docs/adapters/OPERATOR_TABLE.md` / `ops/*/spec.yaml`
-- [ ] Table `tab:placeholder` has **no** numeric model scores
+- [ ] No numeric model scores anywhere; `tab:adequacy` matches `python -m diptych.adequacy`
 - [ ] RQ1–RQ5 result cells stay N/A (`paper/RQ_PROTOCOL.md`)
 - [ ] Discussion states green×8×3 proves coverage+axis power only; not RQ answers
 - [ ] Witness appendix / `docs/adapters/WITNESSES.md` present for reviewer audit
@@ -237,7 +238,7 @@ author block in the `.tex`.
 
 ## 6. Non-claims (must survive camera-ready)
 
-- No fabricated LLM / model scores; blank `tab:placeholder` until the study ends.
+- No fabricated LLM / model scores; model study is future work (§VIII-E).
 - No AUROC / `model_grade` in graded envelopes.
 - No exploit payloads; localization ≠ exploitability.
 - `inconclusive` ≠ green.

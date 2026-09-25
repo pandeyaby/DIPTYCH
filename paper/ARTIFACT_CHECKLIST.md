@@ -168,7 +168,7 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 3. Confirm pins match `adapters/PINS.md` / README.
 4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK` (optional:
    `python -m diptych.poc --json`; `python -m diptych.grade --input examples/fixtures/zeroday/RESEED`).
-5. Confirm Table `tab:placeholder` has no numeric model scores; RQ cells N/A.
+5. Confirm no numeric model scores; `tab:adequacy` matches `python -m diptych.adequacy`.
 6. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
 7. (Optional) `make artifact` → inspect zip for CODE_SHA + matrix + notes.
 8. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf` or `make paper`.

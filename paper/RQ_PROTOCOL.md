@@ -47,7 +47,7 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 | **Metric** | Marginal contribution to separation; inter-operator redundancy |
 | **Harness answer** | Ablate one operator at a time from the full-8 probe set; compare coupling strata (`open_loop` vs `crn_closed_loop`) |
 | **Controls** | Same control bank; power floor before scoring models |
-| **Result** | **N/A** — Table `tab:placeholder` stays `---` |
+| **Result** | **N/A** until model study |
 
 ## RQ3 — Predictive validity vs held-out robustness
 

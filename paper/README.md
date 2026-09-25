@@ -84,7 +84,7 @@ unless the matrix requires.
 **green×8×3** = twin contrast + `gate_axis_mutate` axis power across
 `diptych_core` × `zeroday` × `aomb` for eight operators. It is **not** an
 accuracy, AUROC, or vulnerability-finding claim. Model-study Table
-`tab:placeholder` stays blank (`---`) until real data exists.
+§VIII reports grader adequacy (`tab:adequacy`, from `python -m diptych.adequacy`); no model-score table until real data exists.
 
 **PDF page count:** after `make paper`, record pages in
 [`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**
