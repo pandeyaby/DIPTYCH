@@ -67,10 +67,11 @@ frozen pins only — not accuracy, vulnerability finding, or RQ answers.
 
 | Claim | Status |
 |-------|--------|
-| RQ1–RQ5 measured results | **N/A** — protocol scaffolding only ([`RQ_PROTOCOL.md`](RQ_PROTOCOL.md)) |
-| Model power / separation on real artifacts | **N/A** — future work (§VIII-E); reserved table removed |
+| RQ1, RQ2, RQ4, RQ5 | **pilot** — 20 model-written controllers ([`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) ledger; paper §VIII-D) |
+| RQ3 predictive validity | **N/A** — no held-out scenarios yet |
+| Model comparison / ranking | **N/A** — 5 single-shot samples per model; not claimed |
 | AUROC / F1 / `model_grade` / accuracy | **N/A** — contract rejects; not claimed |
-| Measured probe-tree α (tick counts) | **N/A** — Definition `def:cost` is protocol only |
+| Measured probe-tree α (tick counts) | **pilot** — α = 2.76 on live executions |
 | Vuln-finding / exploitability from green×8×3 | **N/A** — localization ≠ exploitability |
 
 Fill model-study cells only from real held-out artifacts and scenarios. Do not

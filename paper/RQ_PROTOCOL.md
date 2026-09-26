@@ -81,18 +81,21 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 
 ---
 
-## Results ledger (keep blank)
+## Results ledger
+
+Pilot values come from `python -m diptych.pilot.study` (`diptych/pilot/results.json`):
+20 single-shot controllers from four Claude models on the reduced task in
+`diptych/pilot/TASK.md`. They are pilot measurements, not a full model study.
 
 | RQ | Status | Value |
 |----|--------|-------|
-| RQ1 separation index | protocol | N/A |
-| RQ2 marginal / redundancy | protocol | N/A |
-| RQ3 held-out rank corr. | protocol | N/A |
-| RQ4 α (amortization) | protocol definition | N/A (no measured ticks yet) |
-| RQ5 inconclusive rate | protocol | N/A |
+| RQ1 separation index | pilot | 0.78 (83 of 106 single-trace-equivalent pairs) |
+| RQ2 operator information | pilot (descriptive) | TRAJSWAP 13/20 paired fails (12 missed by single trace); VARSCALE 8 (5 missed); SIGNFLIP 5 (2 missed); FREEZEDRY/RESEED/SCHEMAX 0 |
+| RQ3 held-out rank corr. | protocol | N/A (no held-out scenarios yet) |
+| RQ4 α (amortization) | pilot, measured ticks | 2.76 (150,304 executed vs 415,504 naive replay) |
+| RQ5 inconclusive rate | pilot | 4.4% of paired verdicts (7/160) |
 
-Fill this ledger only from a completed model study with real artifacts and
-scenarios. Do not back-fill from green×8×3.
+Never back-fill from green×8×3.
 
 See also: [`READINESS.md`](READINESS.md), [`SUBMISSION.md`](SUBMISSION.md),
 [`NOTES.md`](NOTES.md), [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md).

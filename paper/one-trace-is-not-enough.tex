@@ -1,6 +1,6 @@
 %% One Trace Is Not Enough
 %% IEEE conference submission draft (AUTHORITATIVE living source)
-%% STATUS: Section VII = measured harness evaluation (controls, coverage, mutation-sweep adequacy); no model scores.
+%% STATUS: Section VIII = harness evaluation (controls, coverage, mutation sweep) + pilot on 20 model-written controllers (diptych/pilot).
 %% Artifact: https://github.com/pandeyaby/DIPTYCH · Cite: CITATION.cff (no DOI yet) · License: LICENSE (MIT)
 %% Adapter pins (read-only, frozen as of main f606cfe4 post-#16): ZeroDay@fb5b39da · AOMB@667e475
 %% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
@@ -77,14 +77,13 @@
 		discipline for closed-loop pairs, and a probe-tree strategy that
 		amortizes a shared prefix.
 		
-		Third, a measured evaluation of the harness itself. An exhaustive
-		single-leaf mutation sweep over every conforming probe (1{,}030
-		mutants) exposed three classes of grader defect in our own
-		implementation, including a self-reported fingerprint that bypassed the
-		sign-symmetry check; fixing them raised the on-axis mutant kill rate
-		from 67.4\% to 82.5\%, and every remaining survivor is triaged. We
-		evaluate the grader, not models: no accuracy, AUROC, or model rankings
-		are claimed.
+		Third, an evaluation. A mutation sweep over every conforming probe
+		(1{,}030 mutants) exposed three classes of defect in our own graders;
+		fixing them raised the on-axis kill rate from 67.4\% to 82.5\%. In a
+		pilot with 20 controllers written by four models, 15 pass every
+		single-trace check, yet 12 of those 15 violate a requirement under
+		paired probing (separation index 0.78), and prefix sharing cuts
+		executed ticks by a measured factor of 2.76.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -168,17 +167,16 @@
 		comparability, and a probe-tree execution strategy with an amortized cost
 		model (Proposition \ref{prop:prefix}).
 		
-		\item \textbf{A measured evaluation of grader adequacy} (Section
-		\ref{sec:protocol}). Hand-authored control twins whose verdict is known
-		by construction, a power-on-axis gate that rejects cosmetic greens, and
-		an exhaustive mutation sweep that found and fixed real defects in the
-		graders. Product adapters ZeroDay and AOMB are graded at pinned SHAs.
+		\item \textbf{An evaluation} (Section \ref{sec:protocol}). Control
+		twins, a power-on-axis gate, and an exhaustive mutation sweep that found
+		and fixed real grader defects; and a pilot on model-written controllers
+		for a reduced orchestrator task, with executable controls, where paired
+		probing overturns the single-trace verdict on most artifacts.
 	\end{enumerate}
 
-	We are explicit about scope. This paper delivers the formalism, the audit,
-	the harness, and an evaluation of whether the harness's graders are
-	adequate---that is, whether they reject what they claim to reject. It does
-	not score models; a model study is future work
+	We are explicit about scope. The pilot is small (20 single-shot
+	controllers, one reduced task) and shows that paired grading changes
+	verdicts, not how models compare; a full study is future work
 	(Section~\ref{sec:future}).
 	
 	\section{Motivating Example}
@@ -582,8 +580,8 @@
 		$C_{\mathrm{tree}}(m)=t_p + \sum_{j=1}^{m}(n_j-t_p)$ under a shared
 		fork at $t_p$. The protocol amortization factor is
 		$\alpha(m)=C_{\mathrm{naive}}(m)/C_{\mathrm{tree}}(m)$ when
-		$C_{\mathrm{tree}}(m)>0$. Section~\ref{sec:eval-cost} works one
-		instance; measuring $\alpha$ requires executing live artifacts.
+		$C_{\mathrm{tree}}(m)>0$. Section~\ref{sec:eval-cost} reports $\alpha$
+		measured on live executions.
 	\end{definition}
 	
 	The engineering requirement is a cheap fork of artifact state at $t_p$. The
@@ -699,37 +697,29 @@
 	\section{Evaluating the Harness}
 	\label{sec:protocol}
 	
-	A paired grader is only useful if it rejects what it claims to reject. We
-	therefore evaluate \sys{}'s graders, not models, with three instruments:
-	ground-truth controls, a power-on-axis gate, and an exhaustive mutation
-	sweep. Every number below is produced by a command in the public artifact
-	(see Artifact availability, Section~\ref{sec:conclusion}).
+	We ask two questions. Do \sys{}'s graders reject what they claim to reject
+	(ground-truth controls, a power-on-axis gate, an exhaustive mutation
+	sweep)? And does paired grading change the verdict on controllers that
+	models actually write (a pilot study)? Every number below is produced by a
+	command in the public artifact (Artifact availability,
+	Section~\ref{sec:conclusion}).
 	
 	\subsection{Ground-truth controls}
 	
-	For each operator we hand-author three schema-\texttt{0.2} probe pairs
-	whose verdict is known by construction: a \emph{conforming} pair, a
-	\emph{violating} pair that differs in one design decision on the graded
-	axis (symmetric vs.\ asymmetric gain, order-sensitive vs.\ order-blind
-	history summary, variance-aware vs.\ variance-blind headroom, clamped vs.\
-	unclamped actuator, history-dependent vs.\ independent step response,
-	stable vs.\ drifting telemetry schema, frozen vs.\ leaking RNG/clock,
-	seed-stable vs.\ seed-sensitive output), and an \emph{incomparable} pair
-	that must return \texttt{inconclusive}. All 24 are graded as expected: 8
-	pass, 8 fail, and 8 inconclusive, with reasons split across shared-prefix
-	length mismatch (4), missing twin (2), and CRN stream-id mismatch (2).
-	These are controls, not findings: they establish that each probe can
-	separate its own pair before anything else is measured. A five-envelope
-	\emph{cosmetic} corpus (an injected AUROC field, a hard-coded pass, a
-	missing axis channel, a stub marker, a wrong schema version) is rejected
-	5/5 by the envelope contract.
+	For each operator we hand-author three recorded probe pairs whose verdict
+	is known by construction: \emph{conforming}, \emph{violating} (one design
+	decision changed on the graded axis), and \emph{incomparable} (must be
+	\texttt{inconclusive}). All 24 grade as expected. These are controls, not
+	findings. A five-envelope \emph{cosmetic} corpus (injected AUROC field,
+	hard-coded pass, missing axis, stub marker, wrong schema version) is
+	rejected 5/5.
 	
 	\subsection{Power-on-axis and adapter coverage}
 	\label{sec:adapters}
 	
-	Table~\ref{tab:coverage} records, for each operator and each source, that
-	the conforming twin passes, the violating twin fails, and
-	\texttt{gate\_axis\_mutate} flips pass$\to$fail when only the named axis
+	For all 24 operator--source cells of the coverage matrix
+	(\texttt{coverage/matrix.json}), the conforming twin passes, the violating
+	twin fails, and \texttt{gate\_axis\_mutate} flips pass$\to$fail when only the named axis
 	is mutated while a wrong-axis distractor does not flip. Sources are the
 	core fixtures and two product emitters that emit schema-\texttt{0.2} twins
 	and are not vendored: ZeroDay@\texttt{fb5b39da} and
@@ -739,33 +729,11 @@
 	vulnerability or model-quality claim.
 	
 	
-	\begin{table}[t]
-		\caption{Coverage matrix (\texttt{coverage/matrix.json}): conforming
-			$\to$ pass, violating $\to$ fail, and axis power under
-			\texttt{gate\_axis\_mutate}, per operator and source.}
-		\label{tab:coverage}
-		\centering
-		\scriptsize
-		\begin{tabular}{@{}lcccc@{}}
-			\toprule
-			Operator & core & ZeroDay & AOMB & axis power \\
-			\midrule
-			\textsc{FreezeDry} & green & green & green & true \\
-			\textsc{Reseed}    & green & green & green & true \\
-			\textsc{SchemaX}   & green & green & green & true \\
-			\textsc{SignFlip}  & green & green & green & true \\
-			\textsc{SatExtend} & green & green & green & true \\
-			\textsc{HistSwap}  & green & green & green & true \\
-			\textsc{TrajSwap}  & green & green & green & true \\
-			\textsc{VarScale}  & green & green & green & true \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
 	
 	\subsection{Grader adequacy: an exhaustive mutation sweep}
 	\label{sec:eval-adequacy}
 	
-	Table~\ref{tab:coverage} says each grader separates \emph{one} hand-picked
+	The coverage matrix says each grader separates \emph{one} hand-picked
 	mutation. It does not say the grader is sensitive to its whole axis. We
 	therefore mutate every scalar leaf under \texttt{traces} of all 18
 	conforming probes (core cassette, core probes, and adapter fixtures) with
@@ -822,56 +790,108 @@
 		\end{tabular}
 	\end{table}
 	
-	\textbf{Survivor triage.} After the fixes 145 on-axis mutants survive
-	(Table~\ref{tab:adequacy}). 133 are legitimate insensitivities: 64
-	\textsc{TrajSwap} residual edits stay under the fixtures' declared bound
-	of 5.0 (observed residuals reach 0.7, so at that bound the residual clause
-	has no power---a fixture weakness we report rather than tune away); 48
-	\textsc{SatExtend} edits remain inside symmetric $[-1,1]$ bounds; 8
-	\textsc{FreezeDry} edits leave one of \texttt{rng}/\texttt{clock}
-	frozen; 7 \textsc{Reseed} seed edits keep the seeds distinct; and 6
-	\textsc{SignFlip} fingerprint edits are now correctly ignored. The
-	remaining 12 are genuine blind spots: \texttt{hist\_splice\_at}
-	(\textsc{HistSwap}, 8) and \texttt{frozen} (\textsc{FreezeDry}, 4) are
-	part of the declared axis but are never read by the grader.
-	
+	\textbf{Survivor triage.} Of the 145 surviving on-axis mutants, 133 are
+	legitimate insensitivities: 64 \textsc{TrajSwap} residual edits stay under
+	the fixtures' non-binding bound of 5.0 (residuals reach 0.7---a fixture
+	weakness we report rather than tune away), 48 \textsc{SatExtend} edits stay
+	inside symmetric bounds, and 21 edits leave the predicate's inputs
+	unchanged. The other 12 are blind spots: \texttt{hist\_splice\_at} and
+	\texttt{frozen} are declared on-axis but never read.
 	\textbf{Off-axis dependence.} All 99 off-axis \texttt{fail} verdicts are
-	grader preconditions that the declared axis snapshot omits: the
-	\textsc{HistSwap} \texttt{present} channel (32), \textsc{SchemaX}
-	required keys (24), CRN parameters of \textsc{VarScale} (20) and
-	\textsc{TrajSwap} (12), \textsc{Reseed} \texttt{config\_id} (6), and the
-	target-channel names of \textsc{SignFlip} (3) and \textsc{SatExtend} (2).
-	None is wrong, but each means the axis declaration used by
-	\texttt{gate\_axis\_mutate} under-describes what the grader reads, so a
-	wrong-axis distractor could land on a real dependency. Axis declarations
-	should be derived from the grader rather than written beside it.
+	grader preconditions the declared axis omits (e.g., \textsc{SchemaX}
+	required keys, CRN parameters). None is wrong, but axis declarations
+	should be derived from the grader, not written beside it.
 	
-	\subsection{Cost of paired grading}
+	\subsection{Pilot: model-authored controllers}
+	\label{sec:pilot}
+	
+	\textbf{Task and plant.} The industrial specification is not public, so
+	the pilot uses a reduced orchestrator task that we release: a controller
+	sets a concurrency limit each tick so that latency tracks a setpoint in a
+	deterministic closed-loop service model, with a tick/snapshot/restore
+	interface and eight requirements written as specification prose
+	(asymmetric response, trend recency, anti-windup, volatility
+	suppression, setpoint-change quiet, determinism, round-trip stability,
+	schema stability). Each requirement is graded by one live-execution
+	instance of the matching operator: the harness runs a shared prefix in
+	the plant, forks the controller at three fork points, and drives the two
+	branches with inputs that differ on one axis (\textsc{VarScale} under
+	CRN; \textsc{Reseed} and \textsc{FreezeDry} across fresh interpreter
+	processes). A violation at any fork point or any of three noise seeds
+	fails the requirement.
+	
+	\textbf{Single-trace baseline.} For each requirement we implement the
+	check a harness author would write from its prose, on one closed-loop
+	run---for asymmetric response, the ratio of mean downward to upward
+	limit moves over ticks above and below setpoint, exactly the confounded
+	estimator of Proposition~\ref{prop:confound}.
+	
+	\textbf{Executable controls.} One conforming controller and eight
+	violators, each changing one design decision, calibrate both graders:
+	thresholds are set so the conforming control passes everything. Paired
+	grading catches all eight violators on their own axis; single-trace
+	grading catches one. Building the controls was itself instructive: our
+	first symmetric-gain and variance-blind violators \emph{satisfied} the
+	requirements they were meant to break, because the variance penalty
+	already makes the response asymmetric and the asymmetric gain already
+	suppresses volatility. Requirements interact, so a violator is only a
+	violator once a probe says so.
+	
+	\textbf{Artifacts.} Four models (Claude Haiku~4.5, Sonnet~5, Opus~5.5,
+	Fable~5.1) each wrote five controllers from the task text in one
+	tool-free turn; all 20 load and run. Forking by state copy matched
+	replay-from-scratch for every artifact.
+	
+	\begin{table}[t]
+		\caption{Pilot on 20 model-written controllers: artifacts failing each
+			requirement under paired vs.\ single-trace grading, and paired
+			failures the single-trace check passed.}
+		\label{tab:pilot}
+		\centering
+		\scriptsize
+		\begin{tabular}{@{}lrrr@{}}
+			\toprule
+			Requirement (operator) & paired fail & single fail & missed \\
+			\midrule
+			Trend recency (\textsc{TrajSwap})         & 13 & 1 & 12 \\
+			Volatility (\textsc{VarScale})             &  8 & 3 &  5 \\
+			Asymmetric response (\textsc{SignFlip})    &  5 & 4 &  2 \\
+			Setpoint-change quiet (\textsc{HistSwap})  &  1 & 1 &  1 \\
+			Anti-windup (\textsc{SatExtend})           &  0 & 0 &  0 \\
+			Determinism / round-trip / schema          &  0 & 0 &  0 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\textbf{Results.} Fifteen of the 20 controllers pass every single-trace
+	check; twelve of those fifteen fail at least one paired probe
+	(Table~\ref{tab:pilot}). Over the 106 artifact pairs that single-trace
+	grading cannot distinguish, the separation index
+	(Section~\ref{sec:metrics}) is 0.78: 83 pairs receive different paired
+	verdicts. Trend recency dominates: most controllers add a trend term too
+	weak to overcome their estimator lag, so after improving latency the
+	limit ends \emph{lower} than after the same observations worsening---a
+	defect invisible in one run. Paired violations appear in at least three
+	of five samples from every model; with five single-shot samples per
+	model we make no model comparison. Conversely, every controller met the
+	determinism, round-trip, and schema requirements, which the prompt states
+	explicitly and which are easy to satisfy in the standard library. Seven
+	of 160 paired verdicts (4.4\%) are inconclusive (a branch hit a limit
+	bound or never saturated), and 95\% of forked verdicts agree across all
+	three seeds; the rest are borderline controllers, which the any-seed rule
+	resolves conservatively.
+	
+	\textbf{Cost.}
 	\label{sec:eval-cost}
+	Counting every executed tick, prefix sharing ran the pilot's probes in
+	150{,}304 controller ticks; replaying each branch's prefix from scratch
+	would take 415{,}504, so $\alpha = 2.76$ (Definition~\ref{def:cost}).
 	
-	The artifact grades recorded traces, so it executes no ticks and we cannot
-	yet \emph{measure} cost. We instead work the cost model on the
-	\texttt{gate\_axis\_mutate} tree that the harness builds for each
-	control: an 8-step conforming spine shared by the on-axis and wrong-axis
-	branches, each diverging only at the final step. Two independent probes
-	hold 16 nodes; the tree holds 10, so $\alpha = 1.6$
-	(Definition~\ref{def:cost}). The factor grows with later perturbation
-	points and longer horizons (Corollary~\ref{cor:tree}); measuring executed
-	ticks and wall-clock time is part of the model study.
-	
-	\subsection{Future work: a model study}
+	\textbf{Next.} The pilot is small and single-shot. The natural extension
+	is tool-using coding agents from several vendors on the full
+	orchestrator task, with held-out adversarial scenarios for predictive
+	validity (Section~\ref{sec:metrics}).
 	\label{sec:future}
-	
-	The evaluation above establishes that the graders are adequate; it does
-	not show that paired grading changes conclusions about real agent-authored
-	artifacts. The next step is to generate controllers for the orchestrator
-	task with several coding agents, run each under all eight operators and
-	under a single-trace grader, and measure the separation index
-	(Section~\ref{sec:metrics}) over artifact pairs that single-trace grading
-	scores as equivalent, together with inconclusive rates by artifact and
-	predictive validity on held-out adversarial scenarios. The harness already
-	computes all of these; what is missing is the artifact population.
-	
 	
 	\section{Related Work}
 	\label{sec:related}
@@ -912,7 +932,7 @@
 	\label{sec:discussion}
 	
 	\textbf{A green matrix is necessary, not sufficient.} Every cell of
-	Table~\ref{tab:coverage} was green \emph{before} the mutation sweep, while
+	the coverage matrix was green \emph{before} the mutation sweep, while
 	\textsc{SignFlip} was passing 97\% of its on-axis mutants. One hand-picked
 	mutation per axis certifies that a grader \emph{can} fail, not that it
 	fails on the whole axis. We think any paired-grading harness, including
@@ -920,17 +940,15 @@
 	coverage matrix; self-reported evidence (fingerprints, hashes, summary
 	flags) should never short-circuit a check on the underlying data.
 	
-	\textbf{What it does not prove.} Not vulnerability findings, exploitability,
-	deployment readiness, accuracy, AUROC, F1, or model ranks. Localization
-	$\neq$ exploitability. Adapter columns are pin-scoped
-	(ZeroDay@\texttt{fb5b39da}, AOMB@\texttt{667e475}); product trees are not
-	vendored. Lab AUROC / \texttt{model\_grade} are rejected by the envelope
-	contract.
-	
-	\textbf{Design implication.} When a requirement is calibration across related
-	worlds, a single-trace pass is insufficient even if the film looks legal
-	(Figure~\ref{fig:diptych}). Paired grading with an explicit axis and an
-	inconclusive escape hatch is the minimal honest substitute.
+	\textbf{Single-trace grading passes the defect it cannot see.} In the
+	pilot, twelve controllers that a single-trace grader would ship violate a
+	stated requirement, and the dominant failure (estimator lag overriding
+	trend recency) is precisely a counterfactual contrast: the same
+	observations in a different order.
+
+	\textbf{Non-claims.} A green cell is not a vulnerability finding, and no
+	result here is an accuracy, AUROC, or model ranking; the envelope
+	contract rejects such fields.
 	
 	\section{Threats to Validity}
 	\label{sec:threats}
@@ -948,9 +966,8 @@
 	
 	\textbf{Inconclusive.} Schema~\texttt{0.2} admits \texttt{inconclusive} with
 	\texttt{meta.inconclusive\_reason}. That is \emph{not} green. Over-/under-use
-	can hide weak probes or force spurious verdicts. Inconclusive rates on the
-	controls are fixed by construction; rates on real artifacts await the
-	model study.
+	can hide weak probes or force spurious verdicts; the pilot's 4.4\% rate
+	comes from branches hitting limit bounds or never saturating.
 	
 	\textbf{Handwritten-control bias.} Controls and fixtures are written by the
 	same authors as the graders and can overfit them; the mutation sweep is
@@ -966,6 +983,15 @@
 	universal. Whether CRN drift depends on artifact quality is a model-study
 	question.
 	
+	\textbf{Pilot validity.} The pilot task is a reduction we wrote; the
+	single-trace baseline is one reasonable reading per requirement,
+	calibrated on our controls, and a cleverer reading could catch more
+	(Proposition~\ref{prop:confound} bounds what any single trace identifies,
+	not what a heuristic may happen to flag). Artifacts are 20 tool-free,
+	single-shot samples from one vendor's models, so they may under- or
+	over-represent defects of agents that run their own tests. 5\% of forked
+	verdicts depend on the noise seed.
+
 	\textbf{Internal / external.} Graders are deterministic functions of envelopes;
 	the full-8 gate regresses harness logic, not model quality. Findings are from
 	one task family: we claim generality for the classification and harness
@@ -981,19 +1007,20 @@
 	$2$-safety hyperproperties. We audited a real long-horizon control task
 	(seven of twenty-two invariants misclassified), proved the single-trace
 	confound for stateful artifacts, and presented a paired harness with
-	coupling, an inconclusive verdict, and a probe-tree cost model. Turning a
-	mutation sweep on our own graders found three classes of defect that a
-	fully green coverage matrix had hidden. When a requirement is about a
+	coupling, an inconclusive verdict, and a probe-tree cost model. A mutation
+	sweep on our own graders found three classes of defect that a fully green
+	coverage matrix had hidden, and a pilot on model-written controllers found
+	that most controllers passing every single-trace check violate a
+	requirement once probed in pairs. When a requirement is about a
 	counterfactual, a counterfactual needs two executions---and the grader
 	that compares them needs testing too.
 	
-	{\raggedright\textbf{Artifact availability.} Code, fixtures, and adapter pins are at
-	\url{https://github.com/pandeyaby/DIPTYCH} (MIT). \texttt{./scripts/run\_poc.sh}
-	reproduces Table~\ref{tab:coverage}; \texttt{python -m diptych.adequacy}
-	reproduces Table~\ref{tab:adequacy} and lists every survivor and off-axis
-	failure; \texttt{tests/test\_adequacy.py} pins each pre-fix defect.
-	Axis witnesses for every green cell are in
-	\texttt{docs/adapters/WITNESSES.md}.\par}
+	{\raggedright\textbf{Artifact availability.} Code, controls, generated
+	controllers, and adapter pins: \url{https://github.com/pandeyaby/DIPTYCH}
+	(MIT). \texttt{python -m diptych.pilot.study} reproduces
+	Table~\ref{tab:pilot}; \texttt{python -m diptych.adequacy},
+	Table~\ref{tab:adequacy}; \texttt{./scripts/run\_poc.sh}, the coverage
+	matrix.\par}
 	
 	\balance
 	

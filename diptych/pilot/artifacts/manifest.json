@@ -1,0 +1,162 @@
+[
+  {
+    "model": "claude-fable-5-1",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 2.06312,
+    "code_block": true,
+    "path": "artifacts/claude-fable-5-1/0.py"
+  },
+  {
+    "model": "claude-fable-5-1",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 1.5016699999999998,
+    "code_block": true,
+    "path": "artifacts/claude-fable-5-1/1.py"
+  },
+  {
+    "model": "claude-fable-5-1",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 1.08801775,
+    "code_block": true,
+    "path": "artifacts/claude-fable-5-1/2.py"
+  },
+  {
+    "model": "claude-fable-5-1",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 0.8112077500000001,
+    "code_block": true,
+    "path": "artifacts/claude-fable-5-1/3.py"
+  },
+  {
+    "model": "claude-fable-5-1",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 1.27690775,
+    "code_block": true,
+    "path": "artifacts/claude-fable-5-1/4.py"
+  },
+  {
+    "model": "claude-haiku-4-5-20251001",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 0.24066300000000002,
+    "code_block": true,
+    "path": "artifacts/claude-haiku-4-5-20251001/0.py"
+  },
+  {
+    "model": "claude-haiku-4-5-20251001",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 0.133387,
+    "code_block": true,
+    "path": "artifacts/claude-haiku-4-5-20251001/1.py"
+  },
+  {
+    "model": "claude-haiku-4-5-20251001",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 0.121693,
+    "code_block": true,
+    "path": "artifacts/claude-haiku-4-5-20251001/2.py"
+  },
+  {
+    "model": "claude-haiku-4-5-20251001",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 0.12124499999999999,
+    "code_block": true,
+    "path": "artifacts/claude-haiku-4-5-20251001/3.py"
+  },
+  {
+    "model": "claude-haiku-4-5-20251001",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 0.095437,
+    "code_block": true,
+    "path": "artifacts/claude-haiku-4-5-20251001/4.py"
+  },
+  {
+    "model": "claude-opus-5-5",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 0.27805599999999997,
+    "code_block": true,
+    "path": "artifacts/claude-opus-5-5/0.py"
+  },
+  {
+    "model": "claude-opus-5-5",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 0.8095319999999999,
+    "code_block": true,
+    "path": "artifacts/claude-opus-5-5/1.py"
+  },
+  {
+    "model": "claude-opus-5-5",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 0.305437,
+    "code_block": true,
+    "path": "artifacts/claude-opus-5-5/2.py"
+  },
+  {
+    "model": "claude-opus-5-5",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 0.18247420000000003,
+    "code_block": true,
+    "path": "artifacts/claude-opus-5-5/3.py"
+  },
+  {
+    "model": "claude-opus-5-5",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 0.155789,
+    "code_block": true,
+    "path": "artifacts/claude-opus-5-5/4.py"
+  },
+  {
+    "model": "claude-sonnet-5",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 0.200938,
+    "code_block": true,
+    "path": "artifacts/claude-sonnet-5/0.py"
+  },
+  {
+    "model": "claude-sonnet-5",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 0.132842,
+    "code_block": true,
+    "path": "artifacts/claude-sonnet-5/1.py"
+  },
+  {
+    "model": "claude-sonnet-5",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 0.36272,
+    "code_block": true,
+    "path": "artifacts/claude-sonnet-5/2.py"
+  },
+  {
+    "model": "claude-sonnet-5",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 0.09318979999999999,
+    "code_block": true,
+    "path": "artifacts/claude-sonnet-5/3.py"
+  },
+  {
+    "model": "claude-sonnet-5",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 0.0924538,
+    "code_block": true,
+    "path": "artifacts/claude-sonnet-5/4.py"
+  }
+]

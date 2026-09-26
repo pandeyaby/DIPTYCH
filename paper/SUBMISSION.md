@@ -26,22 +26,27 @@ claims to chase a venue metric.
 
 | Field | Value (fill before upload) |
 |-------|----------------------------|
-| **Venue name** | `TODO — IEEE conference / workshop name` |
-| **Venue year / edition** | `TODO — e.g. 2027` |
-| **CFP / submission deadline** | `TODO — YYYY-MM-DD (AoE/local as CFP states)` |
-| **Page limit (main body)** | `TODO — confirm CFP (typical IEEE conf: 6pp; some allow 8)` |
-| **References policy** | `TODO — included in limit / +1 page / unlimited?` |
-| **Artifact / code option** | `TODO — required / optional / badge track?` |
-| **Anonymization** | `TODO — double-blind vs single-blind / open` → see [`ANON.md`](ANON.md) |
+| **Venue name** | AGENT'27 — Second International Workshop on Agentic Engineering, co-located with ICSE 2027 (Dublin) · https://conf.researchr.org/home/icse-2027/agent-2027 |
+| **Venue year / edition** | 2027 (2nd edition); workshop Mon 26 Apr 2027 |
+| **CFP / submission deadline** | 2026-11-27 (paper) · notification 2026-12-11 · camera-ready 2027-01-29 · HotCRP https://icse2027-agent.hotcrp.com/ |
+| **Page limit (main body)** | Full paper ≤ 8 pages; short paper ≤ 5 pages |
+| **References policy** | Excluded from the page limit |
+| **Artifact / code option** | Not stated in CFP; public repo linked from paper |
+| **Anonymization** | Single-anonymous (named authors; public repo OK) — ANON.md path not needed |
 | **Track / topic** | Agentic evaluation, hyperproperties, metamorphic / paired-trace grading |
 | **Corresponding author (CMT/HotCRP)** | **Abhinav Pandey** · `pandey.aby@gmail.com` |
 | **Corresponding affiliation** | Independent Researcher |
 | **Co-author contact (camera-ready only)** | Abhishek Pandey (Meta) · `pandeyabhi1987@gmail.com` |
 
+**Fallback if rejected (sequential, never concurrent):** AGENT'27 notifies
+2026-12-11, before the ICST 2027 New Ideas and Emerging Results deadline
+(2027-01-13). Revise with reviews and resubmit there. Do not submit this paper
+anywhere else while it is under review at AGENT'27.
+
 **Checklist before upload**
 
-- [ ] Venue name filled (not TBD)
-- [ ] Deadline recorded
+- [x] Venue name filled (not TBD)
+- [x] Deadline recorded
 - [ ] Page limit recorded and compared to measured PDF count (§2)
 - [ ] Corresponding-author contact confirmed in CMT/HotCRP
 - [ ] Anonymization path applied if double-blind (`ANON.md`)
