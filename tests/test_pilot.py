@@ -55,3 +55,20 @@ class TestPilotControls(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestStrongBaseline(unittest.TestCase):
+    def test_no_reading_flags_the_conforming_control(self):
+        from diptych.pilot.probes import calibrate_strong
+
+        self.assertEqual(calibrate_strong(), set())
+
+    def test_strong_baseline_catches_schema_violator(self):
+        # Schema drift within one trace is single-trace falsifiable.
+        r = _evaluate(CONTROLS / "violating" / "schemax.py")
+        self.assertEqual(r["single_trace_strong"]["SCHEMAX"], "fail")
+
+    def test_strong_baseline_misses_trend_violator(self):
+        r = _evaluate(CONTROLS / "violating" / "trajswap.py")
+        self.assertEqual(r["single_trace_strong"]["TRAJSWAP"], "pass")
+        self.assertEqual(r["paired"]["TRAJSWAP"], "fail")

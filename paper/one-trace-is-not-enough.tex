@@ -56,14 +56,14 @@
 		on agent-authored systems. Properties such as calibrated conservatism
 		under volatility, anti-windup, reproducibility across restarts, and
 		telemetry schema stability are \emph{hyperproperties}: predicates over
-		sets of traces. No single execution can falsify them.
+		sets of traces, which in general no single execution can falsify.
 		
 		We make three contributions. First, a property taxonomy for agentic
 		evaluation and an audit of a long-horizon control-system specification
 		(twenty-two invariants): seven written as single-trace prose are only
 		falsifiable as $2$-safety hyperproperties. We prove the obstruction:
-		for a stateful deterministic artifact, any asymmetry estimate from one
-		trace confounds the effect under test with internal state drift.
+		two stateful deterministic artifacts can produce the identical trace yet
+		respond with opposite asymmetry, so no single-trace estimate identifies it.
 		
 		Second, \sys{}, a grading harness that renders every hyperproperty
 		judgment on a coupled pair: eight perturbation operators, a coupling
@@ -74,9 +74,12 @@
 		(1{,}030 mutants) exposed three classes of defect in our own graders;
 		fixing them raised the on-axis kill rate from 67.4\% to 82.5\%. In a
 		pilot with 40 controllers written by Claude and OpenAI models, one-shot
-		and as tool-using agents, 34 pass every single-trace check, yet 28 of
-		those violate a requirement under paired probing (separation index
-		0.85); agents that tested against a simulator fared no better.
+		and as tool-using agents, 28 of the 34 that pass every single-trace
+		check violate a requirement stated to them in plain words, and agents
+		that tested against a simulator fared no better. A stronger
+		single-trace grader does not close the gap: on asymmetric response it
+		disagrees with the fixed-state contrast on 25 of 40 controllers, in
+		both directions, as the confounding result predicts.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -149,9 +152,10 @@
 		\item \textbf{A state-confounding obstruction} (Proposition
 		\ref{prop:confound}). For a deterministic stateful transducer on a
 		non-repeating observation stream, no single trace supplies both arms of the
-		counterfactual contrast that an asymmetry invariant requires. Paired
-		execution from a shared state is not a convenience; it is the only
-		construction that identifies the quantity.
+		counterfactual contrast that an asymmetry invariant requires: two
+		artifacts can produce the identical trace yet have contrasts of opposite
+		sign. Under a black-box contract, paired execution from a shared state
+		is the construction that identifies the quantity.
 		
 		\item \textbf{\sys{}, a paired-trace grading harness} (Sections
 		\ref{sec:harness} and \ref{sec:operators}). Eight perturbation operators, a
@@ -188,9 +192,8 @@
 	partition, retry storms, cascade, hunting, heavy tails, flaps, rollout, and
 	serialize-restart) score twenty-two invariants.
 	
-	The task is a good testbed: long-horizon (millions of ticks), deterministic
-	(needed for pairing), and written by systems practitioners---so
-	misclassifications are realistic, not formal-methods artifacts.
+	It was written by systems practitioners, so its misclassifications are
+	realistic rather than formal-methods artifacts.
 	
 	\subsection{Two orchestrators a trace grader cannot separate}
 	\label{sec:twoorch}
@@ -203,11 +206,12 @@
 	$g_{\downarrow} > 2 g_{\uparrow}$ and $g_{\uparrow} + g_{\downarrow} = 2g$.
 	Only $A_{\mathrm{asym}}$ satisfies the asymmetric-response invariant.
 	
-	Under a workload whose deviations from setpoint are symmetric in
-	distribution, the two artifacts produce traces with matching totals: the
-	same mean concurrency limit, the same cumulative admitted load, comparable
-	objective attainment, comparable cost. A grader scoring any aggregate of a
-	single trace sees two equally good artifacts.
+	Asymmetric gain on its own shifts the operating point (noise now drives
+	the limit down more than up), but other free parameters---setpoint
+	offset, estimator bandwidth, gain magnitude---shift it too. $A_{\mathrm{sym}}$
+	can therefore be tuned to match $A_{\mathrm{asym}}$ on every aggregate a
+	trace grader scores: mean limit, admitted load, latency attainment. Such a
+	grader sees two equally good artifacts.
 	
 	One might object that a single long trace contains both upward and downward
 	deviations, so the ratio could be read off directly. It cannot, and the
@@ -264,9 +268,10 @@
 	
 	\begin{definition}[$k$-safety]
 		A hyperproperty is $k$-safety if every violation is witnessed by a set of at
-		most $k$ traces. A $k$-safety hyperproperty is decided by $k$-fold self
-		composition: execute the artifact $k$ times on related inputs and evaluate a
-		predicate over the resulting tuple \cite{barthe2004,terauchi2005}.
+		most $k$ traces. A $k$-safety hyperproperty reduces to an ordinary safety
+		property of the $k$-fold self-composition \cite{barthe2004,terauchi2005};
+		testing it means executing the artifact $k$ times on related inputs and
+		evaluating a predicate over the resulting tuple.
 	\end{definition}
 	
 	The practical reading of $k$-safety is a cost statement. A $1$-safety
@@ -404,42 +409,42 @@
 	
 	\begin{proposition}[State confounding]
 		\label{prop:confound}
-		Let $A$ be a deterministic transducer and let $T = \exec(A, c, \bar{o})$ be a
-		trace in which no state recurs, that is $s_i \neq s_j$ for $i \neq j$.
-		Define the counterfactual sign contrast at state $s$ and base observation
-		$o$ as
+		Let $A$ be a deterministic transducer with decisions in a normed space
+		$D$, and let $T = \exec(A, c, \bar{o})$ be a trace in which no state
+		recurs ($s_i \neq s_j$ for $i \neq j$). For a visited state $s = s_{i-1}$
+		with observation $o = o_i$ and a perturbation $e$ with
+		$o \oplus e \neq o \neq o \ominus e$, define the sign contrast
 		\[
-		\rho(s, o, e) \;=\; \big\| \lambda(s, o \oplus e) - \lambda(s, o) \big\|
-		\;-\; \big\| \lambda(s, o \ominus e) - \lambda(s, o) \big\| ,
+		\rho_A(s, o, e) = \big\| \lambda(s, o \oplus e) - \lambda(s, o) \big\|
+		- \big\| \lambda(s, o \ominus e) - \lambda(s, o) \big\| .
 		\]
-		where $\oplus$ and $\ominus$ perturb the observation by $+e$ and $-e$. Then
-		$T$ contains at most one of the two terms of $\rho$ for any state it visits,
-		and every estimator of $\rho$ computed from $T$ alone is a contrast between
-		outputs at two distinct states $s_i \neq s_j$, hence confounds the sign
-		effect with the state difference $s_i \to s_j$.
+		Then there are transducers $A^{+}$ and $A^{-}$ with
+		$\exec(A^{\pm}, c, \bar{o}) = T$ and
+		$\rho_{A^{+}}(s,o,e) > 0 > \rho_{A^{-}}(s,o,e)$. Hence no function of $T$
+		identifies $\rho$.
 	\end{proposition}
 	
-	\begin{IEEEproof}[Proof sketch]
-		Fix a tick $i$. The trace records the single pair $(o_i, d_i)$ with
-		$d_i = \lambda(s_{i-1}, o_i)$. Evaluating $\rho(s_{i-1}, o_i, e)$ requires
-		$\lambda(s_{i-1}, \cdot)$ at two further arguments $o_i \oplus e$ and
-		$o_i \ominus e$, neither of which the trace supplies, because the execution
-		proceeded from $s_{i-1}$ on exactly one input. Any substitute drawn from the
-		same trace uses $\lambda(s_{j-1}, \cdot)$ for some $j \neq i$, and by the
-		no-recurrence hypothesis $s_{j-1} \neq s_{i-1}$. The resulting quantity is
-		therefore a sum of the sign effect and the state effect, and no assumption
-		available to the grader separates them. Identification requires evaluating
-		$\lambda$ at a common state, which is achieved by executing the shared
-		prefix once and branching.
+	\begin{IEEEproof}
+		$T$ constrains $\lambda$ only on the visited pairs $(s_{j-1}, o_j)$ and
+		$\delta$ only along the path; by no recurrence, the only visited pair
+		with state $s$ is $(s, o)$. Fix $u \in D$ with $u \neq 0$ and let $A^{+}$
+		equal $A$ except $\lambda^{+}(s, o \oplus e) = \lambda(s,o) + 2u$ and
+		$\lambda^{+}(s, o \ominus e) = \lambda(s,o) + u$; let $A^{-}$ swap the two
+		values. Neither pair occurs in $T$ and $\delta$ is unchanged, so both
+		transducers produce $T$, while $\rho_{A^{+}} = \|u\| > 0$ and
+		$\rho_{A^{-}} = -\|u\| < 0$.
 	\end{IEEEproof}
 	
-	The no-recurrence hypothesis is mild for the systems we care about. A
-	long-horizon controller carries real-valued estimators over a
-	non-stationary observation stream; exact state recurrence is a measure-zero
-	event. Where an artifact does have a small recurrent state space, the
-	proposition weakens gracefully: identification becomes possible but requires
-	the grader to detect recurrence, which requires state inspection the public
-	contract does not permit.
+	This is the fundamental problem of causal inference \cite{holland1986}
+	in transducer form: each state is observed under one input only. Any
+	single-trace estimate of $\rho$ must borrow outputs from other states and
+	so rests on an assumption relating $\lambda$ across states---exactly
+	what calibration requirements leave open. Paired execution evaluates
+	$\lambda(s, o \oplus e)$ and $\lambda(s, o \ominus e)$ directly by forking
+	at $s$. The no-recurrence hypothesis is mild: a controller carrying
+	real-valued estimators over a non-stationary stream essentially never
+	revisits a state, and detecting recurrence would require the state
+	inspection a black-box contract forbids.
 	
 	\section{\sys{}: Paired-Trace Grading}
 	\label{sec:harness}
@@ -456,151 +461,84 @@
 		the single dimension the perturbation operator varies.
 	\end{definition}
 	
-	The harness encodes coupling as an envelope enum
-	\texttt{coupling}$\,\in\,\{\texttt{open\_loop},\,\texttt{crn\_closed\_loop}\}$
-	(\texttt{diptych.COUPLINGS}; enforced by \texttt{ops/*/spec.yaml} and the
-	schema-\texttt{0.2} contract). The choice is dictated by what is being
-	measured, not by convenience.
+	Each probe declares one of two couplings. An \emph{open-loop} probe drives
+	both arms with a fixed observation sequence after the shared prefix;
+	decisions are graded but do not feed the plant, so coupling is exact and
+	the probe isolates the response function of
+	Proposition~\ref{prop:confound}. Six operators are open-loop. A
+	\emph{CRN closed-loop} probe runs both arms against a live plant whose
+	exogenous noise, arrivals, and faults come from a shared
+	common-random-numbers stream \cite{glasserman1992}; the arms diverge only
+	through the perturbation and the artifact's reaction. It measures
+	outcomes---which operating point the system settles into---and is
+	required for \textsc{TrajSwap} and \textsc{VarScale}; the envelope
+	contract rejects open-loop tagging of either.
 	
-	\begin{definition}[Open-loop coupling]
-		\label{def:openloop}
-		A probe is \texttt{open\_loop} if both arms are driven by a fixed
-		observation (or cassette) sequence that does not depend on the artifact's
-		decisions after the shared prefix. Decisions are recorded and graded but
-		do not feed the plant. Coupling is therefore exact: the only intentional
-		difference between arms is the operator axis.
-	\end{definition}
+	\subsection{Comparability and inconclusive verdicts}
 	
-	Open-loop probing isolates the response function in Proposition
-	\ref{prop:confound}. It is the harness default for
-	\textsc{FreezeDry}, \textsc{Reseed}, \textsc{SchemaX}, \textsc{SignFlip},
-	\textsc{SatExtend}, and \textsc{HistSwap}---statements about response
-	magnitude, fingerprint stability, or schema identity under a controlled
-	axis.
-	
-	\begin{definition}[CRN closed-loop coupling]
-		\label{def:crn}
-		A probe is \texttt{crn\_closed\_loop} if both arms run against a live
-		plant under a shared common-random-numbers (CRN) stream
-		(\texttt{meta.crn\_stream\_id}, \texttt{meta.crn\_closed\_loop=true} on
-		each twin). Exogenous noise, arrivals, and fault injections are drawn
-		from the shared stream; arms diverge only through the perturbation and
-		the artifact's closed-loop reaction. The contract requires this enum for
-		\textsc{TrajSwap} and \textsc{VarScale} (\texttt{diptych.CRN\_REQUIRED}).
-	\end{definition}
-	
-	CRN closed-loop probing measures outcomes---which operating point the system
-	settles into under mean-matched variance or swapped trajectory segments---
-	rather than open-loop response magnitude. Residual channels
-	(\texttt{channels.closed\_loop\_residual}, variance-proxy ordering) are the
-	graded witnesses; open-loop tagging of those operators is a contract reject.
-	
-	\subsection{Comparability horizon}
-	
-	A closed-loop pair eventually becomes incomparable. Once the two plants have
-	drifted far apart, a difference in decisions no longer attributes to the
-	perturbation. \sys{} therefore attaches to each probe a
-	\emph{comparability horizon} declared on the envelope and mirrored in
-	\texttt{ops/*/spec.yaml}.
-	
-	\begin{definition}[Comparability horizon]
+	\begin{definition}[Comparability]
 		\label{def:horizon}
-		The comparability horizon of a probe is the envelope field
-		\texttt{horizon}$=\{$\texttt{unit},\,\texttt{length}$\}$, where
-		\texttt{unit}$\,\in\,\{\texttt{steps},\,\texttt{ms},\,\texttt{events}\}$
-		and \texttt{length} is a non-negative integer. A twin pair remains
-		\emph{comparable} for grading only while a declared divergence statistic
-		(for CRN probes: closed-loop residual / plant-state distance; for
-		open-loop probes: shared-prefix integrity) stays inside the operator's
-		envelope for the full horizon window.
+		A probe declares a horizon (length and unit). A twin pair is
+		\emph{comparable} only while shared-prefix integrity holds over the
+		horizon: both twins are present, paired channels have equal length,
+		and CRN twins share a stream identifier.
 	\end{definition}
-	
-	When the horizon check fails---shared-prefix breakage, missing twin role, or
-	residual outside bound---the harness does not invent a pass or fail. It
-	emits an inconclusive verdict (Definition~\ref{def:inconclusive}).
-	
-	\subsection{Inconclusive verdicts}
 	
 	\begin{definition}[Inconclusive verdict]
 		\label{def:inconclusive}
-		Schema~\texttt{0.2} admits exactly three expected verdicts:
-		\texttt{pass}, \texttt{fail}, and \texttt{inconclusive}
-		(\texttt{diptych.VERDICTS}). An envelope may declare
-		\texttt{expected\_verdict=inconclusive} only with
-		\texttt{meta.inconclusive\_reason}. Operator specs list
-		\texttt{inconclusive\_when} conditions (shared-prefix incomparability,
-		missing twin role). Coverage counting treats
-		\texttt{inconclusive}$\,\neq\,$green: a cell is green only under
-		conforming$\to$\texttt{pass}, violating$\to$\texttt{fail}, and
-		\texttt{gate\_axis\_mutate} power (\texttt{docs/adapters/GATING.md}).
+		A probe on a non-comparable pair returns \texttt{inconclusive}, with a
+		recorded reason, instead of \texttt{pass} or \texttt{fail}. Inconclusive
+		is never counted as a pass.
 	\end{definition}
 	
-	Reporting inconclusive separately is deliberate. Silent degradation of a
-	hyperproperty probe into a coin flip is exactly the failure mode the paper
-	argues against; a harness that hides incomparability reproduces the problem
-	one level up. We do not convert inconclusive rates into model scores.
+	Closed-loop residual bounds belong to the graded predicate, so exceeding
+	them fails a probe; in the pilot, pairs whose branches hit a controller
+	bound are inconclusive. Reporting inconclusive separately is deliberate:
+	silently degrading a paired probe into a coin flip would reproduce, one
+	level up, the failure this paper describes.
 	
 	\subsection{Probe trees and amortization}
 	
-	Naive $k$-safety grading multiplies cost by $k$. Deterministic replay makes
-	that unnecessary. If a perturbation is applied at tick $t_p$, both arms
-	share the prefix $o_1 \ldots o_{t_p}$ exactly, so the prefix need only be
-	executed once. The formulas below are a \emph{protocol cost model}: they
-	define how the harness accounts for tick evaluations. They are not measured
-	wall-clock results and carry no claimed AUROC or dollar cost.
+	Naive $k$-safety grading multiplies cost by $k$. With deterministic replay,
+	both arms share the prefix up to the perturbation point $t_p$, which need
+	be executed only once. We count tick evaluations, not wall-clock time.
 	
 	\begin{proposition}[Prefix sharing]
 		\label{prop:prefix}
-		For a $2$-safety probe with perturbation point $t_p$ and scenario length
-		$n$, exogenously coupled execution costs $n + (n - t_p)$ tick evaluations
-		rather than $2n$.
+		A $2$-safety probe with perturbation point $t_p$ and scenario length $n$
+		costs $n + (n - t_p)$ tick evaluations under exogenous coupling, rather
+		than $2n$.
 	\end{proposition}
 	
 	\begin{corollary}[Probe tree]
 		\label{cor:tree}
-		Let $m$ probes share a perturbation point $t_p$. Executing them as a tree
-		rooted at the shared prefix costs
-		$t_p + \sum_{j=1}^{m}\left(n_j - t_p\right)$ rather than
-		$\sum_{j=1}^{m} 2 n_j$. For probes with late perturbation points the
-		amortized marginal cost of an additional probe approaches the length of its
-		suffix alone.
+		$m$ probes sharing $t_p$ cost $C_{\mathrm{tree}} = t_p + \sum_{j}(n_j -
+		t_p)$ rather than $C_{\mathrm{naive}} = \sum_j 2 n_j$; the marginal cost
+		of a late-forking probe approaches its suffix length.
 	\end{corollary}
 	
-	\begin{definition}[Probe-tree cost (protocol)]
+	\begin{definition}[Amortization factor]
 		\label{def:cost}
-		Let $C_{\mathrm{naive}}(m)=\sum_{j=1}^{m} 2 n_j$ and
-		$C_{\mathrm{tree}}(m)=t_p + \sum_{j=1}^{m}(n_j-t_p)$ under a shared
-		fork at $t_p$. The protocol amortization factor is
-		$\alpha(m)=C_{\mathrm{naive}}(m)/C_{\mathrm{tree}}(m)$ when
-		$C_{\mathrm{tree}}(m)>0$. Section~\ref{sec:eval-cost} reports $\alpha$
-		measured on live executions.
+		$\alpha = C_{\mathrm{naive}} / C_{\mathrm{tree}}$;
+		Section~\ref{sec:eval-cost} reports it on live executions.
 	\end{definition}
 	
-	The engineering requirement is a cheap fork of artifact state at $t_p$. The
-	orchestrator contract already provides one, since the task mandates a
-	serialize-and-restore pair with bit-identical subsequent behavior
-	(\textsc{FreezeDry}'s graded axis). This is a pleasant alignment: the same
-	property that makes the artifact operationally restartable makes
-	hyperproperty grading affordable. We suggest that future task specifications
-	require a state fork for this reason, independent of any operational
-	motivation.
+	Forking needs a cheap copy of artifact state at $t_p$. The orchestrator
+	task already mandates serialize/restore with bit-identical continuation
+	(\textsc{FreezeDry}'s axis), so the property that makes an artifact
+	restartable also makes paired grading affordable; we suggest task
+	specifications require it for that reason alone.
 	
 	\subsection{Power-on-axis: \texttt{gate\_axis\_mutate}}
 	
-	Twin contrast alone is not enough: a harness can ship identical twins with
-	hard-coded opposite \texttt{expected\_verdict} labels, or rename a cosmetic
-	field, and still look green. \sys{} therefore requires
-	\texttt{gate\_axis\_mutate}: on each conforming twin, mutate \emph{only} the
-	operator's graded axis (seed, freeze mask, schema key, polarity channel,
-	saturation bound, history splice, trajectory segment, or variance scale) and
-	demand that the grader flip \texttt{pass}$\to$\texttt{fail}. Each successful
-	flip carries a semantic witness with \texttt{expected\_axis},
-	\texttt{channel}, and before/after snapshots; a wrong-axis mutation must
-	\emph{not} flip the conforming twin. Cosmetic edits---flipping the expected
-	verdict alone, renaming a SARIF level, or injecting an AUROC field---leave
-	the axis fingerprint unchanged and fail the gate. A coverage cell is green
-	only when conforming$\to$\texttt{pass}, violating$\to$\texttt{fail}, and
-	\texttt{gate\_axis\_mutate} reports power.
+	Twin contrast alone is not enough: identical twins with hard-coded
+	opposite expected verdicts look green. \sys{} therefore mutates
+	\emph{only} the operator's graded axis of each conforming twin (seed,
+	freeze mask, schema key, polarity, saturation bound, history splice,
+	trajectory segment, or variance scale), demands a \texttt{pass}$\to$%
+	\texttt{fail} flip with a recorded before/after witness, and requires
+	that a wrong-axis mutation \emph{not} flip. A coverage cell is green only
+	when conforming passes, violating fails, and the gate reports power.
 	
 	\section{Perturbation Operators}
 	\label{sec:operators}
@@ -609,41 +547,41 @@
 	dimension and preserving everything else. Table \ref{tab:ops} lists the
 	eight operators in \sys{}.
 	
-	\begin{table*}[t]
-		\caption{Perturbation operators. \emph{Coupling} and \emph{graded channels} match the live harness enums in \texttt{ops/*/spec.yaml}, \texttt{diptych.OPERATORS}/\texttt{COUPLINGS}, and \texttt{docs/adapters/OPERATOR\_TABLE.md} (not a probe-semantics gloss). Row order matches the harness \texttt{OPERATORS} tuple.}
+	\begin{table}[t]
+		\caption{Perturbation operators: coupling (OL open-loop, CRN
+			closed-loop), the varied axis, and the requirement probed.}
 		\label{tab:ops}
 		\centering
 		\scriptsize
-		\resizebox{\textwidth}{!}{%
-		\begin{tabular}{@{}lllll@{}}
+		\begin{tabular}{@{}llll@{}}
 			\toprule
-			Operator & Coupling & Primary graded channels & Varies & Probe \\
+			Operator & Coup. & Varies & Probes \\
 			\midrule
-			\textsc{SignFlip} & \texttt{open\_loop} & \texttt{channels.<target>.values}, \texttt{meta.signflip\_channel} & sign of target channel & asymmetric response \\
-			\textsc{TrajSwap} & \texttt{crn\_closed\_loop} & \texttt{channels.trajectory.*}, \texttt{channels.closed\_loop\_residual.values} & recent trajectory ordering & trend / closed-loop residual \\
-			\textsc{VarScale} & \texttt{crn\_closed\_loop} & \texttt{channels.variance\_proxy.values}, \texttt{meta.var\_scale} & variance / noise scale & volatility ordering \\
-			\textsc{SatExtend} & \texttt{open\_loop} & \texttt{channels.<target>.values}, \texttt{meta.sat\_lo}/\texttt{sat\_hi} & saturation bounds & anti-windup \\
-			\textsc{HistSwap} & \texttt{open\_loop} & \texttt{channels.history.values}, \texttt{meta.hist\_splice\_at} & pre-step history splice & history dependence \\
-			\textsc{FreezeDry} & \texttt{open\_loop} & \texttt{meta.decision\_fingerprint}, \texttt{meta.freeze\_channels} & freeze mask / serialize-restore & round-trip stability \\
-			\textsc{Reseed} & \texttt{open\_loop} & \texttt{meta.seed}, \texttt{channels.stability.values} & process / hash seed & stability under reseed \\
-			\textsc{SchemaX} & \texttt{open\_loop} & \texttt{channels.schema.keys}, \texttt{meta.required\_schema\_keys} & scenario / key set & schema stability \\
+			\textsc{SignFlip}  & OL  & sign of deviation & asymmetric response \\
+			\textsc{TrajSwap}  & CRN & order of recent samples & trend recency \\
+			\textsc{VarScale}  & CRN & noise variance & volatility suppression \\
+			\textsc{SatExtend} & OL  & saturation duration & anti-windup \\
+			\textsc{HistSwap}  & OL  & pre-step history & setpoint-change quiet \\
+			\textsc{FreezeDry} & OL  & serialize/restore & round-trip stability \\
+			\textsc{Reseed}    & OL  & process / hash seed & determinism \\
+			\textsc{SchemaX}   & OL  & scenario & schema stability \\
 			\bottomrule
-		\end{tabular}%
-		}
-	\end{table*}
+		\end{tabular}
+	\end{table}
 	
-	Preservation intent (exogenous identity except the varied axis) is enforced by
-	the coupling enum and graded fields above. Three constructions deserve a note.
+	Three constructions deserve a note.
 	\textsc{TrajSwap} permutes samples inside a window (multiset-fixed) so one arm
 	ends improving and the other degrading; order-insensitive summaries fail by
 	construction. \textsc{SatExtend} pairs a saturated arm with its
 	extension and requires every actuator sample on both arms to stay inside
 	the declared saturation and legal bounds, which an unbounded integrator
-	exceeds (Section~\ref{sec:audit}); the current grader checks bounds, not
-	the first post-release response.
-	\textsc{SchemaX} compares emission records of a common event type across two
-	scenarios ($2$-safety over a trace set rather than a perturbation pair) with
-	the same falsification shape: two traces, one predicate, no single-run witness.
+	exceeds (Section~\ref{sec:audit}); the recorded-envelope grader checks
+	these bounds, while the pilot's live probe (Section~\ref{sec:pilot})
+	compares the first post-release response directly.
+	\textsc{SchemaX} compares emission records across scenarios ($2$-safety
+	over a trace set rather than a perturbation pair), catching drift no
+	single scenario exhibits; drift within one run is single-trace
+	falsifiable, which our strong baseline exploits.
 	
 	\section{Metrics}
 	\label{sec:metrics}
@@ -652,8 +590,8 @@
 	
 	For each operator, power against Section~\ref{sec:protocol} controls is the
 	fraction of violating controls on which the probe returns fail and conforming
-	controls on which it returns pass. Probes below a declared power floor are
-	excluded from scoring rather than reported with a caveat.
+	controls on which it returns pass. A probe that cannot separate its own
+	control pair is not used.
 	
 	\subsection{Separation index}
 	
@@ -662,13 +600,6 @@
 	the fraction of such pairs on which hyperproperty score vectors disagree.
 	Near zero refutes the premise; near one shows paired probes carry information
 	trace grading cannot recover.
-	
-	\subsection{Predictive validity}
-	
-	Hold out adversarial scenarios; score probes built only from training
-	scenarios; compare rank correlation of hyperproperty vs.\ trace-property
-	scores with held-out outcome quality. Hypothesis: calibration generalizes
-	better than scenario-specific outcome tuning. No correlations are claimed yet.
 	
 	\subsection{Cost}
 	
@@ -712,13 +643,16 @@
 	For all 24 operator--source cells of the coverage matrix
 	(\texttt{coverage/matrix.json}), the conforming twin passes, the violating
 	twin fails, and \texttt{gate\_axis\_mutate} flips pass$\to$fail when only the named axis
-	is mutated while a wrong-axis distractor does not flip. Sources are the
-	core fixtures and two product emitters that emit schema-\texttt{0.2} twins
-	and are not vendored: ZeroDay@\texttt{fb5b39da} and
-	AOMB@\texttt{667e475} (full SHAs in \texttt{adapters/PINS.md}; CRN
-	required for \textsc{TrajSwap}/\textsc{VarScale}). A green cell is
-	evidence that the grader and emitter agree on the axis; it is not a
-	vulnerability or model-quality claim.
+	is mutated while a wrong-axis distractor does not flip. Besides our core
+	fixtures, the sources are two external tools that emit
+	schema-\texttt{0.2} twins from their own executions, testing that the
+	envelope contract works outside the harness: ZeroDay, a
+	vulnerability-localization tool whose probes perturb its ranking and
+	search (e.g., the sign of a score margin), and AOMB, an agent that tunes a
+	small language model for telemetry anomaly detection. Both are the
+	authors' own open-source projects, pinned at commits \texttt{fb5b39da}
+	and \texttt{667e475}. A green cell means grader and emitter agree on the
+	axis, not that either tool is correct.
 	
 	
 	
@@ -807,17 +741,23 @@
 	\textsc{FreezeDry} across fresh processes). A violation at any fork point
 	or any of three noise seeds fails the requirement.
 	
-	\textbf{Single-trace baseline.} For each requirement we implement the
-	check a harness author would write from its prose, on one closed-loop
-	run---for asymmetric response, the ratio of mean downward to upward
-	limit moves over ticks above and below setpoint, exactly the confounded
-	estimator of Proposition~\ref{prop:confound}.
+	\textbf{Single-trace baselines.} The \emph{basic} baseline implements,
+	per requirement, the check a harness author would write from its prose on
+	one closed-loop run---for asymmetric response, the ratio of mean downward
+	to upward limit moves above and below setpoint. The \emph{strong}
+	baseline gives single-trace grading every advantage we could find: two
+	or three readings per requirement (e.g., least-squares response slopes,
+	a trend coefficient from regressing limit moves on error and error
+	trend, the correlation between rolling error spread and the limit),
+	each applied to every scenario where it is meaningful, failing the
+	requirement if any reading fires on any trace. Both are calibrated like
+	the paired probes: no reading may flag the conforming control.
 	
 	\textbf{Executable controls.} One conforming controller and eight
-	violators, each changing one design decision, calibrate both graders:
-	thresholds are set so the conforming control passes everything. Paired
-	grading catches all eight violators on their own axis; single-trace
-	grading catches one. Building the controls was itself instructive: our
+	violators, each changing one design decision, calibrate all graders:
+	the conforming control must pass everything. Paired grading catches all
+	eight violators on their own axis; the basic single-trace baseline
+	catches one and the strong one three. Building the controls was itself instructive: our
 	first symmetric-gain and variance-blind violators \emph{satisfied} the
 	requirements they were meant to break, because the variance penalty
 	already makes the response asymmetric and the asymmetric gain already
@@ -834,42 +774,64 @@
 	run, and forking by state copy matched replay-from-scratch for every one.
 	
 	\begin{table}[t]
-		\caption{Pilot on 40 model-written controllers: controllers passing
-			every single-trace check, how many of those fail a paired probe,
-			and the separation index over single-trace-equivalent pairs.}
+		\caption{Pilot on 40 model-written controllers. For each single-trace
+			baseline: controllers passing every check, and how many of those
+			violate a requirement under paired probing.}
 		\label{tab:pilot}
 		\centering
 		\scriptsize
-		\begin{tabular}{@{}lrrrr@{}}
+		\begin{tabular}{@{}lrrrrr@{}}
 			\toprule
-			Condition & $n$ & all single pass & \dots paired fail & sep.\ index \\
+			& & \multicolumn{2}{c}{basic} & \multicolumn{2}{c}{strong} \\
+			Condition & $n$ & pass & \dots fail & pass & \dots fail \\
 			\midrule
-			One-shot, Claude (4 models) & 20 & 15 & 12 & 0.78 \\
-			One-shot, Codex             &  5 &  4 &  3 & 1.00 \\
-			Agentic, Claude (2 models)  & 10 & 10 &  8 & 0.91 \\
-			Agentic, Codex              &  5 &  5 &  5 & 0.80 \\
+			One-shot, Claude (4 models) & 20 & 15 & 12 & 6 & 5 \\
+			One-shot, Codex             &  5 &  4 &  3 & 2 & 2 \\
+			Agentic, Claude (2 models)  & 10 & 10 &  8 & 2 & 2 \\
+			Agentic, Codex              &  5 &  5 &  5 & 1 & 1 \\
 			\midrule
-			All                         & 40 & 34 & 28 & 0.85 \\
+			All                         & 40 & 34 & 28 & 11 & 10 \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
 	
-	\textbf{Results.} Thirty-four of the 40 controllers pass every
-	single-trace check; 28 of those 34 fail at least one paired probe
-	(Table~\ref{tab:pilot}), and over the 563 pairs single-trace grading
-	cannot distinguish, 478 receive different paired verdicts (separation
-	index 0.85). Trend recency dominates: 23 controllers fail it and the
-	single-trace check catches one. Most add a trend term too weak to
-	overcome their estimator lag, so after improving latency the limit ends
-	\emph{lower} than after the same observations worsening---a defect
-	invisible in one run. Volatility suppression fails for 13 (10 missed),
-	asymmetric response for 10 (7 missed), anti-windup and setpoint-change
-	quiet for 3 each (all missed). Every controller met determinism,
+	\textbf{What the results can and cannot show.} Several requirements are
+	\emph{stated} comparatively (trend recency: ``after a run of improving
+	latency the limit must end higher than after the same observations in
+	worsening order''), so a single-trace check can only approximate them and
+	Proposition~\ref{prop:confound} already predicts that it will err. The
+	informative results are therefore how often controllers violate
+	requirements given to them in plain words, whether a best-effort
+	single-trace grader recovers those violations, and whether agents that
+	test their own code avoid them.
+	
+	\textbf{Violations are common.} 34 of the 40 controllers pass every basic
+	single-trace check, and 28 of those 34 violate a stated requirement under
+	paired probing (82\%, 95\% Wilson CI 66--92\%). Per artifact, paired
+	probing finds a violation the basic baseline misses in 33 controllers and
+	the reverse in 2 (exact McNemar $p < 10^{-7}$). Trend recency dominates
+	(23 violations): most controllers add a trend term too weak to overcome
+	their estimator lag, so after improving latency the limit ends
+	\emph{lower} than after the same observations worsening. Volatility
+	suppression fails for 13, asymmetric response for 10, anti-windup and
+	setpoint-change quiet for 3 each; every controller met determinism,
 	round-trip, and schema stability.
 	
+	\textbf{A stronger baseline errs differently, not less.} The strong
+	baseline flags 29 controllers, but of the 11 it passes, 10 still violate a
+	requirement (91\%, CI 62--98\%). It still misses 16 of 23 trend-recency
+	and 8 of 13 volatility violations. On asymmetric response it disagrees
+	with the fixed-state contrast on 25 of 40 controllers: it misses 4
+	violations and flags 21 controllers whose fixed-state responses satisfy
+	the requirement at all three seeds. That two-sided disagreement is
+	Proposition~\ref{prop:confound} observed: its estimates compare responses
+	from different states. Overall the two graders disagree too often to be
+	substitutes (29 paired-only vs.\ 21 strong-only artifacts; McNemar
+	$p = 0.32$).
+	
 	\textbf{Testing does not help.} Every agentic controller passes every
-	single-trace check---agents ran the simulator and polished what one run
-	shows---yet 13 of the 15 violate a requirement under paired probing,
+	basic single-trace check---agents ran the simulator and polished what one
+	run shows---yet 13 of the 15 violate a requirement under paired probing,
 	including three (two Opus, one Sonnet) with integrator windup that no
 	single-trace check flagged. The effect is not vendor-specific: Codex
 	controllers fail in the same pattern as Claude's. With five samples per
@@ -901,25 +863,37 @@
 	Differential privacy \cite{dwork2006,dwork2014} is likewise relational; we
 	target calibration, not $(\varepsilon,\delta)$ budgets.
 	
-	\textbf{Runtime verification.} Classic RV fits single-trace temporals
-	\cite{leucker2009,bartocci2018,falcone2018}; $k$-safety still needs
-	multiple runs or a product. \sys{} is a paired metamorphic harness, not an
-	online monitor.
+	\textbf{Testing and monitoring $k$-safety.} Runtime verification of
+	HyperLTL monitors $k$-safety over sets of recorded traces
+	\cite{agrawal2016,finkbeiner2019}, building on single-trace RV
+	\cite{leucker2009,bartocci2018,falcone2018}; relational program logics
+	verify $k$-safety statically \cite{sousa2016}. Closest to us, Christakis
+	et al.\ specify and test $k$-safety properties of machine-learning
+	models by generating related inputs \cite{christakis2023}. Those models
+	are stateless; our artifacts are stateful closed-loop controllers, where
+	the pair must share a prefix and a noise stream \cite{glasserman1992},
+	and where Proposition~\ref{prop:confound} makes recorded traces
+	insufficient---monitors over logged executions cannot supply the
+	unvisited branch.
 	
-	\textbf{Metamorphic testing.} Metamorphic relations are $k$-safety under
-	another vocabulary \cite{chen1998,segura2016}. Our subject is a stateful
-	long-horizon artifact under closed-loop coupling---the engineering gap.
+	\textbf{Metamorphic and property-based testing.} Metamorphic relations
+	are $k$-safety under another vocabulary \cite{chen1998,segura2016},
+	applied to autonomous systems by perturbing inputs \cite{tian2018};
+	property-based testing checks universally quantified properties on
+	random inputs \cite{claessen2000}. We add forking from a shared internal
+	state, closed-loop coupling, and an explicit inconclusive verdict, and we
+	test the graders themselves with mutation analysis \cite{jia2011}.
 	
-	\textbf{Agentic / LLM evaluation.} Repository, tool-use, and pass-rate
-	benchmarks \cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021} grade single
-	executions (or aggregates). Trajectory judges inherit the same limit.
-	\sys{} is complementary, not a pass@$k$ replacement; we invent no
-	AUROC/F1/model scores against those suites.
+	\textbf{Evaluating model-written code.} Repository, tool-use, and
+	functional-correctness benchmarks
+	\cite{jimenez2024,yao2024,liu2023,zhou2024,chen2021} grade single
+	executions or aggregates; EvalPlus showed that stronger tests overturn
+	many pass verdicts \cite{liu2023evalplus}. Our pilot finds the same
+	effect along a different axis: not more inputs, but paired executions.
 	
-	\textbf{Differential / regression testing.} Differential testing compares
-	implementations on shared inputs \cite{mckeeman1998}. We compare one
-	implementation on deliberately related inputs---the dual---with a
-	semantically controlled input relation.
+	\textbf{Differential testing} compares implementations on shared inputs
+	\cite{mckeeman1998}; we compare one implementation on deliberately
+	related inputs.
 	
 	\section{Discussion}
 	\label{sec:discussion}
@@ -934,10 +908,11 @@
 	flags) should never short-circuit a check on the underlying data.
 	
 	\textbf{Single-trace grading passes the defect it cannot see.} In the
-	pilot, 28 controllers that a single-trace grader would ship violate a
-	stated requirement, agents that tested their own code included, and the dominant failure (estimator lag overriding
-	trend recency) is precisely a counterfactual contrast: the same
-	observations in a different order.
+	pilot, 28 controllers that a basic single-trace grader would ship violate
+	a stated requirement, agents that tested their own code included, and a
+	stronger grader trades misses for false alarms. The dominant failure
+	(estimator lag overriding trend recency) is precisely a counterfactual
+	contrast: the same observations in a different order.
 
 	\textbf{Non-claims.} A green cell is not a vulnerability finding, and no
 	result here is an accuracy, AUROC, or model ranking; the envelope
@@ -946,19 +921,14 @@
 	\section{Threats to Validity}
 	\label{sec:threats}
 	
-	\textbf{Construct.} Operators encode one reading of each invariant; a
-	different reading yields a different twin. We publish operators as
-	executable code (Table~\ref{tab:ops}) so intent disputes become artifact
-	disputes. ``Green'' means twin contrast + \texttt{gate\_axis\_mutate} under
-	schema~\texttt{0.2} (Section~\ref{sec:discussion}), not exploitability.
+	\textbf{Construct.} Operators encode one reading of each invariant; we
+	publish them as code so intent disputes become artifact disputes.
 	
 	\textbf{Adapter pin drift.} Adapter greens hold at the pinned SHAs only;
 	a pin move can flip them while core cells stay green.
 	
-	\textbf{Inconclusive.} Schema~\texttt{0.2} admits \texttt{inconclusive} with
-	\texttt{meta.inconclusive\_reason}. That is \emph{not} green. Over-/under-use
-	can hide weak probes or force spurious verdicts; the pilot's 3.1\% rate
-	comes from branches hitting limit bounds or never saturating.
+	\textbf{Inconclusive.} Overusing it could hide weak probes; the pilot's
+	3.1\% rate comes from branches hitting limit bounds or never saturating.
 	
 	\textbf{Handwritten-control bias.} Controls and fixtures are written by the
 	same authors as the graders and can overfit them; the mutation sweep is
@@ -972,20 +942,19 @@
 	two closed-loop operators, and CRN coupling is not universal; the pilot's
 	seed instability concentrates in closed-loop \textsc{VarScale}.
 	
-	\textbf{Pilot validity.} The pilot task is a reduction we wrote; the
-	single-trace baseline is one reasonable reading per requirement,
-	calibrated on our controls, and a cleverer reading could catch more
-	(Proposition~\ref{prop:confound} bounds what any single trace identifies,
-	not what a heuristic may happen to flag). Artifacts are 40 samples from
+	\textbf{Pilot validity.} We wrote the reduced task, its requirement
+	wording, and both baselines, calibrated on our own controls; a different
+	single-trace design could catch more, though
+	Proposition~\ref{prop:confound} bounds what any can identify. Paired
+	verdicts are ground truth only relative to our reading of each
+	requirement at a fixed state. Artifacts are 40 samples from
 	two vendors, five per model and condition, with bounded agent sessions;
 	12\% of forked verdicts depend on the noise seed.
 
-	\textbf{Internal / external.} Graders are deterministic functions of envelopes;
-	the full-8 gate regresses harness logic, not model quality. Findings are from
-	one task family: we claim generality for the classification and harness
-	architecture, not the operator set. Twin construction and grading are
-	deterministic, so every number in Section~\ref{sec:protocol} is exact and
-	reproducible rather than a sample estimate.
+	\textbf{External.} Findings come from one task family: we claim
+	generality for the classification and harness architecture, not the
+	operator set. Grading is deterministic, so every number in
+	Section~\ref{sec:protocol} is exactly reproducible.
 	
 	\section{Conclusion}
 	\label{sec:conclusion}
