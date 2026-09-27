@@ -1,134 +1,646 @@
 {
   "artifacts": {
-    "all_single_trace_pass": 15,
-    "all_single_trace_pass_but_paired_fail": 12,
+    "all_single_trace_pass": 34,
+    "all_single_trace_pass_but_paired_fail": 28,
     "error_rate": 0.0,
-    "fork_fidelity_ok": 20,
-    "inconclusive_rate": 0.04375,
-    "n_artifacts": 20,
+    "fork_fidelity_ok": 40,
+    "inconclusive_rate": 0.03125,
+    "n_artifacts": 40,
     "per_operator": {
       "FREEZEDRY": {
-        "agree": 20,
-        "decided_by_both": 20,
+        "agree": 40,
+        "decided_by_both": 40,
         "paired": {
-          "pass": 20
+          "pass": 40
         },
         "single_fail_paired_pass": 0,
         "single_pass_paired_fail": 0,
         "single_trace": {
-          "pass": 20
+          "pass": 40
         }
       },
       "HISTSWAP": {
-        "agree": 16,
-        "decided_by_both": 17,
+        "agree": 32,
+        "decided_by_both": 35,
         "paired": {
-          "fail": 1,
-          "inconclusive": 3,
-          "pass": 16
+          "fail": 3,
+          "inconclusive": 5,
+          "pass": 32
         },
         "single_fail_paired_pass": 0,
-        "single_pass_paired_fail": 1,
+        "single_pass_paired_fail": 3,
         "single_trace": {
           "fail": 1,
-          "pass": 19
+          "pass": 39
         }
       },
       "RESEED": {
-        "agree": 20,
-        "decided_by_both": 20,
+        "agree": 40,
+        "decided_by_both": 40,
         "paired": {
-          "pass": 20
+          "pass": 40
         },
         "single_fail_paired_pass": 0,
         "single_pass_paired_fail": 0,
         "single_trace": {
-          "pass": 20
+          "pass": 40
         }
       },
       "SATEXTEND": {
-        "agree": 18,
-        "decided_by_both": 18,
+        "agree": 35,
+        "decided_by_both": 38,
         "paired": {
+          "fail": 3,
           "inconclusive": 2,
-          "pass": 18
+          "pass": 35
         },
         "single_fail_paired_pass": 0,
-        "single_pass_paired_fail": 0,
+        "single_pass_paired_fail": 3,
         "single_trace": {
-          "pass": 20
+          "pass": 40
         }
       },
       "SCHEMAX": {
-        "agree": 20,
-        "decided_by_both": 20,
+        "agree": 40,
+        "decided_by_both": 40,
         "paired": {
-          "pass": 20
+          "pass": 40
         },
         "single_fail_paired_pass": 0,
         "single_pass_paired_fail": 0,
         "single_trace": {
-          "pass": 20
+          "pass": 40
         }
       },
       "SIGNFLIP": {
-        "agree": 17,
-        "decided_by_both": 20,
+        "agree": 31,
+        "decided_by_both": 40,
         "paired": {
-          "fail": 5,
-          "pass": 15
+          "fail": 10,
+          "pass": 30
         },
-        "single_fail_paired_pass": 1,
-        "single_pass_paired_fail": 2,
+        "single_fail_paired_pass": 2,
+        "single_pass_paired_fail": 7,
         "single_trace": {
-          "fail": 4,
-          "pass": 16
+          "fail": 5,
+          "pass": 35
         }
       },
       "TRAJSWAP": {
-        "agree": 6,
-        "decided_by_both": 18,
+        "agree": 15,
+        "decided_by_both": 37,
         "paired": {
-          "fail": 13,
-          "inconclusive": 2,
-          "pass": 5
+          "fail": 23,
+          "inconclusive": 3,
+          "pass": 14
         },
         "single_fail_paired_pass": 0,
-        "single_pass_paired_fail": 12,
+        "single_pass_paired_fail": 22,
         "single_trace": {
           "fail": 1,
-          "pass": 19
+          "pass": 39
         }
       },
       "VARSCALE": {
-        "agree": 15,
-        "decided_by_both": 20,
+        "agree": 30,
+        "decided_by_both": 40,
         "paired": {
-          "fail": 8,
-          "pass": 12
+          "fail": 13,
+          "pass": 27
         },
         "single_fail_paired_pass": 0,
-        "single_pass_paired_fail": 5,
+        "single_pass_paired_fail": 10,
         "single_trace": {
           "fail": 3,
-          "pass": 17
+          "pass": 37
         }
       }
     },
     "seed_stability": {
-      "cells": 100,
-      "rate": 0.95,
-      "same_verdict_all_seeds": 95
+      "cells": 200,
+      "rate": 0.88,
+      "same_verdict_all_seeds": 176
     },
     "separation": {
-      "hyper_distinct": 83,
-      "index": 0.7830188679245284,
-      "trace_equivalent_pairs": 106
+      "hyper_distinct": 478,
+      "index": 0.8490230905861457,
+      "trace_equivalent_pairs": 563
     },
     "ticks": {
-      "alpha": 2.7644241004896744,
-      "forked": 150304,
-      "naive_equivalent": 415504
+      "alpha": 2.712127570289551,
+      "forked": 309790,
+      "naive_equivalent": 840190
+    }
+  },
+  "by_group": {
+    "agentic-claude": {
+      "all_single_trace_pass": 10,
+      "all_single_trace_pass_but_paired_fail": 8,
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 10,
+      "inconclusive_rate": 0.025,
+      "n_artifacts": 10,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "HISTSWAP": {
+          "agree": 8,
+          "decided_by_both": 9,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 1,
+            "pass": 8
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "RESEED": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SATEXTEND": {
+          "agree": 7,
+          "decided_by_both": 10,
+          "paired": {
+            "fail": 3,
+            "pass": 7
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 3,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SCHEMAX": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 6,
+          "decided_by_both": 9,
+          "paired": {
+            "fail": 3,
+            "inconclusive": 1,
+            "pass": 6
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 3,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "VARSCALE": {
+          "agree": 8,
+          "decided_by_both": 10,
+          "paired": {
+            "fail": 2,
+            "pass": 8
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "pass": 10
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 50,
+        "rate": 0.9,
+        "same_verdict_all_seeds": 45
+      },
+      "separation": {
+        "hyper_distinct": 41,
+        "index": 0.9111111111111111,
+        "trace_equivalent_pairs": 45
+      },
+      "ticks": {
+        "alpha": 2.638088649503385,
+        "forked": 80948,
+        "naive_equivalent": 213548
+      }
+    },
+    "agentic-codex": {
+      "all_single_trace_pass": 5,
+      "all_single_trace_pass_but_paired_fail": 5,
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 5,
+      "inconclusive_rate": 0.0,
+      "n_artifacts": 5,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "HISTSWAP": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "RESEED": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SATEXTEND": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SCHEMAX": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 2,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 3,
+            "pass": 2
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 3,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 0,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 5,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "VARSCALE": {
+          "agree": 4,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 1,
+            "pass": 4
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 5
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 25,
+        "rate": 0.64,
+        "same_verdict_all_seeds": 16
+      },
+      "separation": {
+        "hyper_distinct": 8,
+        "index": 0.8,
+        "trace_equivalent_pairs": 10
+      },
+      "ticks": {
+        "alpha": 2.690895179801071,
+        "forked": 39210,
+        "naive_equivalent": 105510
+      }
+    },
+    "oneshot-claude": {
+      "all_single_trace_pass": 15,
+      "all_single_trace_pass_but_paired_fail": 12,
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 20,
+      "inconclusive_rate": 0.04375,
+      "n_artifacts": 20,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "HISTSWAP": {
+          "agree": 16,
+          "decided_by_both": 17,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 3,
+            "pass": 16
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 1,
+            "pass": 19
+          }
+        },
+        "RESEED": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SATEXTEND": {
+          "agree": 18,
+          "decided_by_both": 18,
+          "paired": {
+            "inconclusive": 2,
+            "pass": 18
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SCHEMAX": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 17,
+          "decided_by_both": 20,
+          "paired": {
+            "fail": 5,
+            "pass": 15
+          },
+          "single_fail_paired_pass": 1,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "fail": 4,
+            "pass": 16
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 6,
+          "decided_by_both": 18,
+          "paired": {
+            "fail": 13,
+            "inconclusive": 2,
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 12,
+          "single_trace": {
+            "fail": 1,
+            "pass": 19
+          }
+        },
+        "VARSCALE": {
+          "agree": 15,
+          "decided_by_both": 20,
+          "paired": {
+            "fail": 8,
+            "pass": 12
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 5,
+          "single_trace": {
+            "fail": 3,
+            "pass": 17
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 100,
+        "rate": 0.95,
+        "same_verdict_all_seeds": 95
+      },
+      "separation": {
+        "hyper_distinct": 83,
+        "index": 0.7830188679245284,
+        "trace_equivalent_pairs": 106
+      },
+      "ticks": {
+        "alpha": 2.7644241004896744,
+        "forked": 150304,
+        "naive_equivalent": 415504
+      }
+    },
+    "oneshot-codex": {
+      "all_single_trace_pass": 4,
+      "all_single_trace_pass_but_paired_fail": 3,
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 5,
+      "inconclusive_rate": 0.025,
+      "n_artifacts": 5,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "HISTSWAP": {
+          "agree": 3,
+          "decided_by_both": 4,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 1,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "RESEED": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SATEXTEND": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SCHEMAX": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 2,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 1,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "fail": 1,
+            "pass": 4
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 3,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "VARSCALE": {
+          "agree": 3,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "pass": 5
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 25,
+        "rate": 0.8,
+        "same_verdict_all_seeds": 20
+      },
+      "separation": {
+        "hyper_distinct": 6,
+        "index": 1.0,
+        "trace_equivalent_pairs": 6
+      },
+      "ticks": {
+        "alpha": 2.6858218063466235,
+        "forked": 39328,
+        "naive_equivalent": 105628
+      }
     }
   },
   "controls": {
@@ -213,6 +725,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:conforming",
       "objective": {
@@ -505,6 +1018,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-freezedry",
       "objective": {
@@ -797,6 +1311,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-histswap",
       "objective": {
@@ -1089,6 +1604,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-reseed",
       "objective": {
@@ -1381,6 +1897,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-satextend",
       "objective": {
@@ -1673,6 +2190,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-schemax",
       "objective": {
@@ -1965,6 +2483,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-signflip",
       "objective": {
@@ -2227,6 +2746,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-trajswap",
       "objective": {
@@ -2519,6 +3039,7 @@
         ],
         "ok": true
       },
+      "group": null,
       "kind": "control",
       "name": "control:violating-varscale",
       "objective": {
@@ -2768,6 +3289,4338 @@
       "violates": "VARSCALE"
     },
     {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-opus-5-5/0.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              69.47442622918564,
+              77.9193055964397
+            ],
+            "ok": true,
+            "replayed": [
+              69.47442622918564,
+              77.9193055964397
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              68.20283721164,
+              77.54164446690626
+            ],
+            "ok": true,
+            "replayed": [
+              68.20283721164,
+              77.54164446690626
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              60.61847886427236,
+              77.84287960013904
+            ],
+            "ok": true,
+            "replayed": [
+              60.61847886427236,
+              77.84287960013904
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-opus-5-5#0",
+      "objective": {
+        "mean_abs_latency_error": 0.1559890974539016,
+        "mean_admitted_rps": 76.64317832118671
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.5597163299440453,
+                  -0.5489697764091197,
+                  -0.5384295567020665,
+                  -0.5280917092133848,
+                  -0.5179523483964878,
+                  -0.5080076633072785
+                ],
+                "corrections_b": [
+                  -1.4880903832410723,
+                  -1.45951904788285,
+                  -1.4314962821634936,
+                  -1.4040115535459705,
+                  -1.3770545317178744,
+                  -1.3506150847088918
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.5595396941611384,
+                  -0.5487965320332435,
+                  -0.5382596386182037,
+                  -0.5279250535567357,
+                  -0.5177888925284471,
+                  -0.5078473457919017
+                ],
+                "corrections_b": [
+                  -1.4820579511499545,
+                  -1.4536024384878914,
+                  -1.425693271668905,
+                  -1.3983199608528736,
+                  -1.3714722176044916,
+                  -1.3451399510264963
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.4256390514417596,
+                  -0.417466781654074,
+                  -0.4094514194463166,
+                  -0.4015899521929498,
+                  -0.39387942511084617,
+                  -0.386316940148717
+                ],
+                "corrections_b": [
+                  -1.4257627867825704,
+                  -1.3983881412763424,
+                  -1.3715390889638428,
+                  -1.3452055384557298,
+                  -1.319377592117391,
+                  -1.2940455423487265
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 17,
+                "long_arm_drop": 15.359999999999985,
+                "short_arm_drop": 15.359999999999985
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 17,
+                "long_arm_drop": 15.359999999999985,
+                "short_arm_drop": 15.359999999999985
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 17,
+                "long_arm_drop": 15.359999999999985,
+                "short_arm_drop": 15.359999999999985
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 8.12846985949551,
+                "up": 0.31640950775855003
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 7.914132957755129,
+                "up": 0.35639632160567203
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 9.372244074732023,
+                "up": 0.381629784814578
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 33.79100842438819,
+                "worsening_end": 32.179081562432096
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 33.855543291544535,
+                "worsening_end": 32.34896702064907
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 28.156439598498572,
+                "worsening_end": 25.04421782447952
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 68.8174326446712,
+                "mean_limit_low_var": 77.64412679367484
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 67.44472142743102,
+                "mean_limit_low_var": 77.43625254167921
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 68.86852191408273,
+                "mean_limit_low_var": 77.83346147872108
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7496,
+        "naive_equivalent": 20756,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-opus-5-5/1.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              74.72080707550049,
+              78.7480297088623
+            ],
+            "ok": true,
+            "replayed": [
+              74.72080707550049,
+              78.7480297088623
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.40058422088623,
+              78.38943576812744
+            ],
+            "ok": true,
+            "replayed": [
+              74.40058422088623,
+              78.38943576812744
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.69982051849365,
+              79.12238025665283
+            ],
+            "ok": true,
+            "replayed": [
+              74.69982051849365,
+              79.12238025665283
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-opus-5-5#1",
+      "objective": {
+        "mean_abs_latency_error": 0.12725225544766447,
+        "mean_admitted_rps": 77.27011332021775
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "fail",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ],
+                "corrections_b": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ],
+                "corrections_b": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ],
+                "corrections_b": [
+                  -1.140000343322754,
+                  -0.9779996871948242,
+                  -0.8646001815795898,
+                  -0.7852201461791992,
+                  -0.7296533584594727,
+                  -0.6907577514648438
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 86,
+                "long_arm_drop": 4.682795524597168,
+                "short_arm_drop": 4.85076904296875
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 86,
+                "long_arm_drop": 4.682774543762207,
+                "short_arm_drop": 4.849390983581543
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 87,
+                "long_arm_drop": 4.685328483581543,
+                "short_arm_drop": 5.008074760437012
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 3.526182174682617,
+                "up": 0.5010404586791992
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 3.459756851196289,
+                "up": 0.4945201873779297
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 3.872511863708496,
+                "up": 0.25667285919189453
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 65.11888313293457,
+                "worsening_end": 62.082844734191895
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 65.76286792755127,
+                "worsening_end": 62.727684020996094
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 64.21438217163086,
+                "worsening_end": 60.92776393890381
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 75.11457860310873,
+                "mean_limit_low_var": 78.8038330078125
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 74.70613647460938,
+                "mean_limit_low_var": 78.65566210428874
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 75.30209285736083,
+                "mean_limit_low_var": 78.78807244618734
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8740,
+        "naive_equivalent": 22000,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-opus-5-5/2.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              73.16430807858706,
+              77.14406809583306
+            ],
+            "ok": true,
+            "replayed": [
+              73.16430807858706,
+              77.14406809583306
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.1057566171512,
+              77.05999729409814
+            ],
+            "ok": true,
+            "replayed": [
+              73.1057566171512,
+              77.05999729409814
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.81227173283696,
+              77.77152588404715
+            ],
+            "ok": true,
+            "replayed": [
+              73.81227173283696,
+              77.77152588404715
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-opus-5-5#2",
+      "objective": {
+        "mean_abs_latency_error": 0.17157827308734575,
+        "mean_admitted_rps": 76.3003796802741
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ],
+                "corrections_b": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ],
+                "corrections_b": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ],
+                "corrections_b": [
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645,
+                  -1.2000000001862645
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 53,
+                "long_arm_drop": 3.599999999627471,
+                "short_arm_drop": 3.599999999627471
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 52,
+                "long_arm_drop": 3.599999999627471,
+                "short_arm_drop": 3.599999999627471
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 58,
+                "long_arm_drop": 3.599999999627471,
+                "short_arm_drop": 3.599999999627471
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 3.701985633932054,
+                "up": 0.2777743833139539
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 3.6547167347744107,
+                "up": 0.32636531814932823
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 3.8476115623489022,
+                "up": -0.24667121283710003
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 59.95304853096604,
+                "worsening_end": 56.58393225632608
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 60.419718477874994,
+                "worsening_end": 57.04938798304647
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 60.468244371935725,
+                "worsening_end": 57.04669179581106
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 67.91471137131253,
+                "mean_limit_low_var": 77.57493483836453
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 67.04330452599874,
+                "mean_limit_low_var": 77.00989237920692
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 67.39473054186752,
+                "mean_limit_low_var": 77.5346768357108
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8154,
+        "naive_equivalent": 21414,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-opus-5-5/3.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              73.18726695660831,
+              80.63826200574375
+            ],
+            "ok": true,
+            "replayed": [
+              73.18726695660831,
+              80.63826200574375
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              72.765317609873,
+              80.14758236071604
+            ],
+            "ok": true,
+            "replayed": [
+              72.765317609873,
+              80.14758236071604
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              71.00938883407306,
+              78.51132486666958
+            ],
+            "ok": true,
+            "replayed": [
+              71.00938883407306,
+              78.51132486666958
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-opus-5-5#3",
+      "objective": {
+        "mean_abs_latency_error": 0.13710684386105085,
+        "mean_admitted_rps": 77.82545875513645
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "fail"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ],
+                "corrections_b": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ],
+                "corrections_b": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ],
+                "corrections_b": [
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972,
+                  -1.7999999999999972
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 30,
+                "long_arm_drop": 13.140002179515193,
+                "short_arm_drop": 12.918318103753336
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 30,
+                "long_arm_drop": 13.14000221574679,
+                "short_arm_drop": 12.908054719194297
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 30,
+                "long_arm_drop": 13.14000440810284,
+                "short_arm_drop": 12.934366781934472
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 5.860826939405754,
+                "up": 1.5901681097296887
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.583410616298124,
+                "up": 1.3566590756646661
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.744623915750552,
+                "up": 0.9025510015020757
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 57.94338837887568,
+                "worsening_end": 54.86344227710586
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 59.69749225888642,
+                "worsening_end": 56.67239743360053
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 60.027070264150026,
+                "worsening_end": 56.893087710135894
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.82799935581555,
+                "mean_limit_low_var": 79.66903680525625
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.60551635803083,
+                "mean_limit_low_var": 79.49532729116254
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 77.82796374811164,
+                "mean_limit_low_var": 79.50189168979709
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "fail"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7730,
+        "naive_equivalent": 20990,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-opus-5-5/4.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              73.4249626419853,
+              79.37048068812067
+            ],
+            "ok": true,
+            "replayed": [
+              73.4249626419853,
+              79.37048068812067
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.00870058387726,
+              78.90085719405931
+            ],
+            "ok": true,
+            "replayed": [
+              73.00870058387726,
+              78.90085719405931
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.04907181289525,
+              79.088592502996
+            ],
+            "ok": true,
+            "replayed": [
+              73.04907181289525,
+              79.088592502996
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-opus-5-5#4",
+      "objective": {
+        "mean_abs_latency_error": 0.11814445323518619,
+        "mean_admitted_rps": 77.53105630445069
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "fail",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 49,
+                "long_arm_drop": 7.4232912386921726,
+                "short_arm_drop": 7.7532121724304375
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 49,
+                "long_arm_drop": 7.425368909144652,
+                "short_arm_drop": 7.765922232903051
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 51,
+                "long_arm_drop": 7.443678298373754,
+                "short_arm_drop": 7.852685255964303
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 5.275867438111575,
+                "up": 0.6696506080237867
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.389670472078436,
+                "up": 0.5741603343836204
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.7666985981695404,
+                "up": 0.2723513795124006
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 55.721087444255566,
+                "worsening_end": 49.519402486836405
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 55.52538426821899,
+                "worsening_end": 49.25137123789759
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 56.32973995962426,
+                "worsening_end": 49.782630216978816
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.96315081464442,
+                "mean_limit_low_var": 79.03581007940015
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.52430655812535,
+                "mean_limit_low_var": 78.94666715598089
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.90906851647303,
+                "mean_limit_low_var": 78.87638588007506
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8078,
+        "naive_equivalent": 21338,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-sonnet-5/0.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              76.96725492162186,
+              79.84925588042337
+            ],
+            "ok": true,
+            "replayed": [
+              76.96725492162186,
+              79.84925588042337
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              76.681151180709,
+              79.54311414241552
+            ],
+            "ok": true,
+            "replayed": [
+              76.681151180709,
+              79.54311414241552
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              77.96917935309125,
+              80.96299543944406
+            ],
+            "ok": true,
+            "replayed": [
+              77.96917935309125,
+              80.96299543944406
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-sonnet-5#0",
+      "objective": {
+        "mean_abs_latency_error": 0.10048744484680525,
+        "mean_admitted_rps": 78.02930133073467
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.5788323436102445,
+                  -0.573622852517758,
+                  -0.5684602468450919,
+                  -0.5633441046234893,
+                  -0.5582740076818808,
+                  -0.5532495416127432
+                ],
+                "corrections_b": [
+                  -0.7411328598998921,
+                  -0.7344626641607874,
+                  -0.7278525001833458,
+                  -0.7213018276816996,
+                  -0.714810111232552,
+                  -0.7083768202314644
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.5797872679589489,
+                  -0.5745691825473216,
+                  -0.569398059904394,
+                  -0.5642734773652549,
+                  -0.5591950160689692,
+                  -0.5541622609243433
+                ],
+                "corrections_b": [
+                  -0.7430394810494789,
+                  -0.7363521257200318,
+                  -0.7297249565885551,
+                  -0.72315743197926,
+                  -0.7166490150914484,
+                  -0.7101991739556297
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.5753250529475906,
+                  -0.5701471274710599,
+                  -0.5650158033238242,
+                  -0.5599306610939081,
+                  -0.554891285144059,
+                  -0.5498972635777619
+                ],
+                "corrections_b": [
+                  -0.749390725027169,
+                  -0.7426462085019239,
+                  -0.7359623926254102,
+                  -0.7293387310917865,
+                  -0.7227746825119539,
+                  -0.7162697103693461
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 43,
+                "long_arm_drop": 8.100013969648614,
+                "short_arm_drop": 8.163812728478803
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 43,
+                "long_arm_drop": 8.100014203853135,
+                "short_arm_drop": 8.164866273627382
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 43,
+                "long_arm_drop": 8.100028180172416,
+                "short_arm_drop": 8.228472288792318
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 2.3588320391708635,
+                "up": 0.523168919630649
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.273632074520208,
+                "up": 0.5774207309700614
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.3615027858490407,
+                "up": 0.5772393482703109
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 67.91532363808193,
+                "worsening_end": 67.68988394207383
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 68.18454010493721,
+                "worsening_end": 67.87547229284588
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 68.7337774937465,
+                "worsening_end": 68.50396874994894
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.57117535877771,
+                "mean_limit_low_var": 79.95899481808644
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.2296092350423,
+                "mean_limit_low_var": 79.84838302263864
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.71909761381845,
+                "mean_limit_low_var": 79.91621451503731
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7960,
+        "naive_equivalent": 21220,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-sonnet-5/1.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              73.17125635983507,
+              79.10340046906485
+            ],
+            "ok": true,
+            "replayed": [
+              73.17125635983507,
+              79.10340046906485
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              72.84622189856208,
+              78.73043688060693
+            ],
+            "ok": true,
+            "replayed": [
+              72.84622189856208,
+              78.73043688060693
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              71.17466405152707,
+              77.7506094031965
+            ],
+            "ok": true,
+            "replayed": [
+              71.17466405152707,
+              77.7506094031965
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-sonnet-5#1",
+      "objective": {
+        "mean_abs_latency_error": 0.13354389118029716,
+        "mean_admitted_rps": 77.26589314423136
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.852739993998803,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.545367461480133
+                ],
+                "corrections_b": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.8527399939987959,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.5453674614801258
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.852739993998803,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.545367461480133
+                ],
+                "corrections_b": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.8527399939987959,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.54536746148014
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.852739993998803,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.545367461480133
+                ],
+                "corrections_b": [
+                  -1.9200000000000017,
+                  -1.9789545416973482,
+                  -1.8527399939987959,
+                  -1.7317868947975228,
+                  -1.6291583952690445,
+                  -1.5453674614801258
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 44,
+                "long_arm_drop": 5.759999999999991,
+                "short_arm_drop": 5.759999999999991
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 44,
+                "long_arm_drop": 5.759999999999991,
+                "short_arm_drop": 5.759999999999991
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 43,
+                "long_arm_drop": 5.759999999999991,
+                "short_arm_drop": 5.759999999999991
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 5.058216163844662,
+                "up": 0.8739279453851196
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 4.843340848753243,
+                "up": 0.9455530504155831
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 6.294070146872912,
+                "up": 0.45347265780750945
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 54.728453842000114,
+                "worsening_end": 54.901264984233116
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 56.4223339616535,
+                "worsening_end": 56.665132953090286
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 52.531421476994176,
+                "worsening_end": 52.32975120876057
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 77.63714764100801,
+                "mean_limit_low_var": 78.68765203412539
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 77.5623555575879,
+                "mean_limit_low_var": 78.91337213927649
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 77.48880315750297,
+                "mean_limit_low_var": 78.6110970438523
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7982,
+        "naive_equivalent": 21242,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-sonnet-5/2.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              65.5641739306291,
+              73.7241739306291
+            ],
+            "ok": true,
+            "replayed": [
+              65.5641739306291,
+              73.7241739306291
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              65.76035835470475,
+              73.92035835470476
+            ],
+            "ok": true,
+            "replayed": [
+              65.76035835470475,
+              73.92035835470476
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              65.95116767480323,
+              74.11116767480324
+            ],
+            "ok": true,
+            "replayed": [
+              65.95116767480323,
+              74.11116767480324
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-sonnet-5#2",
+      "objective": {
+        "mean_abs_latency_error": 0.24953261075855968,
+        "mean_admitted_rps": 74.26246071998918
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "inconclusive",
+        "RESEED": "pass",
+        "SATEXTEND": "fail",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "inconclusive",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "inconclusive",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "inconclusive",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "fail",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "inconclusive",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 80,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 140,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 200,
+              "verdict": "inconclusive"
+            }
+          ],
+          "verdict": "inconclusive"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 32,
+                "long_arm_drop": 3.6295339059385014,
+                "short_arm_drop": 5.295882842821754
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "k0": 31,
+                "long_arm_drop": 3.6300703710090545,
+                "short_arm_drop": 5.3082973702220215
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "k0": 38,
+                "long_arm_drop": 3.649513370599607,
+                "short_arm_drop": 6.920772777528242
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 8.920254150548288,
+                "up": -0.7602541505482776
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 8.144733436779958,
+                "up": 0.003816640805013094
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 7.473506183646791,
+                "up": 0.17162345408830504
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 80,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 140,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 200,
+              "verdict": "inconclusive"
+            }
+          ],
+          "verdict": "inconclusive"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 5.307275963134763,
+                "mean_limit_low_var": 74.8764285780238
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 3.0757582412109503,
+                "mean_limit_low_var": 74.64017413080461
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 3.2065761459906192,
+                "mean_limit_low_var": 75.3225553205101
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7780,
+        "naive_equivalent": 21040,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-sonnet-5/3.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              75.74832199940273,
+              78.83412410497866
+            ],
+            "ok": true,
+            "replayed": [
+              75.74832199940273,
+              78.83412410497866
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              75.44651457647369,
+              78.54258630572438
+            ],
+            "ok": true,
+            "replayed": [
+              75.44651457647369,
+              78.54258630572438
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              77.19965220290553,
+              80.16910213126219
+            ],
+            "ok": true,
+            "replayed": [
+              77.19965220290553,
+              80.16910213126219
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-sonnet-5#3",
+      "objective": {
+        "mean_abs_latency_error": 0.12802107392865733,
+        "mean_admitted_rps": 77.26156950181502
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "fail"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "fail"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2632455532033688,
+                  -1.094565407529231,
+                  -0.9712295280317065,
+                  -0.8822104443122782,
+                  -0.8181227601430052,
+                  -0.7719036161904569
+                ],
+                "corrections_b": [
+                  -1.2632455532033617,
+                  -1.094565407529231,
+                  -0.9712295280316994,
+                  -0.8822104443122782,
+                  -0.8181227601429981,
+                  -0.7719036161904569
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2632455532033688,
+                  -1.094565407529231,
+                  -0.9712295280317065,
+                  -0.8822104443122782,
+                  -0.8181227601430052,
+                  -0.7719036161904569
+                ],
+                "corrections_b": [
+                  -1.2632455532033617,
+                  -1.094565407529231,
+                  -0.9712295280316994,
+                  -0.8822104443122782,
+                  -0.8181227601429981,
+                  -0.7719036161904569
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2632455532033688,
+                  -1.094565407529231,
+                  -0.9712295280317065,
+                  -0.8822104443122782,
+                  -0.8181227601430052,
+                  -0.7719036161904569
+                ],
+                "corrections_b": [
+                  -1.2632455532033617,
+                  -1.094565407529231,
+                  -0.9712295280316994,
+                  -0.8822104443122782,
+                  -0.8181227601429981,
+                  -0.7719036161904569
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 92,
+                "long_arm_drop": 4.23245553203418,
+                "short_arm_drop": 4.232465937073556
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 92,
+                "long_arm_drop": 4.232455532034123,
+                "short_arm_drop": 4.2324651959393975
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 91,
+                "long_arm_drop": 4.232455532034095,
+                "short_arm_drop": 4.2324644901885335
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 2.6571112920726563,
+                "up": 0.4286908135032661
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.6280212732675494,
+                "up": 0.4609177837866554
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.7694050629829405,
+                "up": 0.11666170134502352
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 66.62680660113179,
+                "worsening_end": 66.09580991863733
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 66.98587411858567,
+                "worsening_end": 66.61993674734292
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 66.15971660534755,
+                "worsening_end": 65.71735615390956
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.11685492349869,
+                "mean_limit_low_var": 78.71168901886931
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.26507986060474,
+                "mean_limit_low_var": 78.75363621067517
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.92688689912967,
+                "mean_limit_low_var": 78.69789505293352
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8848,
+        "naive_equivalent": 22108,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-claude/claude-sonnet-5/4.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              69.4647277829449,
+              77.81892264549688
+            ],
+            "ok": true,
+            "replayed": [
+              69.4647277829449,
+              77.81892264549688
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              68.74912232595115,
+              77.04735372819749
+            ],
+            "ok": true,
+            "replayed": [
+              68.74912232595115,
+              77.04735372819749
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              66.04963507892307,
+              74.56932007382294
+            ],
+            "ok": true,
+            "replayed": [
+              66.04963507892307,
+              74.56932007382294
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-claude",
+      "kind": "artifact",
+      "name": "agentic-claude:claude-sonnet-5#4",
+      "objective": {
+        "mean_abs_latency_error": 0.17464482306002746,
+        "mean_admitted_rps": 76.24408866440353
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "fail",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.10071444485689085,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993
+                ],
+                "corrections_b": [
+                  -0.9241569029229879,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.24919143101922003,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993
+                ],
+                "corrections_b": [
+                  -1.0726338890853242,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.025399549950293476,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993,
+                  -1.1999999999999993
+                ],
+                "corrections_b": [
+                  -0.8488420080163905,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 55,
+                "long_arm_drop": 15.91999999936317,
+                "short_arm_drop": 15.906645210858215
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 55,
+                "long_arm_drop": 15.919999999353337,
+                "short_arm_drop": 15.906435974222063
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 54,
+                "long_arm_drop": 15.91999999931852,
+                "short_arm_drop": 15.90570853126124
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 7.6142310600795895,
+                "up": 0.7399638024723885
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 7.018653852713328,
+                "up": 1.0617618997038818
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 9.374465590020321,
+                "up": -0.7494616554724445
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 38.8712764804043,
+                "worsening_end": 41.78341627135275
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 43.8100619397367,
+                "worsening_end": 47.10649876290718
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 36.86024034352366,
+                "worsening_end": 39.10298806222851
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 75.90659420156761,
+                "mean_limit_low_var": 77.08901817888629
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.0050571541282,
+                "mean_limit_low_var": 77.43944035906551
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 75.61402537238497,
+                "mean_limit_low_var": 76.86491717856225
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8180,
+        "naive_equivalent": 21440,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-codex/gpt-5.6-sol/0.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              75.08216639856047,
+              79.83415098531506
+            ],
+            "ok": true,
+            "replayed": [
+              75.08216639856047,
+              79.83415098531506
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              75.02084626886578,
+              79.56951469309436
+            ],
+            "ok": true,
+            "replayed": [
+              75.02084626886578,
+              79.56951469309436
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.51873144811334,
+              78.4839089421098
+            ],
+            "ok": true,
+            "replayed": [
+              74.51873144811334,
+              78.4839089421098
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-codex",
+      "kind": "artifact",
+      "name": "agentic-codex:gpt-5.6-sol#0",
+      "objective": {
+        "mean_abs_latency_error": 0.11895293166772992,
+        "mean_admitted_rps": 77.76311508103915
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "fail"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "fail",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ],
+                "corrections_b": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ],
+                "corrections_b": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ],
+                "corrections_b": [
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028,
+                  -1.2000000000000028
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 39,
+                "long_arm_drop": 3.5999999999999943,
+                "short_arm_drop": 3.5999999999999943
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 39,
+                "long_arm_drop": 3.5999999999999943,
+                "short_arm_drop": 3.5999999999999943
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 38,
+                "long_arm_drop": 3.5999999999999943,
+                "short_arm_drop": 3.5999999999999943
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 3.758234903450287,
+                "up": 0.9937496833043014
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 4.194882808916276,
+                "up": 0.8415935286531351
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.620104337090041,
+                "up": 0.17538925356095092
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 64.38654805806101,
+                "worsening_end": 64.1571329131022
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 65.29903928965652,
+                "worsening_end": 65.42505068159133
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 64.98924438315325,
+                "worsening_end": 65.02991641441876
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.04739594879902,
+                "mean_limit_low_var": 79.38846310528393
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.72776819801571,
+                "mean_limit_low_var": 79.47936140513882
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.94263652344225,
+                "mean_limit_low_var": 79.34425081775534
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7888,
+        "naive_equivalent": 21148,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-codex/gpt-5.6-sol/1.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              73.91672623935547,
+              79.51999784504157
+            ],
+            "ok": true,
+            "replayed": [
+              73.91672623935547,
+              79.51999784504157
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.04282210331667,
+              79.38045371674781
+            ],
+            "ok": true,
+            "replayed": [
+              74.04282210331667,
+              79.38045371674781
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              72.97412939377857,
+              77.47027806396522
+            ],
+            "ok": true,
+            "replayed": [
+              72.97412939377857,
+              77.47027806396522
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-codex",
+      "kind": "artifact",
+      "name": "agentic-codex:gpt-5.6-sol#1",
+      "objective": {
+        "mean_abs_latency_error": 0.12442949341738417,
+        "mean_admitted_rps": 77.58159553859636
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ],
+                "corrections_b": [
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5,
+                  -1.5
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 37,
+                "long_arm_drop": 4.5,
+                "short_arm_drop": 4.5
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 36,
+                "long_arm_drop": 4.5,
+                "short_arm_drop": 4.5
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 36,
+                "long_arm_drop": 4.5,
+                "short_arm_drop": 4.5
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 4.641027785844912,
+                "up": 0.9622438198411913
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.088189437400018,
+                "up": 0.8476412441344223
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 6.739587419813475,
+                "up": 0.23110310155377078
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 61.350080335100735,
+                "worsening_end": 60.934128514243355
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 62.36559099677733,
+                "worsening_end": 62.35414905301566
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 61.55427057457535,
+                "worsening_end": 61.55743831984522
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.35104019222456,
+                "mean_limit_low_var": 79.13529457366448
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.13168257172738,
+                "mean_limit_low_var": 79.27664986937914
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.30541117689621,
+                "mean_limit_low_var": 79.1161158564784
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7850,
+        "naive_equivalent": 21110,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-codex/gpt-5.6-sol/2.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              67.39929628064584,
+              81.28878997911175
+            ],
+            "ok": true,
+            "replayed": [
+              67.39929628064584,
+              81.28878997911175
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              61.75098683935915,
+              73.07664902306243
+            ],
+            "ok": true,
+            "replayed": [
+              61.75098683935915,
+              73.07664902306243
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              51.63148615046964,
+              54.26007366656791
+            ],
+            "ok": true,
+            "replayed": [
+              51.63148615046964,
+              54.26007366656791
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-codex",
+      "kind": "artifact",
+      "name": "agentic-codex:gpt-5.6-sol#2",
+      "objective": {
+        "mean_abs_latency_error": 0.1921392710548345,
+        "mean_admitted_rps": 76.0032446177394
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "fail",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 80,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -2.6000000000000014,
+                  -2.6000000000000014,
+                  -2.6000000000000014,
+                  -2.6000000000000014,
+                  -2.5999999999999996,
+                  -2.5999999999999996
+                ],
+                "corrections_b": [
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -2.6000000000000014,
+                  -2.5999999999999996,
+                  -2.5999999999999996,
+                  -2.5999999999999996,
+                  -2.5999999999999996,
+                  -2.6
+                ],
+                "corrections_b": [
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943,
+                  -2.5999999999999943
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 21,
+                "long_arm_drop": 7.800000000000011,
+                "short_arm_drop": 7.800000000000011
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 21,
+                "long_arm_drop": 7.800000000000011,
+                "short_arm_drop": 7.800000000000011
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 20,
+                "long_arm_drop": 7.800000000000011,
+                "short_arm_drop": 7.800000000000011
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 12.004583669125523,
+                "up": 1.8849100293403893
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 10.707432476426092,
+                "up": 1.5704475009145682
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 8.787716801397934,
+                "up": -3.004087151079659
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 32.443817319044506,
+                "worsening_end": 30.89576449896935
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 41.09454281260396,
+                "worsening_end": 40.25397792846271
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 38.867183183731754,
+                "worsening_end": 37.39520573707847
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 68.88762038268611,
+                "mean_limit_low_var": 78.2181517781687
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 69.12778374088322,
+                "mean_limit_low_var": 75.69568996521419
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 72.56057107247416,
+                "mean_limit_low_var": 74.14536429405896
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7584,
+        "naive_equivalent": 20844,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-codex/gpt-5.6-sol/3.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              74.25629540598237,
+              79.97498788841722
+            ],
+            "ok": true,
+            "replayed": [
+              74.25629540598237,
+              79.97498788841722
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.59954557852664,
+              79.25351446512379
+            ],
+            "ok": true,
+            "replayed": [
+              73.59954557852664,
+              79.25351446512379
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              72.50782881499708,
+              78.01701176319973
+            ],
+            "ok": true,
+            "replayed": [
+              72.50782881499708,
+              78.01701176319973
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-codex",
+      "kind": "artifact",
+      "name": "agentic-codex:gpt-5.6-sol#3",
+      "objective": {
+        "mean_abs_latency_error": 0.13121041171732925,
+        "mean_admitted_rps": 77.65833461777561
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "fail",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.1892415618983279,
+                  -1.1630782475365606,
+                  -1.1374905260907582,
+                  -1.1124657345167606,
+                  -1.087991488357396,
+                  -1.064055675613531
+                ],
+                "corrections_b": [
+                  -1.8434318145605175,
+                  -1.8028763146401872,
+                  -1.7632130357180955,
+                  -1.7244223489322934,
+                  -1.6864850572557941,
+                  -1.6493823859961623
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.215871988169397,
+                  -1.1891228044296724,
+                  -1.162962102732216,
+                  -1.1373769364721085,
+                  -1.1123546438697218,
+                  -1.087882841704591
+                ],
+                "corrections_b": [
+                  -1.8911349381136233,
+                  -1.8495299694751282,
+                  -1.8088403101466781,
+                  -1.7690458233234523,
+                  -1.7301268152103262,
+                  -1.6920640252756982
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.197461474137576,
+                  -1.1711173217065465,
+                  -1.1453527406290078,
+                  -1.1201549803351654,
+                  -1.0955115707677905,
+                  -1.0714103162109012
+                ],
+                "corrections_b": [
+                  -1.8462911119482754,
+                  -1.8056727074854138,
+                  -1.765947907920733,
+                  -1.7270970539464656,
+                  -1.6891009187596495,
+                  -1.6519406985469374
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 22,
+                "long_arm_drop": 13.200000000000017,
+                "short_arm_drop": 13.200000000000017
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 22,
+                "long_arm_drop": 13.200000000000017,
+                "short_arm_drop": 13.200000000000017
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 21,
+                "long_arm_drop": 13.200000000000017,
+                "short_arm_drop": 13.200000000000017
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 4.532553322215264,
+                "up": 1.1861391602195823
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 4.903715258495367,
+                "up": 0.9233757637419728
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 6.432515508647654,
+                "up": -0.8204212603392875
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 60.085898690569174,
+                "worsening_end": 60.74353230532773
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 61.11576482763922,
+                "worsening_end": 61.95536653349679
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 61.1066991360305,
+                "worsening_end": 61.44230838410921
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.42659236500816,
+                "mean_limit_low_var": 79.34277249667355
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.24288965904844,
+                "mean_limit_low_var": 79.26201238951676
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.47461407478278,
+                "mean_limit_low_var": 79.03470144100909
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7592,
+        "naive_equivalent": 20852,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/agentic-codex/gpt-5.6-sol/4.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              75.74282240110419,
+              78.30851440388736
+            ],
+            "ok": true,
+            "replayed": [
+              75.74282240110419,
+              78.30851440388736
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              75.60623733632187,
+              78.26054977942707
+            ],
+            "ok": true,
+            "replayed": [
+              75.60623733632187,
+              78.26054977942707
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              76.50206773635769,
+              78.81737041380178
+            ],
+            "ok": true,
+            "replayed": [
+              76.50206773635769,
+              78.81737041380178
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "agentic-codex",
+      "kind": "artifact",
+      "name": "agentic-codex:gpt-5.6-sol#4",
+      "objective": {
+        "mean_abs_latency_error": 0.13459756411209967,
+        "mean_admitted_rps": 77.11515170358402
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.7000000000000028,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999005,
+                  -0.29999999999999716
+                ],
+                "corrections_b": [
+                  -1.7000000000000028,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.7000000000000028,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999005
+                ],
+                "corrections_b": [
+                  -1.7000000000000028,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.6999999999999957,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716
+                ],
+                "corrections_b": [
+                  -1.7000000000000028,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716,
+                  -0.29999999999999716
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 61,
+                "long_arm_drop": 5.099999999999994,
+                "short_arm_drop": 5.099999999999994
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 61,
+                "long_arm_drop": 5.099999999999994,
+                "short_arm_drop": 5.099999999999994
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 64,
+                "long_arm_drop": 5.099999999999994,
+                "short_arm_drop": 5.099999999999994
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 2.189784654556007,
+                "up": 0.3759073482271589
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.1149118393332316,
+                "up": 0.36826977876319233
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 1.9040461919191216,
+                "up": 0.08263113244827025
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 70.86540752412012,
+                "worsening_end": 67.89995041372453
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 71.12308864844415,
+                "worsening_end": 68.15802185477764
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 70.60014680428512,
+                "worsening_end": 67.62776205709031
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 71.45291129868068,
+                "mean_limit_low_var": 78.55356534826268
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 70.2420246562125,
+                "mean_limit_low_var": 78.27637110258846
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 72.32883140492774,
+                "mean_limit_low_var": 78.76744384532796
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8296,
+        "naive_equivalent": 21556,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
       "artifact": "diptych/pilot/artifacts/claude-fable-5-1/0.py",
       "errors": [],
       "fork_fidelity": {
@@ -2811,8 +7664,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-fable-5-1#0",
+      "name": "oneshot-claude:claude-fable-5-1#0",
       "objective": {
         "mean_abs_latency_error": 0.2540982386304399,
         "mean_admitted_rps": 72.76347052333315
@@ -3103,8 +7957,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-fable-5-1#1",
+      "name": "oneshot-claude:claude-fable-5-1#1",
       "objective": {
         "mean_abs_latency_error": 0.10652577061610213,
         "mean_admitted_rps": 78.2412097159404
@@ -3395,8 +8250,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-fable-5-1#2",
+      "name": "oneshot-claude:claude-fable-5-1#2",
       "objective": {
         "mean_abs_latency_error": 0.210162545496411,
         "mean_admitted_rps": 74.21611432862682
@@ -3633,8 +8489,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-fable-5-1#3",
+      "name": "oneshot-claude:claude-fable-5-1#3",
       "objective": {
         "mean_abs_latency_error": 0.23441494716223926,
         "mean_admitted_rps": 74.40007385335085
@@ -3910,8 +8767,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-fable-5-1#4",
+      "name": "oneshot-claude:claude-fable-5-1#4",
       "objective": {
         "mean_abs_latency_error": 0.1266252098275923,
         "mean_admitted_rps": 77.32184044063446
@@ -4202,8 +9060,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-haiku-4-5-20251001#0",
+      "name": "oneshot-claude:claude-haiku-4-5-20251001#0",
       "objective": {
         "mean_abs_latency_error": 1.0799891722573727,
         "mean_admitted_rps": 44.63497025223326
@@ -4446,8 +9305,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-haiku-4-5-20251001#1",
+      "name": "oneshot-claude:claude-haiku-4-5-20251001#1",
       "objective": {
         "mean_abs_latency_error": 0.13387287316081228,
         "mean_admitted_rps": 78.80821664828927
@@ -4738,8 +9598,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-haiku-4-5-20251001#2",
+      "name": "oneshot-claude:claude-haiku-4-5-20251001#2",
       "objective": {
         "mean_abs_latency_error": 0.2129277583267969,
         "mean_admitted_rps": 74.91954085298185
@@ -5024,8 +9885,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-haiku-4-5-20251001#3",
+      "name": "oneshot-claude:claude-haiku-4-5-20251001#3",
       "objective": {
         "mean_abs_latency_error": 2.591018385941301,
         "mean_admitted_rps": 85.56362352535285
@@ -5271,8 +10133,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-haiku-4-5-20251001#4",
+      "name": "oneshot-claude:claude-haiku-4-5-20251001#4",
       "objective": {
         "mean_abs_latency_error": 0.13284589316330378,
         "mean_admitted_rps": 79.00258190493179
@@ -5563,8 +10426,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-opus-5-5#0",
+      "name": "oneshot-claude:claude-opus-5-5#0",
       "objective": {
         "mean_abs_latency_error": 0.16493138115891137,
         "mean_admitted_rps": 76.43975801788066
@@ -5855,8 +10719,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-opus-5-5#1",
+      "name": "oneshot-claude:claude-opus-5-5#1",
       "objective": {
         "mean_abs_latency_error": 0.10939131678032571,
         "mean_admitted_rps": 78.2927802769042
@@ -6147,8 +11012,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-opus-5-5#2",
+      "name": "oneshot-claude:claude-opus-5-5#2",
       "objective": {
         "mean_abs_latency_error": 0.11147263097922044,
         "mean_admitted_rps": 77.67395071499311
@@ -6439,8 +11305,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-opus-5-5#3",
+      "name": "oneshot-claude:claude-opus-5-5#3",
       "objective": {
         "mean_abs_latency_error": 0.14392551445443635,
         "mean_admitted_rps": 77.40814597094203
@@ -6731,8 +11598,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-opus-5-5#4",
+      "name": "oneshot-claude:claude-opus-5-5#4",
       "objective": {
         "mean_abs_latency_error": 0.24277414240619272,
         "mean_admitted_rps": 72.40638358252609
@@ -7023,8 +11891,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-sonnet-5#0",
+      "name": "oneshot-claude:claude-sonnet-5#0",
       "objective": {
         "mean_abs_latency_error": 0.11622119291892029,
         "mean_admitted_rps": 77.65324757427874
@@ -7315,8 +12184,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-sonnet-5#1",
+      "name": "oneshot-claude:claude-sonnet-5#1",
       "objective": {
         "mean_abs_latency_error": 0.1435945687112126,
         "mean_admitted_rps": 76.93604140357361
@@ -7607,8 +12477,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-sonnet-5#2",
+      "name": "oneshot-claude:claude-sonnet-5#2",
       "objective": {
         "mean_abs_latency_error": 0.15371573194307953,
         "mean_admitted_rps": 76.71088646678523
@@ -7899,8 +12770,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-sonnet-5#3",
+      "name": "oneshot-claude:claude-sonnet-5#3",
       "objective": {
         "mean_abs_latency_error": 0.17365039184386905,
         "mean_admitted_rps": 76.4866411915006
@@ -8191,8 +13063,9 @@
         ],
         "ok": true
       },
+      "group": "oneshot-claude",
       "kind": "artifact",
-      "name": "claude-sonnet-5#4",
+      "name": "oneshot-claude:claude-sonnet-5#4",
       "objective": {
         "mean_abs_latency_error": 0.14493324684023487,
         "mean_admitted_rps": 76.9754155048928
@@ -8438,7 +13311,1427 @@
         "prefix_shared": 600
       },
       "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/oneshot-codex/gpt-5.6-sol/0.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              74.86840395888227,
+              79.16792154485012
+            ],
+            "ok": true,
+            "replayed": [
+              74.86840395888227,
+              79.16792154485012
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.84499193858488,
+              78.8965215349106
+            ],
+            "ok": true,
+            "replayed": [
+              74.84499193858488,
+              78.8965215349106
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              73.98184440642709,
+              77.78682794111884
+            ],
+            "ok": true,
+            "replayed": [
+              73.98184440642709,
+              77.78682794111884
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "oneshot-codex",
+      "kind": "artifact",
+      "name": "oneshot-codex:gpt-5.6-sol#0",
+      "objective": {
+        "mean_abs_latency_error": 0.12279627516411992,
+        "mean_admitted_rps": 77.41803848332182
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994
+                ],
+                "corrections_b": [
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994
+                ],
+                "corrections_b": [
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994,
+                  -0.7959999999999994
+                ],
+                "corrections_b": [
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065,
+                  -0.7960000000000065
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 69,
+                "long_arm_drop": 2.3880000000000052,
+                "short_arm_drop": 2.3880000000000052
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 68,
+                "long_arm_drop": 2.3880000000000052,
+                "short_arm_drop": 2.3880000000000052
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 68,
+                "long_arm_drop": 2.3880000000000052,
+                "short_arm_drop": 2.3880000000000052
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 3.6345599469890146,
+                "up": 0.6649576389788336
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 4.007163604310534,
+                "up": 0.5480533362569417
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.724392148370512,
+                "up": 0.020169159934582126
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 67.7979384710259,
+                "worsening_end": 66.87277219911527
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 68.44975603282184,
+                "worsening_end": 67.57581199822357
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 66.66512945802812,
+                "worsening_end": 65.68510581585112
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.16866644404459,
+                "mean_limit_low_var": 78.82240048258771
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.28015488707734,
+                "mean_limit_low_var": 79.06884714034695
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.17147168180826,
+                "mean_limit_low_var": 78.8329821684737
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8426,
+        "naive_equivalent": 21686,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/oneshot-codex/gpt-5.6-sol/1.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              61.44950505908769,
+              79.88873502003501
+            ],
+            "ok": true,
+            "replayed": [
+              61.44950505908769,
+              79.88873502003501
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              53.591173906646794,
+              71.73235391639348
+            ],
+            "ok": true,
+            "replayed": [
+              53.591173906646794,
+              71.73235391639348
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              25.197286339864135,
+              44.426583831923864
+            ],
+            "ok": true,
+            "replayed": [
+              25.197286339864135,
+              44.426583831923864
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "oneshot-codex",
+      "kind": "artifact",
+      "name": "oneshot-codex:gpt-5.6-sol#1",
+      "objective": {
+        "mean_abs_latency_error": 0.2147963826701002,
+        "mean_admitted_rps": 74.90754131539722
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "inconclusive",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "inconclusive",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "fail",
+          "TRAJSWAP": "inconclusive",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 80,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 140,
+              "verdict": "inconclusive"
+            },
+            {
+              "evidence": {
+                "reason": "branch hit a limit bound"
+              },
+              "t_p": 200,
+              "verdict": "inconclusive"
+            }
+          ],
+          "verdict": "inconclusive"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 24,
+                "long_arm_drop": 19.104000000000013,
+                "short_arm_drop": 19.104000000000013
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 24,
+                "long_arm_drop": 19.104000000000013,
+                "short_arm_drop": 19.104000000000013
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 24,
+                "long_arm_drop": 19.104000000000013,
+                "short_arm_drop": 19.104000000000013
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 17.26690702964904,
+                "up": 1.1723229312982824
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 16.927352278986838,
+                "up": 1.5229339320016209
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 19.534724824762776,
+                "up": -1.4595580476347578
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 5.458584783822209,
+                "worsening_end": 1.9309570647021772
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 7.68492969534887,
+                "worsening_end": 4.08855639142276
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 6.827691197242625,
+                "worsening_end": 2.7065367724436413
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 60.86959759534448,
+                "mean_limit_low_var": 76.41541779741729
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 66.72881348558381,
+                "mean_limit_low_var": 75.64243589708613
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 62.238984994348876,
+                "mean_limit_low_var": 74.08832232961426
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7648,
+        "naive_equivalent": 20908,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/oneshot-codex/gpt-5.6-sol/2.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              75.303320885779,
+              80.62799689191999
+            ],
+            "ok": true,
+            "replayed": [
+              75.303320885779,
+              80.62799689191999
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.99313323488627,
+              80.28062106238055
+            ],
+            "ok": true,
+            "replayed": [
+              74.99313323488627,
+              80.28062106238055
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              74.39781410199531,
+              79.7001817946957
+            ],
+            "ok": true,
+            "replayed": [
+              74.39781410199531,
+              79.7001817946957
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "oneshot-codex",
+      "kind": "artifact",
+      "name": "oneshot-codex:gpt-5.6-sol#2",
+      "objective": {
+        "mean_abs_latency_error": 0.11129372274104263,
+        "mean_admitted_rps": 78.15344315684273
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "fail",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "fail"
+        },
+        "2": {
+          "HISTSWAP": "fail",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "fail",
+          "TRAJSWAP": "pass",
+          "VARSCALE": "fail"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.3868527724046444,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997
+                ],
+                "corrections_b": [
+                  -1.4256742671005753,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068
+                ]
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.3902743522149237,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997
+                ],
+                "corrections_b": [
+                  -1.4407011827185272,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068
+                ]
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.3090784847177233,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997,
+                  -1.4924999999999997
+                ],
+                "corrections_b": [
+                  -1.3780533752920974,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068,
+                  -1.4925000000000068
+                ]
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 57,
+                "long_arm_drop": 4.477499999999992,
+                "short_arm_drop": 4.477499999999992
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 57,
+                "long_arm_drop": 4.477499999999992,
+                "short_arm_drop": 4.477499999999992
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 56,
+                "long_arm_drop": 4.477499999999992,
+                "short_arm_drop": 4.477499999999992
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 4.162871924463531,
+                "up": 1.1618040816774595
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 4.658399808452373,
+                "up": 0.7130710347747709
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 5.597991383515861,
+                "up": -0.12469580258220958
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 63.93877971254946,
+                "worsening_end": 62.45110634638902
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 64.32778531421057,
+                "worsening_end": 62.83491987477912
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "improving_end": 65.38145382626249,
+                "worsening_end": 63.864977520155556
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.74280393350418,
+                "mean_limit_low_var": 79.94417162602915
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.59976484387661,
+                "mean_limit_low_var": 80.02498688932677
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 79.64904756089364,
+                "mean_limit_low_var": 79.90749172205659
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 8210,
+        "naive_equivalent": 21470,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/oneshot-codex/gpt-5.6-sol/3.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              75.83734364184977,
+              79.38874035703772
+            ],
+            "ok": true,
+            "replayed": [
+              75.83734364184977,
+              79.38874035703772
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              75.65350777883864,
+              79.15927252585026
+            ],
+            "ok": true,
+            "replayed": [
+              75.65350777883864,
+              79.15927252585026
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              77.11643927888241,
+              80.77943587118304
+            ],
+            "ok": true,
+            "replayed": [
+              77.11643927888241,
+              80.77943587118304
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "oneshot-codex",
+      "kind": "artifact",
+      "name": "oneshot-codex:gpt-5.6-sol#3",
+      "objective": {
+        "mean_abs_latency_error": 0.10123644512043903,
+        "mean_admitted_rps": 78.13330108545897
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "fail"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "fail"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.4706839638927605,
+                  -1.426563444975983,
+                  -1.3837665416266987,
+                  -1.3422535453779005,
+                  -1.3019859390165607,
+                  -1.2629263608460661
+                ],
+                "corrections_b": [
+                  -2.6378743534390736,
+                  -2.5587381228358907,
+                  -2.4819759791508176,
+                  -2.407516699776295,
+                  -2.335291198783011,
+                  -2.2652324628195117
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.4854211499292518,
+                  -1.4408585154313727,
+                  -1.397632759968431,
+                  -1.3557037771693814,
+                  -1.3150326638542964,
+                  -1.2755816839386682
+                ],
+                "corrections_b": [
+                  -2.6758573892584963,
+                  -2.5955816675807455,
+                  -2.517714217553319,
+                  -2.442182791026724,
+                  -2.3689173072959164,
+                  -2.2978497880770448
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.464864221435647,
+                  -1.4209182947925711,
+                  -1.3782907459487959,
+                  -1.3369420235703302,
+                  -1.2968337628632227,
+                  -1.2579287499773244
+                ],
+                "corrections_b": [
+                  -2.7124321695632148,
+                  -2.6310592044763155,
+                  -2.5521274283420183,
+                  -2.4755636054917574,
+                  -2.4012966973270125,
+                  -2.329257796407205
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 19,
+                "long_arm_drop": 18.0,
+                "short_arm_drop": 18.0
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 19,
+                "long_arm_drop": 18.0,
+                "short_arm_drop": 18.0
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 18,
+                "long_arm_drop": 18.0,
+                "short_arm_drop": 18.0
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 3.160541064686157,
+                "up": 0.3908556505017913
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.8629063794084857,
+                "up": 0.5868885007392493
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 2.5011041415353645,
+                "up": 0.8379606394742609
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 51.8770296812852,
+                "worsening_end": 59.59050981184834
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 52.52950597557268,
+                "worsening_end": 60.35562505075728
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 53.172806156562885,
+                "worsening_end": 60.64066353797353
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.30322986053102,
+                "mean_limit_low_var": 79.9554665927685
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 70.60154017699173,
+                "mean_limit_low_var": 80.06368060008637
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 58.32825570453603,
+                "mean_limit_low_var": 79.90541517174312
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7524,
+        "naive_equivalent": 20784,
+        "prefix_shared": 600
+      },
+      "violates": null
+    },
+    {
+      "artifact": "diptych/pilot/artifacts/oneshot-codex/gpt-5.6-sol/4.py",
+      "errors": [],
+      "fork_fidelity": {
+        "checks": [
+          {
+            "forked": [
+              72.08105072969029,
+              79.68755807001692
+            ],
+            "ok": true,
+            "replayed": [
+              72.08105072969029,
+              79.68755807001692
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              72.28580494841752,
+              79.70189645932918
+            ],
+            "ok": true,
+            "replayed": [
+              72.28580494841752,
+              79.70189645932918
+            ],
+            "t_p": 80
+          },
+          {
+            "forked": [
+              68.73206943074362,
+              75.61882757614049
+            ],
+            "ok": true,
+            "replayed": [
+              68.73206943074362,
+              75.61882757614049
+            ],
+            "t_p": 80
+          }
+        ],
+        "ok": true
+      },
+      "group": "oneshot-codex",
+      "kind": "artifact",
+      "name": "oneshot-codex:gpt-5.6-sol#4",
+      "objective": {
+        "mean_abs_latency_error": 0.14436740913299023,
+        "mean_admitted_rps": 77.28772891780427
+      },
+      "paired": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "paired_by_seed": {
+        "0": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "1": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        },
+        "2": {
+          "HISTSWAP": "pass",
+          "SATEXTEND": "pass",
+          "SIGNFLIP": "pass",
+          "TRAJSWAP": "fail",
+          "VARSCALE": "pass"
+        }
+      },
+      "paired_evidence": {
+        "HISTSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5254941394995143,
+                  -1.4766783270355361,
+                  -1.4294246205703942,
+                  -1.3836830327121419,
+                  -1.3394051756653553,
+                  -1.2965442100440612
+                ],
+                "corrections_b": [
+                  -2.8171921384514036,
+                  -2.7270419900209646,
+                  -2.6397766463402945,
+                  -2.5553037936574015,
+                  -2.473534072260364,
+                  -2.394380981948032
+                ]
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5529565370867289,
+                  -1.5032619278999562,
+                  -1.455157546207154,
+                  -1.4085925047285244,
+                  -1.3635175445772134,
+                  -1.319884983150743
+                ],
+                "corrections_b": [
+                  -2.874682610918697,
+                  -2.782692767369298,
+                  -2.693646598813487,
+                  -2.607449907651457,
+                  -2.5240115106065986,
+                  -2.4432431422671925
+                ]
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "corrections_a": [
+                  -1.5498733101024627,
+                  -1.5002773641791833,
+                  -1.4522684885254478,
+                  -1.4057958968926343,
+                  -1.3608104281920674,
+                  -1.317264494489926
+                ],
+                "corrections_b": [
+                  -2.919596097646476,
+                  -2.826169022521782,
+                  -2.7357316138010788,
+                  -2.648188202159446,
+                  -2.563446179690345,
+                  -2.4814159019402524
+                ]
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SATEXTEND": {
+          "forks": [
+            {
+              "evidence": {
+                "k0": 18,
+                "long_arm_drop": 19.19999999999999,
+                "short_arm_drop": 19.19999999999999
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 18,
+                "long_arm_drop": 19.19999999999999,
+                "short_arm_drop": 19.19999999999999
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "k0": 18,
+                "long_arm_drop": 19.19999999999999,
+                "short_arm_drop": 19.19999999999999
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "SIGNFLIP": {
+          "forks": [
+            {
+              "evidence": {
+                "down": 6.3863703398886855,
+                "up": 1.2201370004379442
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 6.605679076775644,
+                "up": 1.2173830696846295
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "down": 7.923367921226458,
+                "up": 0.975705317622868
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        },
+        "TRAJSWAP": {
+          "forks": [
+            {
+              "evidence": {
+                "improving_end": 54.80079928677276,
+                "worsening_end": 55.101511240873016
+              },
+              "t_p": 80,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 55.68584418152915,
+                "worsening_end": 56.07126880222283
+              },
+              "t_p": 140,
+              "verdict": "fail"
+            },
+            {
+              "evidence": {
+                "improving_end": 55.730102242515215,
+                "worsening_end": 56.6169183993414
+              },
+              "t_p": 200,
+              "verdict": "fail"
+            }
+          ],
+          "verdict": "fail"
+        },
+        "VARSCALE": {
+          "forks": [
+            {
+              "evidence": {
+                "mean_limit_high_var": 76.88897244407546,
+                "mean_limit_low_var": 78.66715306593458
+              },
+              "t_p": 80,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 78.46491342976002,
+                "mean_limit_low_var": 78.72862588146593
+              },
+              "t_p": 140,
+              "verdict": "pass"
+            },
+            {
+              "evidence": {
+                "mean_limit_high_var": 75.99805893089525,
+                "mean_limit_low_var": 79.06274629633039
+              },
+              "t_p": 200,
+              "verdict": "pass"
+            }
+          ],
+          "verdict": "pass"
+        }
+      },
+      "single_trace": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "ticks": {
+        "forked": 7520,
+        "naive_equivalent": 20780,
+        "prefix_shared": 600
+      },
+      "violates": null
     }
   ],
-  "study_schema": "1.0"
+  "study_schema": "1.1"
 }

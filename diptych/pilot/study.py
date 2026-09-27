@@ -39,14 +39,19 @@ def _controls() -> list[tuple[str, str, str | None]]:
     return out
 
 
-def _artifacts() -> list[tuple[str, str]]:
+def _group(r: dict) -> str:
+    return f"{r.get('condition', 'oneshot')}-{r.get('agent', 'claude')}"
+
+
+def _artifacts() -> list[tuple[str, str, str]]:
+    """(name, path, group) for every generated controller."""
     manifest = HERE / "artifacts" / "manifest.json"
     if not manifest.exists():
         return []
     out = []
     for r in json.loads(manifest.read_text()):
         if r.get("code_block"):
-            out.append((f"{r['model']}#{r['sample']}", str(HERE / r["path"])))
+            out.append((f"{_group(r)}:{r['model']}#{r['sample']}", str(HERE / r["path"]), _group(r)))
     return out
 
 
@@ -148,23 +153,26 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--controls-only", action="store_true")
     p.add_argument("--jobs", type=int, default=4)
     args = p.parse_args(argv)
-    targets = [(n, path, v) for n, path, v in _controls()]
+    targets = [(n, path, v, None) for n, path, v in _controls()]
     if not args.controls_only:
-        targets += [(n, path, "artifact") for n, path in _artifacts()]
+        targets += [(n, path, "artifact", g) for n, path, g in _artifacts()]
     with cf.ThreadPoolExecutor(max_workers=args.jobs) as ex:
         evals = list(ex.map(lambda t: evaluate_isolated(t[1]), targets))
     rows = []
-    for (name, path, v), ev in zip(targets, evals):
+    for (name, path, v, group), ev in zip(targets, evals):
         ev["name"] = name
+        ev["group"] = group
         ev["artifact"] = str(Path(path).relative_to(ROOT))
         ev["violates"] = None if v in (None, "artifact") else v
         ev["kind"] = "artifact" if v == "artifact" else "control"
         rows.append(ev)
     controls = [r for r in rows if r["kind"] == "control"]
     artifacts = [r for r in rows if r["kind"] == "artifact"]
-    report = {"study_schema": "1.0", "operators": list(OPERATORS),
+    groups = sorted({r["group"] for r in artifacts})
+    report = {"study_schema": "1.1", "operators": list(OPERATORS),
               "controls": control_power(controls),
               "artifacts": artifact_metrics(artifacts) if artifacts else None,
+              "by_group": {g: artifact_metrics([r for r in artifacts if r["group"] == g]) for g in groups},
               "rows": rows}
     RESULTS.write_text(json.dumps(report, indent=2, sort_keys=True, default=repr) + "\n")
     print("operators:", " ".join(OPERATORS))
@@ -174,6 +182,11 @@ def main(argv: list[str] | None = None) -> int:
               + (f"  errors={r['errors'][:1]}" if r.get("errors") else ""))
     print(json.dumps({"controls": report["controls"], "artifacts": {
         k: v for k, v in (report["artifacts"] or {}).items() if k != "per_operator"}}, indent=2))
+    for g, m in report["by_group"].items():
+        print(f"[{g}] n={m['n_artifacts']} all_single_pass={m['all_single_trace_pass']} "
+              f"of_which_paired_fail={m['all_single_trace_pass_but_paired_fail']} "
+              f"separation={m['separation']} paired_fail_any="
+              f"{sum(1 for r in artifacts if r['group'] == g and 'fail' in r['paired'].values())}")
     if report["artifacts"]:
         for op, m in report["artifacts"]["per_operator"].items():
             print(f"{op:<10} paired={m['paired']} single={m['single_trace']} "

@@ -73,10 +73,10 @@
 		Third, an evaluation. A mutation sweep over every conforming probe
 		(1{,}030 mutants) exposed three classes of defect in our own graders;
 		fixing them raised the on-axis kill rate from 67.4\% to 82.5\%. In a
-		pilot with 20 controllers written by four models, 15 pass every
-		single-trace check, yet 12 of those 15 violate a requirement under
-		paired probing (separation index 0.78), and prefix sharing cuts
-		executed ticks by a measured factor of 2.76.
+		pilot with 40 controllers written by Claude and OpenAI models, one-shot
+		and as tool-using agents, 34 pass every single-trace check, yet 28 of
+		those violate a requirement under paired probing (separation index
+		0.85); agents that tested against a simulator fared no better.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -167,10 +167,9 @@
 		probing overturns the single-trace verdict on most artifacts.
 	\end{enumerate}
 
-	We are explicit about scope. The pilot is small (20 single-shot
-	controllers, one reduced task) and shows that paired grading changes
-	verdicts, not how models compare; a full study is future work
-	(Section~\ref{sec:future}).
+	We are explicit about scope. The pilot is small (40 controllers, one
+	reduced task) and shows that paired grading changes verdicts, not how
+	models compare.
 	
 	\section{Motivating Example}
 	\label{sec:motivating}
@@ -223,7 +222,7 @@
 	
 	\begin{figure}[t]
 		\centering
-		\includegraphics[width=0.92\columnwidth]{diptych-vs-single-trace.png}
+		\includegraphics[width=0.8\columnwidth]{diptych-vs-single-trace.png}
 		\caption{One film versus the diptych. Left: a single execution may satisfy
 			local invariants yet provide no counterfactual twin. Right: calibration
 			is graded only on a coupled pair that shares a prefix and differs on one
@@ -799,19 +798,14 @@
 	\label{sec:pilot}
 	
 	\textbf{Task and plant.} The industrial specification is not public, so
-	the pilot uses a reduced orchestrator task that we release: a controller
-	sets a concurrency limit each tick so that latency tracks a setpoint in a
-	deterministic closed-loop service model, with a tick/snapshot/restore
-	interface and eight requirements written as specification prose
-	(asymmetric response, trend recency, anti-windup, volatility
-	suppression, setpoint-change quiet, determinism, round-trip stability,
-	schema stability). Each requirement is graded by one live-execution
-	instance of the matching operator: the harness runs a shared prefix in
-	the plant, forks the controller at three fork points, and drives the two
-	branches with inputs that differ on one axis (\textsc{VarScale} under
-	CRN; \textsc{Reseed} and \textsc{FreezeDry} across fresh interpreter
-	processes). A violation at any fork point or any of three noise seeds
-	fails the requirement.
+	we release a reduced orchestrator task: a controller sets a concurrency
+	limit each tick so latency tracks a setpoint in a deterministic
+	closed-loop service model, under eight requirements written as
+	specification prose, one per operator. Each probe runs a shared prefix,
+	forks the live controller at three points, and drives two branches that
+	differ on one axis (\textsc{VarScale} under CRN; \textsc{Reseed} and
+	\textsc{FreezeDry} across fresh processes). A violation at any fork point
+	or any of three noise seeds fails the requirement.
 	
 	\textbf{Single-trace baseline.} For each requirement we implement the
 	check a harness author would write from its prose, on one closed-loop
@@ -830,60 +824,68 @@
 	suppresses volatility. Requirements interact, so a violator is only a
 	violator once a probe says so.
 	
-	\textbf{Artifacts.} Four models (Claude Haiku~4.5, Sonnet~5, Opus~5.5,
-	Fable~5.1) each wrote five controllers from the task text in one
-	tool-free turn; all 20 load and run. Forking by state copy matched
-	replay-from-scratch for every artifact.
+	\textbf{Artifacts.} Forty controllers from four conditions: five
+	one-shot, tool-free samples from each of four Claude models (Haiku~4.5,
+	Sonnet~5, Opus~5.5, Fable~5.1); five one-shot samples from OpenAI's
+	\texttt{gpt-5.6-sol} via Codex; and ten Claude (Sonnet~5, Opus~5.5) and
+	five Codex samples in an \emph{agentic} condition, where the agent works
+	in a directory with the task, the plant, and a closed-loop simulator it
+	can run and test against, but never sees our probes. All 40 load and
+	run, and forking by state copy matched replay-from-scratch for every one.
 	
 	\begin{table}[t]
-		\caption{Pilot on 20 model-written controllers: artifacts failing each
-			requirement under paired vs.\ single-trace grading, and paired
-			failures the single-trace check passed.}
+		\caption{Pilot on 40 model-written controllers: controllers passing
+			every single-trace check, how many of those fail a paired probe,
+			and the separation index over single-trace-equivalent pairs.}
 		\label{tab:pilot}
 		\centering
 		\scriptsize
-		\begin{tabular}{@{}lrrr@{}}
+		\begin{tabular}{@{}lrrrr@{}}
 			\toprule
-			Requirement (operator) & paired fail & single fail & missed \\
+			Condition & $n$ & all single pass & \dots paired fail & sep.\ index \\
 			\midrule
-			Trend recency (\textsc{TrajSwap})         & 13 & 1 & 12 \\
-			Volatility (\textsc{VarScale})             &  8 & 3 &  5 \\
-			Asymmetric response (\textsc{SignFlip})    &  5 & 4 &  2 \\
-			Setpoint-change quiet (\textsc{HistSwap})  &  1 & 1 &  1 \\
-			Anti-windup (\textsc{SatExtend})           &  0 & 0 &  0 \\
-			Determinism / round-trip / schema          &  0 & 0 &  0 \\
+			One-shot, Claude (4 models) & 20 & 15 & 12 & 0.78 \\
+			One-shot, Codex             &  5 &  4 &  3 & 1.00 \\
+			Agentic, Claude (2 models)  & 10 & 10 &  8 & 0.91 \\
+			Agentic, Codex              &  5 &  5 &  5 & 0.80 \\
+			\midrule
+			All                         & 40 & 34 & 28 & 0.85 \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
 	
-	\textbf{Results.} Fifteen of the 20 controllers pass every single-trace
-	check; twelve of those fifteen fail at least one paired probe
-	(Table~\ref{tab:pilot}). Over the 106 artifact pairs that single-trace
-	grading cannot distinguish, the separation index
-	(Section~\ref{sec:metrics}) is 0.78: 83 pairs receive different paired
-	verdicts. Trend recency dominates: most controllers add a trend term too
-	weak to overcome their estimator lag, so after improving latency the
-	limit ends \emph{lower} than after the same observations worsening---a
-	defect invisible in one run. Paired violations appear in at least three
-	of five samples from every model; with five single-shot samples per
-	model we make no model comparison. Conversely, every controller met the
-	determinism, round-trip, and schema requirements, which the prompt states
-	explicitly and which are easy to satisfy in the standard library. Seven
-	of 160 paired verdicts (4.4\%) are inconclusive (a branch hit a limit
-	bound or never saturated), and 95\% of forked verdicts agree across all
-	three seeds; the rest are borderline controllers, which the any-seed rule
-	resolves conservatively.
+	\textbf{Results.} Thirty-four of the 40 controllers pass every
+	single-trace check; 28 of those 34 fail at least one paired probe
+	(Table~\ref{tab:pilot}), and over the 563 pairs single-trace grading
+	cannot distinguish, 478 receive different paired verdicts (separation
+	index 0.85). Trend recency dominates: 23 controllers fail it and the
+	single-trace check catches one. Most add a trend term too weak to
+	overcome their estimator lag, so after improving latency the limit ends
+	\emph{lower} than after the same observations worsening---a defect
+	invisible in one run. Volatility suppression fails for 13 (10 missed),
+	asymmetric response for 10 (7 missed), anti-windup and setpoint-change
+	quiet for 3 each (all missed). Every controller met determinism,
+	round-trip, and schema stability.
+	
+	\textbf{Testing does not help.} Every agentic controller passes every
+	single-trace check---agents ran the simulator and polished what one run
+	shows---yet 13 of the 15 violate a requirement under paired probing,
+	including three (two Opus, one Sonnet) with integrator windup that no
+	single-trace check flagged. The effect is not vendor-specific: Codex
+	controllers fail in the same pattern as Claude's. With five samples per
+	cell we make no model or vendor comparison.
+	
+	\textbf{Stability.} 3.1\% of paired verdicts are inconclusive (a branch
+	hit a bound or never saturated). 88\% of forked verdicts agree across
+	seeds; instability concentrates in Codex controllers near decision
+	boundaries (14 of 24 unstable cells), and 13 of 200 final verdicts would
+	differ under one seed---hence the any-seed rule.
 	
 	\textbf{Cost.}
 	\label{sec:eval-cost}
-	Counting every executed tick, prefix sharing ran the pilot's probes in
-	150{,}304 controller ticks; replaying each branch's prefix from scratch
-	would take 415{,}504, so $\alpha = 2.76$ (Definition~\ref{def:cost}).
-	
-	\textbf{Next.} The pilot is small and single-shot. The natural extension
-	is tool-using coding agents from several vendors on the full
-	orchestrator task, with held-out adversarial scenarios for predictive
-	validity (Section~\ref{sec:metrics}).
+	Counting every executed tick, prefix sharing ran all pilot probes in
+	309{,}790 controller ticks; replaying each branch's prefix from scratch
+	would take 840{,}190, so $\alpha = 2.71$ (Definition~\ref{def:cost}).
 	\label{sec:future}
 	
 	\section{Related Work}
@@ -896,10 +898,8 @@
 	\cite{roscoe1995,zdancewic2003}, and self composition
 	\cite{barthe2004,terauchi2005}. We do not extend that theory; we observe
 	that agentic benchmarks depend on it unrecognized, and ship a pair harness.
-	
-	\textbf{Differential privacy.} Neighboring-dataset distinguishability
-	\cite{dwork2006,dwork2014} is relational; we target calibration
-	hyperproperties, not $(\varepsilon,\delta)$ budgets.
+	Differential privacy \cite{dwork2006,dwork2014} is likewise relational; we
+	target calibration, not $(\varepsilon,\delta)$ budgets.
 	
 	\textbf{Runtime verification.} Classic RV fits single-trace temporals
 	\cite{leucker2009,bartocci2018,falcone2018}; $k$-safety still needs
@@ -934,8 +934,8 @@
 	flags) should never short-circuit a check on the underlying data.
 	
 	\textbf{Single-trace grading passes the defect it cannot see.} In the
-	pilot, twelve controllers that a single-trace grader would ship violate a
-	stated requirement, and the dominant failure (estimator lag overriding
+	pilot, 28 controllers that a single-trace grader would ship violate a
+	stated requirement, agents that tested their own code included, and the dominant failure (estimator lag overriding
 	trend recency) is precisely a counterfactual contrast: the same
 	observations in a different order.
 
@@ -952,14 +952,12 @@
 	disputes. ``Green'' means twin contrast + \texttt{gate\_axis\_mutate} under
 	schema~\texttt{0.2} (Section~\ref{sec:discussion}), not exploitability.
 	
-	\textbf{Adapter pin drift.} Adapter columns are greens at pinned SHAs only
-	(\texttt{adapters/PINS.md}). A silent pin move can flip adapter cells while
-	\texttt{diptych\_core} stays green; re-resolve pins rather than assume
-	floating \texttt{main}.
+	\textbf{Adapter pin drift.} Adapter greens hold at the pinned SHAs only;
+	a pin move can flip them while core cells stay green.
 	
 	\textbf{Inconclusive.} Schema~\texttt{0.2} admits \texttt{inconclusive} with
 	\texttt{meta.inconclusive\_reason}. That is \emph{not} green. Over-/under-use
-	can hide weak probes or force spurious verdicts; the pilot's 4.4\% rate
+	can hide weak probes or force spurious verdicts; the pilot's 3.1\% rate
 	comes from branches hitting limit bounds or never saturating.
 	
 	\textbf{Handwritten-control bias.} Controls and fixtures are written by the
@@ -970,20 +968,17 @@
 	classification relies on the same declared snapshots whose
 	incompleteness it exposed (Section~\ref{sec:eval-adequacy}).
 	
-	\textbf{Open-loop vs.\ CRN.} Six operators use \texttt{open\_loop};
-	\textsc{TrajSwap}/\textsc{VarScale} need \texttt{crn\_closed\_loop}. Open-loop
-	greens do not transfer to closed-loop by assumption; CRN residuals are not
-	universal. Whether CRN drift depends on artifact quality is a model-study
-	question.
+	\textbf{Open-loop vs.\ CRN.} Open-loop greens do not transfer to the
+	two closed-loop operators, and CRN coupling is not universal; the pilot's
+	seed instability concentrates in closed-loop \textsc{VarScale}.
 	
 	\textbf{Pilot validity.} The pilot task is a reduction we wrote; the
 	single-trace baseline is one reasonable reading per requirement,
 	calibrated on our controls, and a cleverer reading could catch more
 	(Proposition~\ref{prop:confound} bounds what any single trace identifies,
-	not what a heuristic may happen to flag). Artifacts are 20 tool-free,
-	single-shot samples from one vendor's models, so they may under- or
-	over-represent defects of agents that run their own tests. 5\% of forked
-	verdicts depend on the noise seed.
+	not what a heuristic may happen to flag). Artifacts are 40 samples from
+	two vendors, five per model and condition, with bounded agent sessions;
+	12\% of forked verdicts depend on the noise seed.
 
 	\textbf{Internal / external.} Graders are deterministic functions of envelopes;
 	the full-8 gate regresses harness logic, not model quality. Findings are from
@@ -1002,18 +997,17 @@
 	confound for stateful artifacts, and presented a paired harness with
 	coupling, an inconclusive verdict, and a probe-tree cost model. A mutation
 	sweep on our own graders found three classes of defect that a fully green
-	coverage matrix had hidden, and a pilot on model-written controllers found
-	that most controllers passing every single-trace check violate a
+	coverage matrix had hidden, and a pilot on 40 model-written controllers
+	found that most controllers passing every single-trace check---including
+	those written by agents that tested their own code---violate a
 	requirement once probed in pairs. When a requirement is about a
 	counterfactual, a counterfactual needs two executions---and the grader
 	that compares them needs testing too.
 	
-	{\raggedright\textbf{Artifact availability.} Code, controls, generated
-	controllers, and adapter pins: \url{https://github.com/pandeyaby/DIPTYCH}
-	(MIT). \texttt{python -m diptych.pilot.study} reproduces
-	Table~\ref{tab:pilot}; \texttt{python -m diptych.adequacy},
-	Table~\ref{tab:adequacy}; \texttt{./scripts/run\_poc.sh}, the coverage
-	matrix.\par}
+	{\raggedright\textbf{Artifact availability.}
+	\url{https://github.com/pandeyaby/DIPTYCH} (MIT): code, controls, and all 40
+	controllers. Tables IV and V: \texttt{python -m diptych.adequacy},
+	\texttt{python -m diptych.pilot.study}.\par}
 	
 	\balance
 	

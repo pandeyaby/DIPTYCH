@@ -1,11 +1,208 @@
 [
   {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 3.0453281999999997,
+    "num_turns": 72,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-opus-5-5/0.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 0.8016864000000001,
+    "num_turns": 15,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-opus-5-5/1.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 2.989860800000001,
+    "num_turns": 60,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-opus-5-5/2.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 1.9735378,
+    "num_turns": 36,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-opus-5-5/3.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 2.3940066,
+    "num_turns": 36,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-opus-5-5/4.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-sonnet-5",
+    "sample": 0,
+    "returncode": 0,
+    "cost_usd": 0.557206,
+    "num_turns": 20,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-sonnet-5/0.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-sonnet-5",
+    "sample": 1,
+    "returncode": 0,
+    "cost_usd": 0.29661160000000003,
+    "num_turns": 10,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-sonnet-5/1.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-sonnet-5",
+    "sample": 2,
+    "returncode": 0,
+    "cost_usd": 0.3547142,
+    "num_turns": 12,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-sonnet-5/2.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-sonnet-5",
+    "sample": 3,
+    "returncode": 0,
+    "cost_usd": 0.3404862,
+    "num_turns": 12,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-sonnet-5/3.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "claude",
+    "model": "claude-sonnet-5",
+    "sample": 4,
+    "returncode": 0,
+    "cost_usd": 0.32281139999999997,
+    "num_turns": 9,
+    "code_block": true,
+    "path": "artifacts/agentic-claude/claude-sonnet-5/4.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 0,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 506185,
+      "cached_input_tokens": 468274,
+      "cache_write_input_tokens": 37854,
+      "output_tokens": 10264,
+      "reasoning_output_tokens": 4052
+    },
+    "commands_run": 12,
+    "code_block": true,
+    "path": "artifacts/agentic-codex/gpt-5.6-sol/0.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 1,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 326693,
+      "cached_input_tokens": 296437,
+      "cache_write_input_tokens": 30214,
+      "output_tokens": 9393,
+      "reasoning_output_tokens": 3514
+    },
+    "commands_run": 9,
+    "code_block": true,
+    "path": "artifacts/agentic-codex/gpt-5.6-sol/1.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 2,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 393099,
+      "cached_input_tokens": 360048,
+      "cache_write_input_tokens": 33003,
+      "output_tokens": 9656,
+      "reasoning_output_tokens": 3833
+    },
+    "commands_run": 11,
+    "code_block": true,
+    "path": "artifacts/agentic-codex/gpt-5.6-sol/2.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 3,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 461869,
+      "cached_input_tokens": 426531,
+      "cache_write_input_tokens": 35284,
+      "output_tokens": 9521,
+      "reasoning_output_tokens": 3339
+    },
+    "commands_run": 13,
+    "code_block": true,
+    "path": "artifacts/agentic-codex/gpt-5.6-sol/3.py"
+  },
+  {
+    "condition": "agentic",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 4,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 981496,
+      "cached_input_tokens": 935977,
+      "cache_write_input_tokens": 45426,
+      "output_tokens": 17707,
+      "reasoning_output_tokens": 7252
+    },
+    "commands_run": 19,
+    "code_block": true,
+    "path": "artifacts/agentic-codex/gpt-5.6-sol/4.py"
+  },
+  {
     "model": "claude-fable-5-1",
     "sample": 0,
     "returncode": 0,
     "cost_usd": 2.06312,
     "code_block": true,
-    "path": "artifacts/claude-fable-5-1/0.py"
+    "path": "artifacts/claude-fable-5-1/0.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-fable-5-1",
@@ -13,7 +210,9 @@
     "returncode": 0,
     "cost_usd": 1.5016699999999998,
     "code_block": true,
-    "path": "artifacts/claude-fable-5-1/1.py"
+    "path": "artifacts/claude-fable-5-1/1.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-fable-5-1",
@@ -21,7 +220,9 @@
     "returncode": 0,
     "cost_usd": 1.08801775,
     "code_block": true,
-    "path": "artifacts/claude-fable-5-1/2.py"
+    "path": "artifacts/claude-fable-5-1/2.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-fable-5-1",
@@ -29,7 +230,9 @@
     "returncode": 0,
     "cost_usd": 0.8112077500000001,
     "code_block": true,
-    "path": "artifacts/claude-fable-5-1/3.py"
+    "path": "artifacts/claude-fable-5-1/3.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-fable-5-1",
@@ -37,7 +240,9 @@
     "returncode": 0,
     "cost_usd": 1.27690775,
     "code_block": true,
-    "path": "artifacts/claude-fable-5-1/4.py"
+    "path": "artifacts/claude-fable-5-1/4.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-haiku-4-5-20251001",
@@ -45,7 +250,9 @@
     "returncode": 0,
     "cost_usd": 0.24066300000000002,
     "code_block": true,
-    "path": "artifacts/claude-haiku-4-5-20251001/0.py"
+    "path": "artifacts/claude-haiku-4-5-20251001/0.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-haiku-4-5-20251001",
@@ -53,7 +260,9 @@
     "returncode": 0,
     "cost_usd": 0.133387,
     "code_block": true,
-    "path": "artifacts/claude-haiku-4-5-20251001/1.py"
+    "path": "artifacts/claude-haiku-4-5-20251001/1.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-haiku-4-5-20251001",
@@ -61,7 +270,9 @@
     "returncode": 0,
     "cost_usd": 0.121693,
     "code_block": true,
-    "path": "artifacts/claude-haiku-4-5-20251001/2.py"
+    "path": "artifacts/claude-haiku-4-5-20251001/2.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-haiku-4-5-20251001",
@@ -69,7 +280,9 @@
     "returncode": 0,
     "cost_usd": 0.12124499999999999,
     "code_block": true,
-    "path": "artifacts/claude-haiku-4-5-20251001/3.py"
+    "path": "artifacts/claude-haiku-4-5-20251001/3.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-haiku-4-5-20251001",
@@ -77,7 +290,9 @@
     "returncode": 0,
     "cost_usd": 0.095437,
     "code_block": true,
-    "path": "artifacts/claude-haiku-4-5-20251001/4.py"
+    "path": "artifacts/claude-haiku-4-5-20251001/4.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-opus-5-5",
@@ -85,7 +300,9 @@
     "returncode": 0,
     "cost_usd": 0.27805599999999997,
     "code_block": true,
-    "path": "artifacts/claude-opus-5-5/0.py"
+    "path": "artifacts/claude-opus-5-5/0.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-opus-5-5",
@@ -93,7 +310,9 @@
     "returncode": 0,
     "cost_usd": 0.8095319999999999,
     "code_block": true,
-    "path": "artifacts/claude-opus-5-5/1.py"
+    "path": "artifacts/claude-opus-5-5/1.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-opus-5-5",
@@ -101,7 +320,9 @@
     "returncode": 0,
     "cost_usd": 0.305437,
     "code_block": true,
-    "path": "artifacts/claude-opus-5-5/2.py"
+    "path": "artifacts/claude-opus-5-5/2.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-opus-5-5",
@@ -109,7 +330,9 @@
     "returncode": 0,
     "cost_usd": 0.18247420000000003,
     "code_block": true,
-    "path": "artifacts/claude-opus-5-5/3.py"
+    "path": "artifacts/claude-opus-5-5/3.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-opus-5-5",
@@ -117,7 +340,9 @@
     "returncode": 0,
     "cost_usd": 0.155789,
     "code_block": true,
-    "path": "artifacts/claude-opus-5-5/4.py"
+    "path": "artifacts/claude-opus-5-5/4.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-sonnet-5",
@@ -125,7 +350,9 @@
     "returncode": 0,
     "cost_usd": 0.200938,
     "code_block": true,
-    "path": "artifacts/claude-sonnet-5/0.py"
+    "path": "artifacts/claude-sonnet-5/0.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-sonnet-5",
@@ -133,7 +360,9 @@
     "returncode": 0,
     "cost_usd": 0.132842,
     "code_block": true,
-    "path": "artifacts/claude-sonnet-5/1.py"
+    "path": "artifacts/claude-sonnet-5/1.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-sonnet-5",
@@ -141,7 +370,9 @@
     "returncode": 0,
     "cost_usd": 0.36272,
     "code_block": true,
-    "path": "artifacts/claude-sonnet-5/2.py"
+    "path": "artifacts/claude-sonnet-5/2.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-sonnet-5",
@@ -149,7 +380,9 @@
     "returncode": 0,
     "cost_usd": 0.09318979999999999,
     "code_block": true,
-    "path": "artifacts/claude-sonnet-5/3.py"
+    "path": "artifacts/claude-sonnet-5/3.py",
+    "condition": "oneshot",
+    "agent": "claude"
   },
   {
     "model": "claude-sonnet-5",
@@ -157,6 +390,93 @@
     "returncode": 0,
     "cost_usd": 0.0924538,
     "code_block": true,
-    "path": "artifacts/claude-sonnet-5/4.py"
+    "path": "artifacts/claude-sonnet-5/4.py",
+    "condition": "oneshot",
+    "agent": "claude"
+  },
+  {
+    "condition": "oneshot",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 0,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 14809,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 14806,
+      "output_tokens": 5130,
+      "reasoning_output_tokens": 3042
+    },
+    "commands_run": 0,
+    "code_block": true,
+    "path": "artifacts/oneshot-codex/gpt-5.6-sol/0.py"
+  },
+  {
+    "condition": "oneshot",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 1,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 14805,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 14802,
+      "output_tokens": 5604,
+      "reasoning_output_tokens": 4043
+    },
+    "commands_run": 0,
+    "code_block": true,
+    "path": "artifacts/oneshot-codex/gpt-5.6-sol/1.py"
+  },
+  {
+    "condition": "oneshot",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 2,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 14809,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 14806,
+      "output_tokens": 5115,
+      "reasoning_output_tokens": 3624
+    },
+    "commands_run": 0,
+    "code_block": true,
+    "path": "artifacts/oneshot-codex/gpt-5.6-sol/2.py"
+  },
+  {
+    "condition": "oneshot",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 3,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 14811,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 14808,
+      "output_tokens": 3547,
+      "reasoning_output_tokens": 2039
+    },
+    "commands_run": 0,
+    "code_block": true,
+    "path": "artifacts/oneshot-codex/gpt-5.6-sol/3.py"
+  },
+  {
+    "condition": "oneshot",
+    "agent": "codex",
+    "model": "gpt-5.6-sol",
+    "sample": 4,
+    "returncode": 0,
+    "usage": {
+      "input_tokens": 14813,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 14810,
+      "output_tokens": 3826,
+      "reasoning_output_tokens": 2224
+    },
+    "commands_run": 0,
+    "code_block": true,
+    "path": "artifacts/oneshot-codex/gpt-5.6-sol/4.py"
   }
 ]
