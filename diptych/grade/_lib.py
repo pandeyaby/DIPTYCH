@@ -66,6 +66,34 @@ def _vals(tr: dict, ch: str) -> list[float]:
     return [float(x) for x in block["values"]]
 
 
+class TwinParamMismatch(Exception):
+    """Both twins declare a grading parameter and the values disagree."""
+
+
+_MISSING = object()
+
+
+def _twin_param(t0: dict, t1: dict, key: str, default: Any = _MISSING) -> Any:
+    """Read a grading parameter from twin ``meta``; both twins must agree.
+
+    A parameter declared on only one twin is used as-is. Declared on both with
+    different values → :class:`TwinParamMismatch` (graded ``fail``), so a
+    grader can never silently read trace 0 and ignore trace 1.
+    """
+    m0, m1 = t0["meta"], t1["meta"]
+    if key in m0 and key in m1:
+        if m0[key] != m1[key]:
+            raise TwinParamMismatch(f"twin parameter mismatch: meta.{key}")
+        return m0[key]
+    if key in m0:
+        return m0[key]
+    if key in m1:
+        return m1[key]
+    if default is _MISSING:
+        raise ContractError(f"missing meta.{key} on both twins")
+    return default
+
+
 def _res(doc, ok, reason, evidence=None):
     return GradeResult(
         operator=doc["operator"], probe_id=doc["probe_id"],
@@ -149,7 +177,7 @@ def comparability_reason(doc: dict[str, Any]) -> str | None:
 
 def grade_reseed(doc):
     t0, t1 = doc["traces"][0], doc["traces"][1]
-    eps = float(t0["meta"].get("epsilon", 0.05))
+    eps = float(_twin_param(t0, t1, "epsilon", 0.05))
     a, b = _vals(t0, "stability"), _vals(t1, "stability")
     if t0["meta"]["seed"] == t1["meta"]["seed"]:
         return _res(doc, False, "seeds must differ")
@@ -210,7 +238,7 @@ def grade_freezedry(doc):
 
 def grade_signflip(doc):
     t0, t1 = doc["traces"][0], doc["traces"][1]
-    target = t0["meta"].get("signflip_channel") or t1["meta"].get("signflip_channel")
+    target = _twin_param(t0, t1, "signflip_channel", None)
     if not target:
         return _res(doc, False, "signflip_channel missing")
     a, b = _vals(t0, target), _vals(t1, target)
@@ -218,19 +246,23 @@ def grade_signflip(doc):
         # Prefer comparability_reason; keep defensive fail if grader called directly.
         return _res(doc, False, "length mismatch")
     err = max(abs(a[i] + b[i]) for i in range(len(a)))
-    eps = float(t0["meta"].get("signflip_eps", 1e-9))
+    eps = float(_twin_param(t0, t1, "signflip_eps", 1e-9))
+    # Emitter-supplied fingerprints are recorded as evidence only: a
+    # self-reported hash must never override the odd-symmetry check on data.
     fp0 = t0["meta"].get("sign_normalized_fingerprint")
     fp1 = t1["meta"].get("sign_normalized_fingerprint")
-    ok = err <= eps or (fp0 is not None and fp0 == fp1)
-    return _res(doc, ok, f"odd_err={err} fp_equal={fp0 == fp1}", {"odd_err": err, "eps": eps})
+    ok = err <= eps
+    return _res(doc, ok, f"odd_err={err} fp_equal={fp0 == fp1}",
+                {"odd_err": err, "eps": eps, "fp_equal": fp0 == fp1})
 
 
 def grade_satextend(doc):
     t0, t1 = doc["traces"][0], doc["traces"][1]
-    target = t0["meta"].get("sat_channel", "actuator")
-    lo, hi = float(t0["meta"]["sat_lo"]), float(t0["meta"]["sat_hi"])
-    legal_lo = float(t0["meta"].get("legal_lo", lo))
-    legal_hi = float(t0["meta"].get("legal_hi", hi))
+    target = _twin_param(t0, t1, "sat_channel", "actuator")
+    lo = float(_twin_param(t0, t1, "sat_lo"))
+    hi = float(_twin_param(t0, t1, "sat_hi"))
+    legal_lo = float(_twin_param(t0, t1, "legal_lo", lo))
+    legal_hi = float(_twin_param(t0, t1, "legal_hi", hi))
     vals = _vals(t0, target) + _vals(t1, target)
     in_sat = all(lo <= v <= hi for v in vals)
     in_legal = all(legal_lo <= v <= legal_hi for v in vals)
@@ -263,10 +295,10 @@ def grade_trajswap(doc):
     s0, s1 = _vals(t0, "swapped_trajectory"), _vals(t1, "swapped_trajectory")
     r0, r1 = _vals(t0, "closed_loop_residual"), _vals(t1, "closed_loop_residual")
     drift_a, drift_b = float(t0["meta"]["crn_drift"]), float(t1["meta"]["crn_drift"])
-    bound = float(t0["meta"].get("residual_bound", 1.0))
+    bound = float(_twin_param(t0, t1, "residual_bound", 1.0))
     crn_ok, ev = prove_traj(p0, p1, drift_a=drift_a, drift_b=drift_b)
     cross = max_abs(s0, p1) <= 1e-9 and max_abs(s1, p0) <= 1e-9
-    resid_ok = all(r <= bound for r in (r0 + r1))
+    resid_ok = all(abs(r) <= bound for r in (r0 + r1))
     ok = crn_ok and cross and resid_ok
     return _res(doc, ok, f"crn={crn_ok} cross={cross} resid_ok={resid_ok}",
                 {**ev, "cross": cross, "resid_ok": resid_ok, "bound": bound})
@@ -280,12 +312,12 @@ def grade_varscale(doc):
         return _res(doc, False, "crn_closed_loop required")
     a, b = _vals(t0, "variance_proxy"), _vals(t1, "variance_proxy")
     sa, sb = float(t0["meta"]["var_scale"]), float(t1["meta"]["var_scale"])
-    mean_v = float(t0["meta"].get("crn_mean", t1["meta"]["crn_mean"]))
-    bound = float(t0["meta"].get("var_scale_bound", 5.0))
+    mean_v = float(_twin_param(t0, t1, "crn_mean"))
+    bound = float(_twin_param(t0, t1, "var_scale_bound", 5.0))
     if sa > sb:
         a, b, sa, sb = b, a, sb, sa
     crn_ok, ev = prove_varscale(a, b, mean_v=mean_v, scale_a=sa, scale_b=sb)
-    mean_eps = float(t0["meta"].get("mean_match_eps", 1e-4))
+    mean_eps = float(_twin_param(t0, t1, "mean_match_eps", 1e-4))
     # CRN twins share generative mean; sample means differ by (sb-sa)*mean(z).
     # Mean-match = each series is consistent with declared crn_mean under its scale.
     mean_matched = (
@@ -320,7 +352,10 @@ def grade_document(doc: dict) -> GradeResult:
     g = GRADERS[doc["operator"]]
     if g.__code__.co_code == (lambda: True).__code__.co_code:  # noqa: E731
         raise ContractError(f"stub grader {doc['operator']}")
-    return g(doc)
+    try:
+        return g(doc)
+    except TwinParamMismatch as exc:
+        return _res(doc, False, str(exc), {"twin_param_mismatch": str(exc)})
 
 
 # ---------------------------------------------------------------------------

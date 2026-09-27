@@ -1,5 +1,9 @@
 # One Trace Is Not Enough — markdown stub (non-authoritative)
 
+> **Superseded.** Historical planning document kept for the record. The paper
+> is [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex); where this file differs, the
+> `.tex` is correct.
+
 **Living IEEEtran (source of truth):**
 [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)
 

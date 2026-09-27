@@ -7,10 +7,10 @@
 
 **Authors:** Abhinav Pandey, Abhishek Pandey (Meta)
 
-**Readiness scorecard:** [`READINESS.md`](READINESS.md) (green vs human TODOs; as of main `4576506a`)  
+**Readiness:** [`READINESS.md`](READINESS.md) (status and pre-upload checklist)  
 **Milestone log:** root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11)  
 **Artifact checklist:** [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md)  
-**Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (venue TBD, zip, anonymization; corresponding author Abhinav)  
+**Submission package:** [`SUBMISSION.md`](SUBMISSION.md) (AGENT'27, page budget, artifact zip)  
 **RQ scaffolding:** [`RQ_PROTOCOL.md`](RQ_PROTOCOL.md) (RQ1–RQ5; results N/A)  
 **Witnesses:** [`WITNESSES.md`](WITNESSES.md) · [`docs/adapters/WITNESSES.md`](../docs/adapters/WITNESSES.md)  
 **Anonymization switch:** [`ANON.md`](ANON.md)  
@@ -28,7 +28,7 @@ make paper
 Requires a TeX distribution with `IEEEtran.cls`, `IEEEtran.bst`, and `latexmk`
 (Debian/Ubuntu: `texlive-publishers`, `texlive-latex-extra`, `latexmk`).
 If `latexmk` is missing, `make paper` exits non-zero and points at the CI
-fallback below (do not invent PDF content).
+fallback below.
 
 Equivalent from `paper/`:
 
@@ -78,17 +78,16 @@ Live cells: `coverage/matrix.json`. Expected stranger contract:
 | ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
-**Pins frozen as of main `84930b24`** (see `adapters/PINS.md`). Do not bump
-unless the matrix requires.
+Pins are listed in `adapters/PINS.md` and change only when the matrix requires it.
 
 **green×8×3** = twin contrast + `gate_axis_mutate` axis power across
 `diptych_core` × `zeroday` × `aomb` for eight operators. It is **not** an
-accuracy, AUROC, or vulnerability-finding claim. Model-study Table
-`tab:placeholder` stays blank (`---`) until real data exists.
+accuracy, AUROC, or vulnerability-finding claim. §VIII reports grader
+adequacy (Table IV, `python -m diptych.adequacy`) and the pilot (Table V,
+`python -m diptych.pilot.study`).
 
-**PDF page count:** after `make paper`, record pages in
-[`NOTES.md`](NOTES.md) / [`SUBMISSION.md`](SUBMISSION.md) §2 (living draft **8pp**
-as of main `4576506a`; venue limit TBD). Cite: [`CITATION.cff`](../CITATION.cff).
+**PDF page count:** body 8 pages + references, within AGENT'27's limit
+([`SUBMISSION.md`](SUBMISSION.md) §2). Cite: [`CITATION.cff`](../CITATION.cff).
 License: [`LICENSE`](../LICENSE). Readiness: [`READINESS.md`](READINESS.md).
 Changelog: [`CHANGELOG.md`](../CHANGELOG.md). Anonymization dry-run: [`ANON.md`](ANON.md)
 (CI stays named).
@@ -127,6 +126,6 @@ Authoritative author IEEEtran source, kept consistent with:
 
 - ZeroDay@`fb5b39da` / AOMB@`667e475` adapter placement (`adapters/PINS.md`)
 - Offline green×8×3 = harness coverage + `gate_axis_mutate` axis power from `coverage/matrix.json` (not vulnerability / accuracy claims)
-- Explicit non-claims (no invented AUROC / F1 / model scores; protocol + controls first)
+- Explicit non-claims (no AUROC / F1 / model rankings; controls before any artifact is scored)
 
 Markdown drafts under `drafts/` are **stubs**; the `.tex` is source of truth.

@@ -21,3 +21,4 @@ paper/*.pdf
 
 # Reviewer artifact packs (scripts/pack_artifact.sh / make artifact)
 dist/
+diptych/pilot/artifacts/manifest.lock

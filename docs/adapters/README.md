@@ -34,7 +34,7 @@ Local Markdown copies in this directory are offline mirrors for CI/review. When 
 Live `coverage/matrix.json` is **green×8×3** (`diptych_core` / `zeroday` /
 `aomb`) with `axis_power: true` on every operator, attributed to pins
 ZeroDay@`fb5b39da` and AOMB@`667e475` (see `adapters/PINS.md`). No AUROC /
-invented model scores. Reproduce: `./scripts/run_poc.sh`.
+model scores. Reproduce: `./scripts/run_poc.sh`.
 
 Product trees are **not** vendored here; adapters emit schema-`0.2` twins and
 DIPTYCH grades. IEEE checklist: `paper/ARTIFACT_CHECKLIST.md`.

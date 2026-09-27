@@ -47,7 +47,7 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 | **Metric** | Marginal contribution to separation; inter-operator redundancy |
 | **Harness answer** | Ablate one operator at a time from the full-8 probe set; compare coupling strata (`open_loop` vs `crn_closed_loop`) |
 | **Controls** | Same control bank; power floor before scoring models |
-| **Result** | **N/A** — Table `tab:placeholder` stays `---` |
+| **Result** | **N/A** until model study |
 
 ## RQ3 — Predictive validity vs held-out robustness
 
@@ -81,18 +81,22 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 
 ---
 
-## Results ledger (keep blank)
+## Results ledger
+
+Pilot values come from `python -m diptych.pilot.study` (`diptych/pilot/results.json`):
+40 controllers on the reduced task in `diptych/pilot/TASK.md` — one-shot from four
+Claude models (20) and OpenAI `gpt-5.6-sol` via Codex (5), and tool-using agents
+(Claude Sonnet 5 / Opus 5.5: 10; Codex: 5). Pilot measurements, not a model comparison.
 
 | RQ | Status | Value |
 |----|--------|-------|
-| RQ1 separation index | protocol | N/A |
-| RQ2 marginal / redundancy | protocol | N/A |
-| RQ3 held-out rank corr. | protocol | N/A |
-| RQ4 α (amortization) | protocol definition | N/A (no measured ticks yet) |
-| RQ5 inconclusive rate | protocol | N/A |
+| RQ1 separation index | pilot | 0.85 (478 of 563 single-trace-equivalent pairs); 28 of 34 all-single-pass controllers fail a paired probe |
+| RQ2 operator information | pilot (descriptive) | TRAJSWAP 23/40 paired fails (22 missed by single trace); VARSCALE 13 (10); SIGNFLIP 10 (7); SATEXTEND 3 (3); HISTSWAP 3 (3); FREEZEDRY/RESEED/SCHEMAX 0 |
+| RQ3 held-out rank corr. | protocol | N/A (no held-out scenarios yet) |
+| RQ4 α (amortization) | pilot, measured ticks | 2.71 (309,790 executed vs 840,190 naive replay) |
+| RQ5 inconclusive rate | pilot | 3.1% of paired verdicts (10/320); 88% of forked verdicts seed-stable |
 
-Fill this ledger only from a completed model study with real artifacts and
-scenarios. Do not back-fill from green×8×3.
+Never back-fill from green×8×3.
 
 See also: [`READINESS.md`](READINESS.md), [`SUBMISSION.md`](SUBMISSION.md),
 [`NOTES.md`](NOTES.md), [`ARTIFACT_CHECKLIST.md`](ARTIFACT_CHECKLIST.md).

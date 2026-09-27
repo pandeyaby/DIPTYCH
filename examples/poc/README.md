@@ -1,6 +1,6 @@
 # PoC — full-8 DIPTYCH gate (5-minute stranger path)
 
-Deterministic offline smoke. No GPU. No network. No AUROC / invented model scores.
+Deterministic offline smoke. No GPU. No network. No AUROC or model scores.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ Exit **0**. You should see:
 5. Unit tests `OK` / `PoC OK`
 
 Adapter greens cite ZeroDay@`fb5b39da` (merged #41+#42) and AOMB@`667e475`
-(merged #18)—pin/merge facts only, never invented model scores.
+(merged #18)—pin/merge facts only, never model scores.
 
 ## What green×8×3 does **not** claim
 

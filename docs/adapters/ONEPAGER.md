@@ -54,7 +54,7 @@
 |---|---|---|
 | freeze_channels | optional shared freeze unrelated to polarity | same |
 | fields | `meta.signflip_channel` + `channels.<target>.values`; invariant holds after sign flip | polarity/invariant breaks |
-| decision/SARIF | may use sign-normalized fingerprint on conforming | unnormalized / broken |
+| decision/SARIF | odd-symmetric values (fingerprint is evidence only, never a pass) | asymmetric values |
 | expected_verdict | `pass` | `fail` |
 | cassette.format | `none` or `vcr_json` | same |
 | power-on-axis | flipping named channel sign preserves vs breaks graded invariant | |

@@ -1,7 +1,7 @@
 # IEEE artifact checklist — DIPTYCH
 
 Living paper: [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)  
-Readiness scorecard: [`READINESS.md`](READINESS.md) (green vs human TODOs; as of main `4576506a`)  
+Readiness: [`READINESS.md`](READINESS.md)  
 Milestone log: root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11)  
 Submission package: [`SUBMISSION.md`](SUBMISSION.md) (venue placeholder, zip contents, anonymization, corresponding author)  
 License: root [`LICENSE`](../LICENSE) (MIT) · Cite: [`CITATION.cff`](../CITATION.cff) (no DOI)  
@@ -59,7 +59,7 @@ witness (`expected_axis` + `channel` + before/after); wrong-axis must not flip.
 | ZeroDay | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | AOMB | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
-Pins frozen as of main `f606cfe4` (post-#16). Do not bump unless the matrix requires.
+Pins change only when the coverage matrix requires it.
 
 Source of truth: `adapters/PINS.md` (mirrored in root `README.md`).
 Record the git commit you graded against (paper cites these shorts; full SHAs above).
@@ -81,7 +81,7 @@ PYTHONPATH=. python -m pytest -q      # optional CI parity
 Exit `0` means full-8 cells are green on `diptych_core` / `zeroday` / `aomb`
 (twin contrast + axis power) and the live matrix matches
 `examples/poc/expected_matrix_snippet.json`. Adapter columns are attributed to
-the pins above—never invented model scores.
+the pins above, never model scores.
 
 ### What green×8×3 does and does **not** claim
 
@@ -168,7 +168,7 @@ gh run download <RUN_ID> -n one-trace-is-not-enough-pdf
 3. Confirm pins match `adapters/PINS.md` / README.
 4. Run `./scripts/run_poc.sh` → exit 0 + `MATRIX CHECK OK` (optional:
    `python -m diptych.poc --json`; `python -m diptych.grade --input examples/fixtures/zeroday/RESEED`).
-5. Confirm Table `tab:placeholder` has no numeric model scores; RQ cells N/A.
+5. Confirm no numeric model scores; `tab:adequacy` matches `python -m diptych.adequacy`.
 6. Confirm Table `tab:ops` coupling + graded channels match `OPERATOR_TABLE.md`.
 7. (Optional) `make artifact` → inspect zip for CODE_SHA + matrix + notes.
 8. (Optional) Download CI PDF artifact `one-trace-is-not-enough-pdf` or `make paper`.
