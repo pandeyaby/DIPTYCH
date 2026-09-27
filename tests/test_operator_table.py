@@ -70,36 +70,27 @@ class TestOperatorTableFidelity(unittest.TestCase):
             for marker in EXPECTED_GRADED_MARKERS[op]:
                 self.assertIn(marker, row, f"{op} graded marker {marker}")
 
-    def test_paper_tex_tab_ops_couplings_and_channels(self):
+    def test_paper_tex_tab_ops_couplings(self):
+        # The paper's operator table lists coupling as OL / CRN per row; graded
+        # channels are checked against OPERATOR_TABLE.md above, not the paper.
         tex = (ROOT / "paper" / "one-trace-is-not-enough.tex").read_text(encoding="utf-8")
-        self.assertIn(r"\label{tab:ops}", tex)
-        # Coupling enums appear as \texttt{open\_loop} / \texttt{crn\_closed\_loop}
-        self.assertIn(r"\texttt{open\_loop}", tex)
-        self.assertIn(r"\texttt{crn\_closed\_loop}", tex)
-        # Each operator row (textsc name) near its coupling — spot-check graded markers.
-        for op, markers in EXPECTED_GRADED_MARKERS.items():
-            # FREEZEDRY -> FreezeDry in textsc
-            pretty = {
-                "SIGNFLIP": "SignFlip",
-                "TRAJSWAP": "TrajSwap",
-                "VARSCALE": "VarScale",
-                "SATEXTEND": "SatExtend",
-                "HISTSWAP": "HistSwap",
-                "FREEZEDRY": "FreezeDry",
-                "RESEED": "Reseed",
-                "SCHEMAX": "SchemaX",
-            }[op]
-            self.assertIn(rf"\textsc{{{pretty}}}", tex, op)
-            for marker in markers:
-                # TeX may escape underscores
-                tex_marker = marker.replace("_", r"\_")
-                self.assertTrue(
-                    marker in tex or tex_marker in tex,
-                    f"paper missing graded marker {marker} for {op}",
-                )
-            coupling = EXPECTED_COUPLING[op]
-            tex_coupling = coupling.replace("_", r"\_")
-            self.assertIn(rf"\texttt{{{tex_coupling}}}", tex)
+        start = tex.index(r"\label{tab:ops}")
+        table = tex[start:tex.index(r"\end{tabular}", start)]
+        abbrev = {"open_loop": "OL", "crn_closed_loop": "CRN"}
+        pretty = {
+            "SIGNFLIP": "SignFlip",
+            "TRAJSWAP": "TrajSwap",
+            "VARSCALE": "VarScale",
+            "SATEXTEND": "SatExtend",
+            "HISTSWAP": "HistSwap",
+            "FREEZEDRY": "FreezeDry",
+            "RESEED": "Reseed",
+            "SCHEMAX": "SchemaX",
+        }
+        for op, coupling in EXPECTED_COUPLING.items():
+            m = re.search(rf"\\textsc\{{{pretty[op]}\}}\s*&\s*(\w+)\s*&", table)
+            self.assertIsNotNone(m, f"paper tab:ops missing row for {op}")
+            self.assertEqual(m.group(1), abbrev[coupling], op)
 
 
 if __name__ == "__main__":

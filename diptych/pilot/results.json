@@ -1,7 +1,16 @@
 {
   "artifacts": {
+    "all_single_pass_paired_fail_ci95": [
+      0.6648593225994784,
+      0.9165114439643031
+    ],
     "all_single_trace_pass": 34,
     "all_single_trace_pass_but_paired_fail": 28,
+    "artifact_mcnemar": {
+      "p_exact": 3.6729034036397934e-08,
+      "paired_only": 33,
+      "single_only": 2
+    },
     "error_rate": 0.0,
     "fork_fidelity_ok": 40,
     "inconclusive_rate": 0.03125,
@@ -126,6 +135,150 @@
       "index": 0.8490230905861457,
       "trace_equivalent_pairs": 563
     },
+    "single_grader": "single_trace",
+    "ticks": {
+      "alpha": 2.712127570289551,
+      "forked": 309790,
+      "naive_equivalent": 840190
+    }
+  },
+  "artifacts_strong": {
+    "all_single_pass_paired_fail_ci95": [
+      0.6226353745137962,
+      0.9837682477371741
+    ],
+    "all_single_trace_pass": 11,
+    "all_single_trace_pass_but_paired_fail": 10,
+    "artifact_mcnemar": {
+      "p_exact": 0.3222363203575469,
+      "paired_only": 29,
+      "single_only": 21
+    },
+    "error_rate": 0.0,
+    "fork_fidelity_ok": 40,
+    "inconclusive_rate": 0.03125,
+    "n_artifacts": 40,
+    "per_operator": {
+      "FREEZEDRY": {
+        "agree": 40,
+        "decided_by_both": 40,
+        "paired": {
+          "pass": 40
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 0,
+        "single_trace": {
+          "pass": 40
+        }
+      },
+      "HISTSWAP": {
+        "agree": 32,
+        "decided_by_both": 35,
+        "paired": {
+          "fail": 3,
+          "inconclusive": 5,
+          "pass": 32
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 3,
+        "single_trace": {
+          "fail": 2,
+          "pass": 38
+        }
+      },
+      "RESEED": {
+        "agree": 40,
+        "decided_by_both": 40,
+        "paired": {
+          "pass": 40
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 0,
+        "single_trace": {
+          "pass": 40
+        }
+      },
+      "SATEXTEND": {
+        "agree": 35,
+        "decided_by_both": 38,
+        "paired": {
+          "fail": 3,
+          "inconclusive": 2,
+          "pass": 35
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 3,
+        "single_trace": {
+          "pass": 40
+        }
+      },
+      "SCHEMAX": {
+        "agree": 40,
+        "decided_by_both": 40,
+        "paired": {
+          "pass": 40
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 0,
+        "single_trace": {
+          "pass": 40
+        }
+      },
+      "SIGNFLIP": {
+        "agree": 15,
+        "decided_by_both": 40,
+        "paired": {
+          "fail": 10,
+          "pass": 30
+        },
+        "single_fail_paired_pass": 21,
+        "single_pass_paired_fail": 4,
+        "single_trace": {
+          "fail": 27,
+          "pass": 13
+        }
+      },
+      "TRAJSWAP": {
+        "agree": 21,
+        "decided_by_both": 37,
+        "paired": {
+          "fail": 23,
+          "inconclusive": 3,
+          "pass": 14
+        },
+        "single_fail_paired_pass": 0,
+        "single_pass_paired_fail": 16,
+        "single_trace": {
+          "fail": 7,
+          "pass": 33
+        }
+      },
+      "VARSCALE": {
+        "agree": 31,
+        "decided_by_both": 40,
+        "paired": {
+          "fail": 13,
+          "pass": 27
+        },
+        "single_fail_paired_pass": 1,
+        "single_pass_paired_fail": 8,
+        "single_trace": {
+          "fail": 6,
+          "pass": 34
+        }
+      }
+    },
+    "seed_stability": {
+      "cells": 200,
+      "rate": 0.88,
+      "same_verdict_all_seeds": 176
+    },
+    "separation": {
+      "hyper_distinct": 180,
+      "index": 0.8372093023255814,
+      "trace_equivalent_pairs": 215
+    },
+    "single_grader": "single_trace_strong",
     "ticks": {
       "alpha": 2.712127570289551,
       "forked": 309790,
@@ -134,8 +287,17 @@
   },
   "by_group": {
     "agentic-claude": {
+      "all_single_pass_paired_fail_ci95": [
+        0.49015684672072335,
+        0.9433190520193067
+      ],
       "all_single_trace_pass": 10,
       "all_single_trace_pass_but_paired_fail": 8,
+      "artifact_mcnemar": {
+        "p_exact": 0.0078125,
+        "paired_only": 8,
+        "single_only": 0
+      },
       "error_rate": 0.0,
       "fork_fidelity_ok": 10,
       "inconclusive_rate": 0.025,
@@ -254,6 +416,7 @@
         "index": 0.9111111111111111,
         "trace_equivalent_pairs": 45
       },
+      "single_grader": "single_trace",
       "ticks": {
         "alpha": 2.638088649503385,
         "forked": 80948,
@@ -261,8 +424,17 @@
       }
     },
     "agentic-codex": {
+      "all_single_pass_paired_fail_ci95": [
+        0.5655085052479191,
+        1.0
+      ],
       "all_single_trace_pass": 5,
       "all_single_trace_pass_but_paired_fail": 5,
+      "artifact_mcnemar": {
+        "p_exact": 0.0625,
+        "paired_only": 5,
+        "single_only": 0
+      },
       "error_rate": 0.0,
       "fork_fidelity_ok": 5,
       "inconclusive_rate": 0.0,
@@ -377,6 +549,7 @@
         "index": 0.8,
         "trace_equivalent_pairs": 10
       },
+      "single_grader": "single_trace",
       "ticks": {
         "alpha": 2.690895179801071,
         "forked": 39210,
@@ -384,8 +557,17 @@
       }
     },
     "oneshot-claude": {
+      "all_single_pass_paired_fail_ci95": [
+        0.5481406466534955,
+        0.9295257935638959
+      ],
       "all_single_trace_pass": 15,
       "all_single_trace_pass_but_paired_fail": 12,
+      "artifact_mcnemar": {
+        "p_exact": 0.000274658203125,
+        "paired_only": 16,
+        "single_only": 1
+      },
       "error_rate": 0.0,
       "fork_fidelity_ok": 20,
       "inconclusive_rate": 0.04375,
@@ -509,6 +691,7 @@
         "index": 0.7830188679245284,
         "trace_equivalent_pairs": 106
       },
+      "single_grader": "single_trace",
       "ticks": {
         "alpha": 2.7644241004896744,
         "forked": 150304,
@@ -516,8 +699,17 @@
       }
     },
     "oneshot-codex": {
+      "all_single_pass_paired_fail_ci95": [
+        0.3006360524426366,
+        0.9544139373553637
+      ],
       "all_single_trace_pass": 4,
       "all_single_trace_pass_but_paired_fail": 3,
+      "artifact_mcnemar": {
+        "p_exact": 0.375,
+        "paired_only": 4,
+        "single_only": 1
+      },
       "error_rate": 0.0,
       "fork_fidelity_ok": 5,
       "inconclusive_rate": 0.025,
@@ -636,6 +828,563 @@
         "index": 1.0,
         "trace_equivalent_pairs": 6
       },
+      "single_grader": "single_trace",
+      "ticks": {
+        "alpha": 2.6858218063466235,
+        "forked": 39328,
+        "naive_equivalent": 105628
+      }
+    }
+  },
+  "by_group_strong": {
+    "agentic-claude": {
+      "all_single_pass_paired_fail_ci95": [
+        0.34237195288961925,
+        1.0
+      ],
+      "all_single_trace_pass": 2,
+      "all_single_trace_pass_but_paired_fail": 2,
+      "artifact_mcnemar": {
+        "p_exact": 1.0,
+        "paired_only": 7,
+        "single_only": 7
+      },
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 10,
+      "inconclusive_rate": 0.025,
+      "n_artifacts": 10,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "HISTSWAP": {
+          "agree": 8,
+          "decided_by_both": 9,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 1,
+            "pass": 8
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "RESEED": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SATEXTEND": {
+          "agree": 7,
+          "decided_by_both": 10,
+          "paired": {
+            "fail": 3,
+            "pass": 7
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 3,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SCHEMAX": {
+          "agree": 10,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 3,
+          "decided_by_both": 10,
+          "paired": {
+            "pass": 10
+          },
+          "single_fail_paired_pass": 7,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "fail": 7,
+            "pass": 3
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 6,
+          "decided_by_both": 9,
+          "paired": {
+            "fail": 3,
+            "inconclusive": 1,
+            "pass": 6
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 3,
+          "single_trace": {
+            "pass": 10
+          }
+        },
+        "VARSCALE": {
+          "agree": 8,
+          "decided_by_both": 10,
+          "paired": {
+            "fail": 2,
+            "pass": 8
+          },
+          "single_fail_paired_pass": 1,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 2,
+            "pass": 8
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 50,
+        "rate": 0.9,
+        "same_verdict_all_seeds": 45
+      },
+      "separation": {
+        "hyper_distinct": 15,
+        "index": 0.9375,
+        "trace_equivalent_pairs": 16
+      },
+      "single_grader": "single_trace_strong",
+      "ticks": {
+        "alpha": 2.638088649503385,
+        "forked": 80948,
+        "naive_equivalent": 213548
+      }
+    },
+    "agentic-codex": {
+      "all_single_pass_paired_fail_ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "all_single_trace_pass": 1,
+      "all_single_trace_pass_but_paired_fail": 1,
+      "artifact_mcnemar": {
+        "p_exact": 0.453125,
+        "paired_only": 5,
+        "single_only": 2
+      },
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 5,
+      "inconclusive_rate": 0.0,
+      "n_artifacts": 5,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "HISTSWAP": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "RESEED": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SATEXTEND": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SCHEMAX": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 2,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 3,
+            "pass": 2
+          },
+          "single_fail_paired_pass": 2,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 4,
+            "pass": 1
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 0,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 5,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "VARSCALE": {
+          "agree": 4,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 1,
+            "pass": 4
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 5
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 25,
+        "rate": 0.64,
+        "same_verdict_all_seeds": 16
+      },
+      "separation": {
+        "hyper_distinct": 4,
+        "index": 0.6666666666666666,
+        "trace_equivalent_pairs": 6
+      },
+      "single_grader": "single_trace_strong",
+      "ticks": {
+        "alpha": 2.690895179801071,
+        "forked": 39210,
+        "naive_equivalent": 105510
+      }
+    },
+    "oneshot-claude": {
+      "all_single_pass_paired_fail_ci95": [
+        0.43649056343635395,
+        0.9699474141282697
+      ],
+      "all_single_trace_pass": 6,
+      "all_single_trace_pass_but_paired_fail": 5,
+      "artifact_mcnemar": {
+        "p_exact": 0.6776394844055176,
+        "paired_only": 13,
+        "single_only": 10
+      },
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 20,
+      "inconclusive_rate": 0.04375,
+      "n_artifacts": 20,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "HISTSWAP": {
+          "agree": 16,
+          "decided_by_both": 17,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 3,
+            "pass": 16
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 2,
+            "pass": 18
+          }
+        },
+        "RESEED": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SATEXTEND": {
+          "agree": 18,
+          "decided_by_both": 18,
+          "paired": {
+            "inconclusive": 2,
+            "pass": 18
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SCHEMAX": {
+          "agree": 20,
+          "decided_by_both": 20,
+          "paired": {
+            "pass": 20
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 20
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 9,
+          "decided_by_both": 20,
+          "paired": {
+            "fail": 5,
+            "pass": 15
+          },
+          "single_fail_paired_pass": 10,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 14,
+            "pass": 6
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 11,
+          "decided_by_both": 18,
+          "paired": {
+            "fail": 13,
+            "inconclusive": 2,
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 7,
+          "single_trace": {
+            "fail": 6,
+            "pass": 14
+          }
+        },
+        "VARSCALE": {
+          "agree": 15,
+          "decided_by_both": 20,
+          "paired": {
+            "fail": 8,
+            "pass": 12
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 5,
+          "single_trace": {
+            "fail": 3,
+            "pass": 17
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 100,
+        "rate": 0.95,
+        "same_verdict_all_seeds": 95
+      },
+      "separation": {
+        "hyper_distinct": 32,
+        "index": 0.8,
+        "trace_equivalent_pairs": 40
+      },
+      "single_grader": "single_trace_strong",
+      "ticks": {
+        "alpha": 2.7644241004896744,
+        "forked": 150304,
+        "naive_equivalent": 415504
+      }
+    },
+    "oneshot-codex": {
+      "all_single_pass_paired_fail_ci95": [
+        0.34237195288961925,
+        1.0
+      ],
+      "all_single_trace_pass": 2,
+      "all_single_trace_pass_but_paired_fail": 2,
+      "artifact_mcnemar": {
+        "p_exact": 0.6875,
+        "paired_only": 4,
+        "single_only": 2
+      },
+      "error_rate": 0.0,
+      "fork_fidelity_ok": 5,
+      "inconclusive_rate": 0.025,
+      "n_artifacts": 5,
+      "per_operator": {
+        "FREEZEDRY": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "HISTSWAP": {
+          "agree": 3,
+          "decided_by_both": 4,
+          "paired": {
+            "fail": 1,
+            "inconclusive": 1,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "RESEED": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SATEXTEND": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SCHEMAX": {
+          "agree": 5,
+          "decided_by_both": 5,
+          "paired": {
+            "pass": 5
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 0,
+          "single_trace": {
+            "pass": 5
+          }
+        },
+        "SIGNFLIP": {
+          "agree": 1,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 2,
+          "single_pass_paired_fail": 2,
+          "single_trace": {
+            "fail": 2,
+            "pass": 3
+          }
+        },
+        "TRAJSWAP": {
+          "agree": 4,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 1,
+            "pass": 4
+          }
+        },
+        "VARSCALE": {
+          "agree": 4,
+          "decided_by_both": 5,
+          "paired": {
+            "fail": 2,
+            "pass": 3
+          },
+          "single_fail_paired_pass": 0,
+          "single_pass_paired_fail": 1,
+          "single_trace": {
+            "fail": 1,
+            "pass": 4
+          }
+        }
+      },
+      "seed_stability": {
+        "cells": 25,
+        "rate": 0.8,
+        "same_verdict_all_seeds": 20
+      },
+      "separation": {
+        "hyper_distinct": 1,
+        "index": 1.0,
+        "trace_equivalent_pairs": 1
+      },
+      "single_grader": "single_trace_strong",
       "ticks": {
         "alpha": 2.6858218063466235,
         "forked": 39328,
@@ -667,6 +1416,17 @@
       "conforming_false_alarms": [],
       "off_axis_fails_on_violators": 2,
       "own_axis_caught": 1,
+      "violators": 8
+    },
+    "single_trace_strong": {
+      "caught": [
+        "SCHEMAX",
+        "SIGNFLIP",
+        "VARSCALE"
+      ],
+      "conforming_false_alarms": [],
+      "off_axis_fails_on_violators": 3,
+      "own_axis_caught": 3,
       "violators": 8
     }
   },
@@ -967,6 +1727,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -1260,6 +2031,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -1553,6 +2335,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -1846,6 +2639,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -2139,6 +2943,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -2432,6 +3247,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "fail",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7846,
         "naive_equivalent": 21106,
@@ -2695,6 +3521,17 @@
         "TRAJSWAP": "fail",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7600,
         "naive_equivalent": 20860,
@@ -2988,6 +3825,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7888,
         "naive_equivalent": 21148,
@@ -3281,6 +4129,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "fail"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7668,
         "naive_equivalent": 20928,
@@ -3574,6 +4433,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7496,
         "naive_equivalent": 20756,
@@ -3867,6 +4737,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8740,
         "naive_equivalent": 22000,
@@ -4160,6 +5041,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8154,
         "naive_equivalent": 21414,
@@ -4453,6 +5345,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7730,
         "naive_equivalent": 20990,
@@ -4746,6 +5649,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8078,
         "naive_equivalent": 21338,
@@ -5039,6 +5953,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7960,
         "naive_equivalent": 21220,
@@ -5332,6 +6257,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7982,
         "naive_equivalent": 21242,
@@ -5577,6 +6513,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7780,
         "naive_equivalent": 21040,
@@ -5870,6 +6817,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8848,
         "naive_equivalent": 22108,
@@ -6163,6 +7121,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8180,
         "naive_equivalent": 21440,
@@ -6456,6 +7425,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7888,
         "naive_equivalent": 21148,
@@ -6749,6 +7729,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7850,
         "naive_equivalent": 21110,
@@ -7027,6 +8018,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7584,
         "naive_equivalent": 20844,
@@ -7320,6 +8322,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7592,
         "naive_equivalent": 20852,
@@ -7613,6 +8626,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8296,
         "naive_equivalent": 21556,
@@ -7906,6 +8930,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7354,
         "naive_equivalent": 20614,
@@ -8199,6 +9234,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7978,
         "naive_equivalent": 21238,
@@ -8438,6 +9484,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 5640,
         "naive_equivalent": 18900,
@@ -8716,6 +9773,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8064,
         "naive_equivalent": 21324,
@@ -9009,6 +10077,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8182,
         "naive_equivalent": 21442,
@@ -9254,6 +10333,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "fail",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7264,
         "naive_equivalent": 20524,
@@ -9547,6 +10637,17 @@
         "TRAJSWAP": "fail",
         "VARSCALE": "fail"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7630,
         "naive_equivalent": 20890,
@@ -9834,6 +10935,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "fail"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 5640,
         "naive_equivalent": 18900,
@@ -10082,6 +11194,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "fail",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7746,
         "naive_equivalent": 21006,
@@ -10375,6 +11498,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "fail"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8206,
         "naive_equivalent": 21466,
@@ -10668,6 +11802,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7678,
         "naive_equivalent": 20938,
@@ -10961,6 +12106,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8120,
         "naive_equivalent": 21380,
@@ -11254,6 +12410,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7696,
         "naive_equivalent": 20956,
@@ -11547,6 +12714,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7616,
         "naive_equivalent": 20876,
@@ -11840,6 +13018,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7334,
         "naive_equivalent": 20594,
@@ -12133,6 +13322,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7722,
         "naive_equivalent": 20982,
@@ -12426,6 +13626,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7754,
         "naive_equivalent": 21014,
@@ -12719,6 +13930,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7738,
         "naive_equivalent": 20998,
@@ -13012,6 +14234,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7486,
         "naive_equivalent": 20746,
@@ -13305,6 +14538,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7456,
         "naive_equivalent": 20716,
@@ -13598,6 +14842,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8426,
         "naive_equivalent": 21686,
@@ -13846,6 +15101,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7648,
         "naive_equivalent": 20908,
@@ -14139,6 +15405,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "fail"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 8210,
         "naive_equivalent": 21470,
@@ -14432,6 +15709,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "fail",
+        "TRAJSWAP": "fail",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7524,
         "naive_equivalent": 20784,
@@ -14725,6 +16013,17 @@
         "TRAJSWAP": "pass",
         "VARSCALE": "pass"
       },
+      "single_trace_strong": {
+        "FREEZEDRY": "pass",
+        "HISTSWAP": "pass",
+        "RESEED": "pass",
+        "SATEXTEND": "pass",
+        "SCHEMAX": "pass",
+        "SIGNFLIP": "pass",
+        "TRAJSWAP": "pass",
+        "VARSCALE": "pass"
+      },
+      "strong_excluded": [],
       "ticks": {
         "forked": 7520,
         "naive_equivalent": 20780,

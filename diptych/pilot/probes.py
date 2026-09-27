@@ -407,6 +407,182 @@ def single_trace_grade(cls: type) -> dict[str, str]:
     return out
 
 
+# ---------------------------------------------------------------------------
+# Strong single-trace baseline: several readings per requirement, each applied
+# to every scenario where it is meaningful; a requirement fails if ANY reading
+# on ANY single trace flags it. Readings that false-alarm on the conforming
+# control are excluded (STRONG_EXCLUDED), mirroring how paired probes are
+# calibrated. This gives single-trace grading every advantage we could think of.
+# ---------------------------------------------------------------------------
+
+def _ls_gain(pairs: list[tuple[float, float]]) -> float | None:
+    """Least-squares k in delta = -k * e over (e, delta) pairs."""
+    den = sum(e * e for e, _ in pairs)
+    if den <= 0:
+        return None
+    return -sum(e * dl for e, dl in pairs) / den
+
+
+def _read_sign_means(tr: list[dict]) -> bool:
+    d = _deltas(tr)
+    downs = [-x for x, r in zip(d, tr) if _err(r) > 0.02]
+    ups = [x for x, r in zip(d, tr) if _err(r) < -0.02]
+    if not downs or not ups:
+        return True
+    md, mu = sum(downs) / len(downs), sum(ups) / len(ups)
+    return md > 0 and md > 2 * mu
+
+
+def _read_sign_slopes(tr: list[dict]) -> bool:
+    d = _deltas(tr)
+    pos = [(_err(r), x) for x, r in zip(d, tr) if _err(r) > 0.02]
+    neg = [(_err(r), x) for x, r in zip(d, tr) if _err(r) < -0.02]
+    kd, ku = _ls_gain(pos), _ls_gain(neg)
+    if kd is None or ku is None:
+        return True
+    return kd > 0 and kd > 2 * ku
+
+
+def _read_trend_frac(tr: list[dict]) -> bool:
+    d = _deltas(tr)
+    lat = [r["obs"]["latency_ms"] for r in tr]
+    imp = [i for i in range(2, len(tr)) if lat[i - 2] > lat[i - 1] > lat[i]]
+    if not imp:
+        return True
+    return sum(1 for i in imp if d[i] > 0) / len(imp) >= 0.5
+
+
+def _read_trend_regression(tr: list[dict]) -> bool:
+    """Regress delta_t on [e_t, e_t - e_{t-3}]; worsening trend must tighten."""
+    d = _deltas(tr)
+    e = [_err(r) for r in tr]
+    rows = [(e[t], e[t] - e[t - 3], d[t]) for t in range(3, len(tr))]
+    if len(rows) < 10:
+        return True
+    sxx = sum(a * a for a, _, _ in rows); syy = sum(b * b for _, b, _ in rows)
+    sxy = sum(a * b for a, b, _ in rows)
+    sxd = sum(a * dl for a, _, dl in rows); syd = sum(b * dl for _, b, dl in rows)
+    det = sxx * syy - sxy * sxy
+    if abs(det) < 1e-12:
+        return True
+    beta_trend = (sxx * syd - sxy * sxd) / det
+    return beta_trend < 0
+
+
+def _read_vol_halves(tr: list[dict]) -> bool:
+    early = sum(r["limit"] for r in tr[60:120]) / 60
+    late = sum(r["limit"] for r in tr[180:240]) / 60
+    return late < early
+
+
+def _read_vol_correlation(tr: list[dict]) -> bool:
+    """Rolling spread of error vs. limit must correlate negatively."""
+    e = [_err(r) for r in tr]
+    xs, ys = [], []
+    for t in range(20, len(tr)):
+        w = e[t - 20:t]
+        m = sum(w) / 20
+        xs.append((sum((v - m) ** 2 for v in w) / 20) ** 0.5)
+        ys.append(tr[t]["limit"])
+    mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
+    cov = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    return cov < 0
+
+
+def _read_sat_leaves(tr: list[dict]) -> bool:
+    hi = CONFIG["max_limit"] - BOUND_EPS
+    sat = [i for i, r in enumerate(tr) if r["limit"] >= hi]
+    if not sat:
+        return True
+    after = [i for i in range(sat[0], len(tr)) if _err(tr[i]) > 0]
+    return not after or any(r["limit"] < hi for r in tr[after[0]:after[0] + 3])
+
+
+def _read_sat_immediate(tr: list[dict]) -> bool:
+    hi = CONFIG["max_limit"] - BOUND_EPS
+    sat = [i for i, r in enumerate(tr) if r["limit"] >= hi]
+    if not sat:
+        return True
+    after = [i for i in range(sat[0], len(tr)) if _err(tr[i]) > 0]
+    return not after or tr[after[0]]["limit"] < hi
+
+
+def _read_quiet_flips(tr: list[dict]) -> bool:
+    big = [x for x in _deltas(tr)[120:140] if abs(x) >= 2.0]
+    return sum(1 for a, b in zip(big, big[1:]) if a * b < 0) <= 2
+
+
+def _read_quiet_settles(tr: list[dict]) -> bool:
+    d = [abs(x) for x in _deltas(tr)]
+    return sum(d[132:140]) / 8 <= sum(d[120:128]) / 8 + 1e-9
+
+
+def _read_quiet_undershoot(tr: list[dict]) -> bool:
+    later = sum(r["limit"] for r in tr[140:160]) / 20
+    return min(r["limit"] for r in tr[120:140]) >= 0.8 * later
+
+
+def _read_schema(tr: list[dict]) -> bool:
+    return len({tuple(sorted(map(str, r["telemetry"]))) for r in tr}) == 1
+
+
+ALL_SCENARIOS = ("steady", "volatile_step", "setpoint_step", "saturate")
+STRONG_READINGS: dict[str, list[tuple[str, Callable[[list[dict]], bool], tuple[str, ...]]]] = {
+    "SIGNFLIP": [("mean-ratio", _read_sign_means, ALL_SCENARIOS),
+                 ("slope-ratio", _read_sign_slopes, ALL_SCENARIOS)],
+    "TRAJSWAP": [("improving-frac", _read_trend_frac, ("steady", "volatile_step", "setpoint_step")),
+                 ("trend-regression", _read_trend_regression, ("steady", "volatile_step", "setpoint_step"))],
+    "VARSCALE": [("halves", _read_vol_halves, ("volatile_step",)),
+                 ("spread-correlation", _read_vol_correlation, ("volatile_step",))],
+    "SATEXTEND": [("leaves-within-3", _read_sat_leaves, ("saturate",)),
+                  ("immediate-drop", _read_sat_immediate, ("saturate",))],
+    "HISTSWAP": [("no-hunting", _read_quiet_flips, ("setpoint_step",)),
+                 ("settles", _read_quiet_settles, ("setpoint_step",)),
+                 ("no-undershoot", _read_quiet_undershoot, ("setpoint_step",))],
+    "SCHEMAX": [("stable-keys", _read_schema, ALL_SCENARIOS)],
+}
+# Filled by calibrate_strong(): (operator, reading, scenario) triples that
+# flag the conforming control and are therefore not used.
+STRONG_EXCLUDED: set[tuple[str, str, str]] = set()
+
+
+def _strong_cells(cls: type) -> dict[tuple[str, str, str], bool]:
+    traces = {sc: closed_loop_trace(cls, sc) for sc in ALL_SCENARIOS}
+    out = {}
+    for op, readings in STRONG_READINGS.items():
+        for name, fn, scs in readings:
+            for sc in scs:
+                out[(op, name, sc)] = fn(traces[sc])
+    return out
+
+
+def calibrate_strong() -> set[tuple[str, str, str]]:
+    """Exclude readings that false-alarm on the conforming control."""
+    here = Path(__file__).resolve().parent
+    conf = load_controller_class(here / "controls" / "conforming.py")
+    bad = {k for k, ok in _strong_cells(conf).items() if not ok}
+    STRONG_EXCLUDED.clear()
+    STRONG_EXCLUDED.update(bad)
+    return bad
+
+
+def single_trace_grade_strong(cls: type) -> dict[str, str]:
+    """Union of all calibrated single-trace readings; RESEED/FREEZEDRY as in the basic grader."""
+    if not STRONG_EXCLUDED and not getattr(single_trace_grade_strong, "_calibrated", False):
+        calibrate_strong()
+        single_trace_grade_strong._calibrated = True  # type: ignore[attr-defined]
+    cells = _strong_cells(cls)
+    basic = single_trace_grade(cls)
+    out = {}
+    for op in OPERATORS:
+        if op in STRONG_READINGS:
+            flagged = [k for k, ok in cells.items() if k[0] == op and k not in STRONG_EXCLUDED and not ok]
+            out[op] = "fail" if flagged else "pass"
+        else:
+            out[op] = basic[op]
+    return out
+
+
 def objective(cls: type) -> dict[str, float]:
     """Task-performance metrics a trace grader would report (steady scenario)."""
     tr = closed_loop_trace(cls, "steady")
@@ -468,9 +644,16 @@ def evaluate(artifact: str, seeds: tuple[int, ...] = SEEDS) -> dict[str, Any]:
         result["errors"].append(f"single_trace: {type(exc).__name__}: {exc}")
         result["single_trace"] = {op: "error" for op in OPERATORS}
     try:
+        result["single_trace_strong"] = single_trace_grade_strong(cls)
+        result["strong_excluded"] = sorted("/".join(k) for k in STRONG_EXCLUDED)
+    except Exception as exc:  # noqa: BLE001
+        result["errors"].append(f"single_trace_strong: {type(exc).__name__}: {exc}")
+        result["single_trace_strong"] = {op: "error" for op in OPERATORS}
+    try:
         result["objective"] = objective(cls)
     except Exception as exc:  # noqa: BLE001
         result["errors"].append(f"objective: {type(exc).__name__}: {exc}")
     result["paired"] = {op: result["paired"].get(op, "error") for op in OPERATORS}
     result["single_trace"] = {op: result["single_trace"].get(op, "error") for op in OPERATORS}
+    result["single_trace_strong"] = {op: result.get("single_trace_strong", {}).get(op, "error") for op in OPERATORS}
     return result
