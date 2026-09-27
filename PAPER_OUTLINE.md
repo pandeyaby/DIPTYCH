@@ -1,5 +1,9 @@
 # PAPER_OUTLINE — DIPTYCH
 
+> **Superseded.** Historical planning document kept for the record. The paper
+> is [`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex); where this file differs, the
+> `.tex` is correct.
+
 **Working title:** *One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems*
 
 **Venue target:** IEEE (artifact-friendly).

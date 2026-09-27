@@ -2,14 +2,30 @@
 
 [![CI](https://github.com/pandeyaby/DIPTYCH/actions/workflows/ci.yml/badge.svg)](https://github.com/pandeyaby/DIPTYCH/actions/workflows/ci.yml)
 
-**DIPTYCH** grades calibration as **2-safety hyperproperties**: not one run, but a
-coupled pair sharing all exogenous inputs except one controlled perturbation. It
-forks a shared prefix (open-loop shape / CRN closed-loop point), discards
-incomparable pairs, and probes suffixes only.
+**Some requirements can't be checked by watching one run.** "React more strongly
+to overload than to underload", "be more conservative when load is noisier",
+"weigh recent evidence more than old" — each compares how a system *would*
+behave in two related situations. A benchmark that grades one execution trace
+cannot see these, so it silently passes code that violates them.
 
-> One film = legal; only the pair = calibrated.
+**DIPTYCH** grades such requirements on a **pair** of executions: run a shared
+prefix once, fork the system, change exactly one thing (the sign of an error,
+the order of recent observations, the noise level), and compare the two
+branches. Formally, these requirements are 2-safety hyperproperties.
 
-IEEE artifact harness. Schema `0.2`. Eight operators + `gate_axis_mutate`.
+It is aimed at people who build benchmarks or graders for agent- and
+model-written software, especially controllers and other stateful code.
+
+**What we found** (paper §VIII): an exhaustive mutation sweep exposed three
+real bugs in our own graders, and in a pilot with 20 controllers written by
+four Claude models, **12 of the 15 that pass every single-trace check violate
+a stated requirement** once tested in pairs.
+
+> One film can look legal; only the pair shows calibration.
+
+Artifact for the paper *One Trace Is Not Enough* (targeting AGENT'27 @ ICSE
+2027). Envelope schema `0.2`, eight perturbation operators, `gate_axis_mutate`
+power check, and a runnable pilot in [`diptych/pilot/`](diptych/pilot/).
 
 ![One film vs coupled diptych](docs/images/diptych-vs-single-trace.png)
 
@@ -64,21 +80,22 @@ pins below.
 }
 ```
 
-Machine-readable: [`CITATION.cff`](CITATION.cff) (no invented DOI).
+Machine-readable: [`CITATION.cff`](CITATION.cff) (no DOI yet).
 
 ## Paper
 
-Living IEEEtran conference source (authors: Abhinav Pandey, Abhishek Pandey / Meta):
+IEEEtran conference source (Abhinav Pandey, Independent Researcher; Abhishek
+Pandey, Meta):
 
-- **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — authoritative IEEEtran source (§VII = evaluation **protocol**; ZeroDay@`fb5b39da` / AOMB@`667e475`; Table `tab:coverage` = live green×8×3; no invented scores)
-- [`paper/READINESS.md`](paper/READINESS.md) — one-page submission readiness scorecard (green vs human TODOs; as of main `4576506a`)
-- [`CHANGELOG.md`](CHANGELOG.md) — merged IEEE polish milestones (#2–#11); status → READINESS
-- [`paper/SUBMISSION.md`](paper/SUBMISSION.md) — camera-ready / artifact zip package (venue TBD; corresponding author Abhinav)
-- [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — IEEE artifact checklist (code, controls, logs, non-claims, reproduce, CI PDF download)
-- [`paper/RQ_PROTOCOL.md`](paper/RQ_PROTOCOL.md) — RQ1–RQ5 scaffolding (result cells N/A)
-- [`paper/README.md`](paper/README.md) — compile notes (`make paper` / CI `paper-pdf` fallback) + figure paths
-- [`drafts/ieee-draft.md`](drafts/ieee-draft.md) — markdown prose draft (must not contradict `.tex`)
-- [`PAPER_OUTLINE.md`](PAPER_OUTLINE.md) — thesis / section plan
+- **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — the paper; PDF from `make paper` or the CI artifact `one-trace-is-not-enough-pdf`
+- [`paper/READINESS.md`](paper/READINESS.md) — submission status and pre-upload checklist
+- [`paper/SUBMISSION.md`](paper/SUBMISSION.md) — venue (AGENT'27), page budget, artifact zip
+- [`paper/RQ_PROTOCOL.md`](paper/RQ_PROTOCOL.md) — research questions and the pilot results ledger
+- [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — reviewer reproduction checklist
+- [`CHANGELOG.md`](CHANGELOG.md) — milestone log
+
+Reproduce the evaluation: `python -m diptych.adequacy` (Table IV) and
+`python -m diptych.pilot.study` (Table V, no model calls).
 
 Figures: PNGs referenced in README/tex; editable SVG sources alongside under
 [`docs/images/`](docs/images/).
@@ -91,7 +108,7 @@ AUROC (and lab AUROC / model grades) are **single-trace ranking scores**. DIPTYC
 2. Invite cosmetic score fields that fail the axis gate (contract rejects `auroc` / `model_grade`)
 3. Confuse localization with exploitability or model quality
 
-Coverage cells record categorical green/pending status and boolean `axis_power` only — never invented model scores. See paper §VII (evaluation protocol).
+Coverage cells record categorical green/pending status and boolean `axis_power` only, never model scores. See paper §VIII.
 
 ## Operators
 
@@ -112,14 +129,14 @@ Product emitters are **not** vendored here. Pin and grade:
 | **ZeroDay** | `fb5b39da` | `fb5b39daf88e37521aaee8526ae9d286cf74f341` |
 | **AOMB** | `667e475` | `667e47538ae5b9c504187b7a73220d22aa8fb96f` |
 
-**Pins frozen as of main `84930b24`.** Unchanged unless the matrix requires a
-bump. Details: [`adapters/PINS.md`](adapters/PINS.md).
+Pins change only when the coverage matrix requires it. Details: [`adapters/PINS.md`](adapters/PINS.md).
 
 ## Layout
 
 ```
-paper/             # living IEEEtran + READINESS / SUBMISSION / RQ_PROTOCOL / ANON
-CHANGELOG.md       # IEEE polish milestones (#2–#11); status → paper/READINESS
+paper/             # IEEEtran source + READINESS / SUBMISSION / RQ_PROTOCOL / ANON
+diptych/pilot/     # pilot study: task, plant, controls, generated controllers, study
+CHANGELOG.md       # milestone log
 LICENSE            # MIT (also cited below)
 CITATION.cff       # cite metadata (pandeyaby/DIPTYCH; no DOI)
 diptych/           # core package (contract, grade, gates, axis mutate)

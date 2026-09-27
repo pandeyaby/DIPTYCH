@@ -12,7 +12,7 @@ Paper: *One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Contro
 | Coupling discipline | Open-loop probes + CRN closed-loop probes |
 | Comparability horizon | Window over which paired traces remain comparable |
 | Probe-tree amortization | Share prefixes across probe branches (cost model) |
-| Verdicts | `pass` / `fail` / `inconclusive` (never invent scores) |
+| Verdicts | `pass` / `fail` / `inconclusive` (no numeric scores) |
 
 ## Eight operators (implementation order)
 

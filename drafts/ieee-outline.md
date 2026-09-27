@@ -1,12 +1,16 @@
 # IEEE draft outline — DIPTYCH
 
+> **Superseded.** Historical planning document kept for the record. The paper
+> is [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex); where this file differs, the
+> `.tex` is correct.
+
 **Authoritative IEEEtran (source of truth):**
 [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)
 
 **Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
 **Companion stubs:** [`ieee-draft.md`](ieee-draft.md) (non-authoritative; trimmed)
 
-Do not invent AUROC / model scores. Do not edit ZeroDay / AOMB product trees.
+No AUROC / model scores; ZeroDay / AOMB product trees are pinned, not edited.
 
 | § | Topic (living `.tex`) |
 |---|------------------------|

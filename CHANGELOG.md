@@ -1,13 +1,7 @@
-# Changelog — DIPTYCH (IEEE harness polish)
+# Changelog — DIPTYCH
 
-Harness-only milestone log. **No ZeroDay / AOMB product edits.** No invented
-AUROC, model scores, venue names, or DOIs.
-
-**Current status:** see [`paper/READINESS.md`](paper/READINESS.md) (frozen as of
-main `4576506a` after #11). Human TODOs (venue, emails/affiliation, optional DOI)
-and model-study cells remain open / N/A.
-
-**HOLD for Abhinav merge yes** before treating any upload as submission-final.
+Milestone log for the harness and paper. ZeroDay / AOMB product trees are
+pinned, never edited here. Current status: [`paper/READINESS.md`](paper/READINESS.md).
 
 ---
 
@@ -47,13 +41,3 @@ and model-study cells remain open / N/A.
 Earlier: [#1](https://github.com/pandeyaby/DIPTYCH/pull/1) (`266ed6cd`) — IEEE draft + CI (pytest/PoC workflow).
 
 ---
-
-## Stop condition (engineering)
-
-Harness polish is at **diminishing returns**. Further material unlocks are
-human- or data-gated:
-
-1. Abhinav fills venue / author fields in `paper/SUBMISSION.md` §0 (never invent)
-2. A real model-study data drop (RQ1–RQ5 / `tab:placeholder` stay **N/A** until then)
-
-Cosmetic doc churn alone is not a reason for another polish PR.

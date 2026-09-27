@@ -1,8 +1,8 @@
 # Anonymization / camera-ready switch — DIPTYCH
 
-Venue is **TBD** (see [`SUBMISSION.md`](SUBMISSION.md) §0). Do not invent a
-conference name. Use this file when a chosen CFP requires double-blind review
-or when restoring the named author block for camera-ready.
+The current target, AGENT'27, is single-anonymous, so this switch is **not**
+needed for it. Use this file only if a future venue requires double-blind
+review, and to restore the named author block afterwards.
 
 **Corresponding author (camera-ready):** Abhinav Pandey · `pandey.aby@gmail.com`  
 **Co-author:** Abhishek Pandey (Meta) · `pandeyabhi1987@gmail.com`
@@ -11,8 +11,6 @@ or when restoring the named author block for camera-ready.
 author block only. Anonymization is a **local / pre-upload** dry-run — do
 **not** fail CI if an anonymous PDF is not produced. Optional future job may
 build anon as a non-blocking artifact; never gate merge on it.
-
-HOLD for Abhinav merge yes before treating any anonymized PDF as submission-final.
 
 ---
 

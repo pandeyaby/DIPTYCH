@@ -1,14 +1,7 @@
-%% One Trace Is Not Enough
-%% IEEE conference submission draft (AUTHORITATIVE living source)
-%% STATUS: Section VIII = harness evaluation (controls, coverage, mutation sweep) + pilot on 20 model-written controllers (diptych/pilot).
-%% Artifact: https://github.com/pandeyaby/DIPTYCH · Cite: CITATION.cff (no DOI yet) · License: LICENSE (MIT)
-%% Adapter pins (read-only, frozen as of main f606cfe4 post-#16): ZeroDay@fb5b39da · AOMB@667e475
-%% Live matrix: coverage/matrix.json (green x8 x3 at pins above; no AUROC / model scores)
-%% Readiness: paper/READINESS.md · Changelog: CHANGELOG.md · Checklist: paper/ARTIFACT_CHECKLIST.md · Submission: paper/SUBMISSION.md
-%% RQ: paper/RQ_PROTOCOL.md · Witnesses: paper/WITNESSES.md · docs/adapters/WITNESSES.md · Notes: paper/NOTES.md
-%% Anon: paper/ANON.md · Pack: make artifact / scripts/pack_artifact.sh
-%% Figures: ../docs/images/{diptych-vs-single-trace,stack}.{png,svg}
-%% Build: make paper (latexmk) · CI fallback: workflow job paper-pdf
+%% One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems
+%% Artifact: https://github.com/pandeyaby/DIPTYCH (MIT). Build: make paper.
+%% Reproduce Table IV: python -m diptych.adequacy · Table V: python -m diptych.pilot.study
+%% Adapter pins (checked by diptych-pins against adapters/PINS.md): ZeroDay@fb5b39da · AOMB@667e475
 
 \documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
