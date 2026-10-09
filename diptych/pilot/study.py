@@ -22,20 +22,22 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from diptych import OPERATORS
+from diptych.pilot.tasks import TASKS, Task
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-RESULTS = HERE / "results.json"
+# Set by main() from --task: the task under study and its requirement keys.
+TASK: Task = TASKS["concurrency"]
+KEYS: tuple[str, ...] = TASK.keys()
 DECIDED = ("pass", "fail")
 
 
 def _controls() -> list[tuple[str, str, str | None]]:
     """(name, path, violated operator or None)."""
-    out = [("control:conforming", str(HERE / "controls" / "conforming.py"), None)]
-    for p in sorted((HERE / "controls" / "violating").glob("*.py")):
+    out = [("control:conforming", str(TASK.controls / "conforming.py"), None)]
+    for p in sorted((TASK.controls / "violating").glob("*.py")):
         if p.stem != "__init__":
-            out.append((f"control:violating-{p.stem}", str(p), p.stem.upper()))
+            out.append((f"control:violating-{p.stem}", str(p), TASK.violated_key(p.stem)))
     return out
 
 
@@ -50,7 +52,7 @@ def _artifacts() -> list[tuple[str, str, str]]:
         return []
     out = []
     for r in json.loads(manifest.read_text()):
-        if r.get("code_block"):
+        if r.get("code_block") and r.get("task", "concurrency") == TASK.name:
             out.append((f"{_group(r)}:{r['model']}#{r['sample']}", str(HERE / r["path"]), _group(r)))
     return out
 
@@ -59,7 +61,8 @@ def evaluate_isolated(path: str, timeout: int = 600) -> dict[str, Any]:
     env = dict(os.environ, PYTHONPATH=str(ROOT), PYTHONHASHSEED="0")
     try:
         proc = subprocess.run(
-            [sys.executable, "-m", "diptych.pilot.worker", "--artifact", path, "--mode", "evaluate"],
+            [sys.executable, "-m", "diptych.pilot.worker", "--artifact", path, "--mode", "evaluate",
+             "--task", TASK.name],
             capture_output=True, text=True, env=env, timeout=timeout, check=False,
         )
     except subprocess.TimeoutExpired:
@@ -70,8 +73,8 @@ def evaluate_isolated(path: str, timeout: int = 600) -> dict[str, Any]:
 
 
 def _all_error(path: str, why: str) -> dict[str, Any]:
-    return {"artifact": path, "paired": {o: "error" for o in OPERATORS},
-            "single_trace": {o: "error" for o in OPERATORS}, "errors": [why]}
+    return {"artifact": path, "paired": {o: "error" for o in KEYS},
+            "single_trace": {o: "error" for o in KEYS}, "errors": [why]}
 
 
 def control_power(rows: list[dict]) -> dict[str, Any]:
@@ -81,12 +84,12 @@ def control_power(rows: list[dict]) -> dict[str, Any]:
         conf = next(r for r in rows if r["violates"] is None)
         viol = [r for r in rows if r["violates"]]
         caught = [r["violates"] for r in viol if r[grader][r["violates"]] == "fail"]
-        off_axis = sum(1 for r in viol for op in OPERATORS
+        off_axis = sum(1 for r in viol for op in KEYS
                        if op != r["violates"] and r[grader][op] == "fail")
         out[grader] = {
             "own_axis_caught": len(caught), "violators": len(viol),
             "caught": sorted(caught),
-            "conforming_false_alarms": sorted(op for op in OPERATORS if conf[grader][op] == "fail"),
+            "conforming_false_alarms": sorted(op for op in KEYS if conf[grader][op] == "fail"),
             "off_axis_fails_on_violators": off_axis,
         }
     return out
@@ -116,7 +119,7 @@ def mcnemar_exact(b: int, c: int) -> float:
 
 def artifact_metrics(rows: list[dict], single: str = "single_trace") -> dict[str, Any]:
     per_op: dict[str, Any] = {}
-    for op in OPERATORS:
+    for op in KEYS:
         paired = Counter(r["paired"][op] for r in rows)
         single_c = Counter(r[single][op] for r in rows)
         both = [r for r in rows if r["paired"][op] in DECIDED and r[single][op] in DECIDED]
@@ -145,12 +148,12 @@ def artifact_metrics(rows: list[dict], single: str = "single_trace") -> dict[str
     ticks = [r["ticks"] for r in rows if r.get("ticks")]
     forked = sum(t["forked"] for t in ticks)
     naive = sum(t["naive_equivalent"] for t in ticks)
-    n_verdicts = len(rows) * len(OPERATORS)
+    n_verdicts = len(rows) * len(KEYS)
     k_fail = sum(1 for r in fully_single_pass if "fail" in r["paired"].values())
     # Artifact-level McNemar: paired flags a violation single-trace misses (b)
     # vs. single-trace flags one paired does not (c), counted per artifact.
-    b = sum(1 for r in rows if any(r["paired"][o] == "fail" and r[single][o] == "pass" for o in OPERATORS))
-    c = sum(1 for r in rows if any(r[single][o] == "fail" and r["paired"][o] == "pass" for o in OPERATORS))
+    b = sum(1 for r in rows if any(r["paired"][o] == "fail" and r[single][o] == "pass" for o in KEYS))
+    c = sum(1 for r in rows if any(r[single][o] == "fail" and r["paired"][o] == "pass" for o in KEYS))
     return {
         "single_grader": single,
         "n_artifacts": len(rows),
@@ -180,9 +183,13 @@ def _fmt(v: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="diptych.pilot.study")
+    p.add_argument("--task", choices=sorted(TASKS), default="concurrency")
     p.add_argument("--controls-only", action="store_true")
     p.add_argument("--jobs", type=int, default=4)
     args = p.parse_args(argv)
+    global TASK, KEYS
+    TASK = TASKS[args.task]
+    KEYS = TASK.keys()
     targets = [(n, path, v, None) for n, path, v in _controls()]
     if not args.controls_only:
         targets += [(n, path, "artifact", g) for n, path, g in _artifacts()]
@@ -199,7 +206,7 @@ def main(argv: list[str] | None = None) -> int:
     controls = [r for r in rows if r["kind"] == "control"]
     artifacts = [r for r in rows if r["kind"] == "artifact"]
     groups = sorted({r["group"] for r in artifacts})
-    report = {"study_schema": "1.1", "operators": list(OPERATORS),
+    report = {"study_schema": "1.2", "task": TASK.name, "operators": list(KEYS),
               "controls": control_power(controls),
               "artifacts": artifact_metrics(artifacts) if artifacts else None,
               "artifacts_strong": artifact_metrics(artifacts, "single_trace_strong") if artifacts else None,
@@ -207,11 +214,22 @@ def main(argv: list[str] | None = None) -> int:
               "by_group_strong": {g: artifact_metrics([r for r in artifacts if r["group"] == g],
                                                       "single_trace_strong") for g in groups},
               "rows": rows}
-    RESULTS.write_text(json.dumps(report, indent=2, sort_keys=True, default=repr) + "\n")
-    print("operators:", " ".join(OPERATORS))
+    goals = [r.get("objective") or {} for r in artifacts]
+    if any("meets_lossy_goal" in g for g in goals):
+        report["goals"] = {
+            "meets_lossy_goal": sum(bool(g.get("meets_lossy_goal")) for g in goals),
+            "meets_delay_goal": sum(bool(g.get("meets_delay_goal")) for g in goals),
+            "meets_both": sum(bool(g.get("meets_lossy_goal") and g.get("meets_delay_goal")) for g in goals),
+            "meets_both_and_all_paired_pass": sum(
+                bool(g.get("meets_lossy_goal") and g.get("meets_delay_goal"))
+                and all(v == "pass" for v in r["paired"].values()) for g, r in zip(goals, artifacts)),
+        }
+        print("goals:", report["goals"])
+    (HERE / TASK.results).write_text(json.dumps(report, indent=2, sort_keys=True, default=repr) + "\n")
+    print("requirements:", " ".join(KEYS))
     for r in rows:
-        print(f"{r['name']:<42} paired={''.join(_fmt(r['paired'][o]) for o in OPERATORS)} "
-              f"single={''.join(_fmt(r['single_trace'][o]) for o in OPERATORS)}"
+        print(f"{r['name']:<42} paired={''.join(_fmt(r['paired'][o]) for o in KEYS)} "
+              f"single={''.join(_fmt(r['single_trace'][o]) for o in KEYS)}"
               + (f"  errors={r['errors'][:1]}" if r.get("errors") else ""))
     print(json.dumps({"controls": report["controls"], "artifacts": {
         k: v for k, v in (report["artifacts"] or {}).items() if k != "per_operator"}}, indent=2))
