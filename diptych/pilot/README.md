@@ -1,12 +1,12 @@
 # Pilot study
 
 Paired vs. single-trace grading on controllers written by models, for a
-reduced version of the paper's orchestrator task. Paper: §VIII-D, Table
+concurrency-control task written for this paper. Paper: §II, §VIII-D, Table
 `tab:pilot`.
 
 | File | Role |
 |------|------|
-| `TASK.md` | Task given verbatim to the models: interface + eight requirements |
+| `TASK.md` | Task text given to the models unchanged: interface + eight requirements |
 | `plant.py` | Deterministic closed-loop service model; per-tick noise pre-drawn from the seed (CRN) |
 | `controls/` | Executable conforming controller and eight violators, one design decision each |
 | `probes.py` | Paired probes (fork live controllers, count ticks), basic and strong single-trace baselines, `evaluate()` |

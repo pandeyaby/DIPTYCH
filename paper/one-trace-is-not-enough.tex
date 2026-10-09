@@ -59,9 +59,10 @@
 		sets of traces, which in general no single execution can falsify.
 		
 		We make three contributions. First, a property taxonomy for agentic
-		evaluation and an audit of a long-horizon control-system specification
-		(twenty-two invariants): seven written as single-trace prose are only
-		falsifiable as $2$-safety hyperproperties. We prove the obstruction:
+		evaluation and an audit of a public controller specification, the
+		IETF's criteria for evaluating congestion control algorithms (RFC~9743):
+		eight of its eighteen behavioral criteria are defined by a contrast
+		between two executions. We prove the obstruction:
 		two stateful deterministic artifacts can produce the identical trace yet
 		respond with opposite asymmetry, so no single-trace estimate identifies it.
 		
@@ -99,8 +100,8 @@
 	execution. ``The function returns the correct value'' and ``the agent
 	eventually books the flight'' are both decided by watching a single run.
 	Much of what we want from autonomous systems is not of this form. Consider
-	four requirements drawn verbatim from an industrial specification for a
-	fleet traffic controller:
+	four requirements on an adaptive concurrency controller, from the task we
+	release with this paper (Section~\ref{sec:pilot}):
 	
 	\begin{itemize}
 		\item \textbf{Asymmetric response.} The controller's downward correction to
@@ -108,10 +109,10 @@
 		to a deviation of equal magnitude and opposite sign.
 		\item \textbf{Volatility suppression.} Given two workloads with equal mean
 		and different variance, the controller must converge to a strictly more
-		conservative operating point on the higher-variance workload.
+		conservative limit on the higher-variance workload.
 		\item \textbf{Anti-windup.} After sustained saturation at a ceiling, the
-		first post-saturation response must be bounded by the immediately observed
-		error and not by the accumulated saturation window.
+		first response to a latency excursion must be bounded by the immediately
+		observed error and not by how long the controller was saturated.
 		\item \textbf{Determinism.} The same configuration and observation sequence
 		must yield a bit-identical decision sequence across fresh interpreter
 		processes.
@@ -122,9 +123,12 @@
 	the observational-determinism hyperproperty from the information-flow
 	literature, and it is well understood there that it is not a trace property
 	\cite{clarkson2010,zdancewic2003}. Our claim is that the other three are
-	formally the same kind of object, that this class is large, and that it is
-	precisely the class capturing the judgment and calibration we most want to
-	measure in agent-authored systems.
+	formally the same kind of object and that this class captures the
+	judgment and calibration we most want to measure in agent-authored
+	systems. Such requirements are not peculiar to our task: the IETF's
+	guidance for assessing congestion controllers asks whether a new
+	algorithm causes more harm to competing flows than a standard one
+	would \cite{rfc9743}, a comparison between two runs.
 	
 	The practical consequence is a silent failure mode in benchmark design. A
 	specification author writes an invariant in single-trace prose. A harness
@@ -142,12 +146,12 @@
 		hyperproperties, and resource properties, and we state for each what
 		evidence is required to falsify it.
 		
-		\item \textbf{An audit of a real specification} (Section \ref{sec:audit}).
-		We classify all twenty-two invariants of a long-horizon orchestrator task.
-		Seven are misclassified in the source specification in the direction that
-		matters: they read as single-trace checks but are only falsifiable with a
-		pair. We also find that the specification's stated ``hardest to satisfy''
-		class and its hardest-to-\emph{check} class are disjoint.
+		\item \textbf{An audit of a public specification} (Section \ref{sec:audit}).
+		We classify the eighteen behavioral evaluation criteria of RFC~9743, the
+		IETF's Best Current Practice for assessing congestion control
+		algorithms. Eight are defined by a counterfactual contrast---harm,
+		impact, or robustness relative to a reference run---and the document
+		prescribes neither thresholds nor how to construct the comparison.
 		
 		\item \textbf{A state-confounding obstruction} (Proposition
 		\ref{prop:confound}). For a deterministic stateful transducer on a
@@ -167,39 +171,36 @@
 		\item \textbf{An evaluation} (Section \ref{sec:protocol}). Control
 		twins, a power-on-axis gate, and an exhaustive mutation sweep that found
 		and fixed real grader defects; and a pilot on model-written controllers
-		for a reduced orchestrator task, with executable controls, where paired
-		probing overturns the single-trace verdict on most artifacts.
+		for a concurrency-control task we release, with executable controls,
+		where paired probing overturns the single-trace verdict on most
+		artifacts.
 	\end{enumerate}
 
 	We are explicit about scope. The pilot is small (40 controllers, one
-	reduced task) and shows that paired grading changes verdicts, not how
-	models compare.
+	task that we wrote) and shows that paired grading changes verdicts, not
+	how models compare.
 	
 	\section{Motivating Example}
 	\label{sec:motivating}
 	
-	We ground the paper in a concrete long-horizon task, which we also use as
-	the audit subject and whose invariants shape the harness operators.
+	We ground the paper in a concrete task, the one used in our pilot
+	(Section~\ref{sec:pilot}); its requirements shape the harness operators.
 	
-	\subsection{The orchestrator task}
+	\subsection{The running task}
 	
-	An agent authors an adaptive traffic orchestrator: constructor, \texttt{tick}
-	(observation$\to$decision), and serialize/restore. Structure is the agent's
-	choice. Observations report rates, latency, errors, queues, capacity,
-	heartbeats, topology, and directives; decisions cover admission, shedding,
-	routing, concurrency, timeouts, ejections, replicas, alerts, and telemetry.
-	Fifteen sealed adversarial scenarios (steady state through brownout,
-	partition, retry storms, cascade, hunting, heavy tails, flaps, rollout, and
-	serialize-restart) score twenty-two invariants.
+	A model or agent writes an adaptive concurrency controller: a constructor,
+	\texttt{tick} (observation$\to$decision), and snapshot/restore. Each tick
+	it observes latency, a latency setpoint, and offered and admitted load,
+	and returns a concurrency limit plus telemetry. The limit determines how
+	much load a simulated service admits, which determines the next latency.
+	The task states eight requirements in prose, among them the four above.
+	We wrote the task and release it with the paper.
 	
-	It was written by systems practitioners, so its misclassifications are
-	realistic rather than formal-methods artifacts.
-	
-	\subsection{Two orchestrators a trace grader cannot separate}
+	\subsection{Two controllers a trace grader cannot separate}
 	\label{sec:twoorch}
 	
 	Consider two candidate artifacts. Both maintain an exponentially weighted
-	estimate of endpoint latency and adjust a concurrency limit toward a
+	estimate of latency and adjust a concurrency limit toward a
 	setpoint. $A_{\mathrm{sym}}$ applies gain $g$ to the error in both
 	directions. $A_{\mathrm{asym}}$ applies $g_{\uparrow}$ when the observed
 	latency is below setpoint and $g_{\downarrow}$ when it is above, with
@@ -217,8 +218,8 @@
 	deviations, so the ratio could be read off directly. It cannot, and the
 	reason is the technical heart of the paper. The response to an upward
 	deviation at tick $t$ and to a downward deviation at tick $t'$ are responses
-	\emph{from different internal states}. The estimator has moved, the
-	saturation history differs, the topology may have changed. Any ratio
+	\emph{from different internal states}. The estimator has moved and the
+	saturation history differs. Any ratio
 	computed across those two moments mixes the sign effect with state drift.
 	Proposition \ref{prop:confound} formalizes this. The only construction that
 	identifies the sign effect holds the state fixed, which means branching two
@@ -280,14 +281,14 @@
 	
 	\subsection{The five classes}
 	
-	\textbf{Trace safety.} A bad prefix exists. One run falsifies. Example: an
-	ejection set that drops a rack below its live-endpoint floor. These are
-	cheap and are what current harnesses check well.
+	\textbf{Trace safety.} A bad prefix exists. One run falsifies. Example: a
+	limit outside its configured bounds. These are cheap and are what current
+	harnesses check well.
 	
 	\textbf{Quantitative trace properties.} A real-valued functional of one
 	trace compared against a threshold. One long run falsifies, subject to
-	sampling error. Example: realized admitted-load share per priority within
-	tolerance of the configured weights.
+	sampling error. Example: mean latency error within a tolerance of the
+	setpoint.
 	
 	\textbf{$k$-safety hyperproperties.} A tuple of $k$ traces falsifies; no
 	single trace does. Almost everything in this paper is $k=2$. Example:
@@ -299,8 +300,8 @@
 	that of the low-variance arm, which is a real-valued contrast over a pair.
 	
 	\textbf{Resource properties.} Statements about execution cost rather than
-	output. Example: median tick latency at reference scale, state size bounded
-	by topology and independent of tick count. These are single-trace but noisy,
+	output. Example: median tick latency, or state size independent of tick
+	count. These are single-trace but noisy,
 	and require repetition for a different reason than $k$-safety does.
 	
 	Table \ref{tab:classes} summarizes the falsification evidence each class
@@ -324,86 +325,84 @@
 		\end{tabular}
 	\end{table}
 	
-	\section{Auditing a Real Specification}
+	\section{Auditing a Public Specification}
 	\label{sec:audit}
 	
-	We classified all twenty-two invariants of the orchestrator task. Table
-	\ref{tab:audit} gives the result. The column \emph{As written} records the
-	class a reader would infer from the specification's prose; \emph{Actual}
-	records the class required to falsify the stated intent.
+	How common are such requirements in specifications that practitioners
+	actually write? We audited RFC~9743 \cite{rfc9743}, the IETF's 2025 Best
+	Current Practice for specifying and assessing congestion control
+	algorithms---adaptive rate controllers, the direct ancestors of
+	concurrency limiters. Its Sections~5 and~7 state the criteria a proposed
+	algorithm is evaluated against.
+	
+	\textbf{Method.} We took every criterion in those sections that
+	constrains or asks for an evaluation of the algorithm's \emph{behavior}
+	(18 in all), setting aside documentation duties (e.g., explaining
+	deviations from earlier principles) and descriptions of environments. We
+	classified each by one rule: a criterion needs \emph{paired} executions
+	iff its text defines the quantity as an effect, impact, or harm relative
+	to a reference situation, or as robustness to a change; otherwise it is
+	a property of one run. Table~\ref{tab:audit} gives the result; the
+	classification is ours and each row cites its section so it can be
+	checked.
 	
 	\begin{table*}[t]
-		\caption{Classification of the orchestrator specification's twenty-two invariants. Rows marked $\star$ are written as single-trace checks but are only falsifiable as $2$-safety hyperproperties.}
+		\caption{The eighteen behavioral evaluation criteria of RFC~9743, paraphrased, with the evidence each requires. \emph{Paired} criteria are defined by a contrast between two executions.}
 		\label{tab:audit}
 		\centering
-		\small
+		\scriptsize
 		\begin{tabular}{@{}llll@{}}
 			\toprule
-			Invariant & Stated group & As written & Actual class \\
+			RFC~9743 & Criterion (paraphrased) & Class & Contrast (if paired) \\
 			\midrule
-			Admission floor & safety & trace safety & trace safety \\
-			No self-cascading action & safety & trace safety & trace safety \\
-			Type contract & safety & trace safety & trace safety \\
-			Determinism $\star$ & safety & trace safety & $2$-safety hyper \\
-			\midrule
-			Weighted admission fairness & fairness & quantitative trace & quantitative trace \\
-			Rack fairness under contention & fairness & trace safety & trace safety \\
-			Backend load balance & fairness & quantitative trace & quantitative trace \\
-			\midrule
-			Asymmetric response $\star$ & adaptive & comparative & quantitative $2$-safety \\
-			Trend recency $\star$ & adaptive & comparative & quantitative $2$-safety \\
-			Anti-windup $\star$ & adaptive & trace safety & quantitative $2$-safety \\
-			Setpoint-change quiet $\star$ & adaptive & trace safety & quantitative $2$-safety \\
-			Volatility suppression $\star$ & adaptive & comparative & quantitative $2$-safety \\
-			\midrule
-			No double-tightening & coherence & trace safety & trace safety \\
-			Failover uses fresh graph & coherence & trace safety & trace safety \\
-			Timeout $\geq$ service time & coherence & trace safety & trace safety \\
-			Alerts precede action & coherence & trace safety & trace safety (windowed) \\
-			No alert flapping & coherence & trace safety & trace safety (windowed) \\
-			\midrule
-			State size bound & memory & quantitative trace & quantitative trace \\
-			Tick throughput & memory & resource & resource \\
-			State round-trip stability $\star$ & memory & trace safety & $2$-safety hyper \\
-			\midrule
-			Telemetry schema stability $\star$ & telemetry & trace safety & $2$-safety hyper \\
-			Actionable coverage & telemetry & trace safety & trace safety \\
+			\S5.1.1 & Full backoff or stop under persistent congestion & trace property & \\
+			\S5.1.2 & Avoid maintaining excessive queues & quantitative trace & \\
+			\S5.1.3 & Avoid causing high loss; reduce rate under high loss & quantitative trace & \\
+			\S5.1.4 & How capacity is shared among flows of the same algorithm & quantitative trace & \\
+			\S5.1.5 & How short-lived flows affect long-lived flows, and vice versa & \textbf{paired} & with vs.\ without the other flows \\
+			\S5.2 & More harm than standard algorithms to flows sharing a bottleneck & \textbf{paired} & proposed vs.\ standard algorithm \\
+			\S5.2 & No starvation; backoff when all feedback is lost & trace property & \\
+			\S5.2.1 & Negative impact on flows using standard congestion control & \textbf{paired} & proposed vs.\ standard competitor \\
+			\S5.2.2 & Coexistence with real-time congestion control & quantitative trace & \\
+			\S5.2.3 & Effect on short and long flows using other algorithms & \textbf{paired} & with vs.\ without the proposed flows \\
+			\S7.1 & Reaction to ECN congestion marks conforms to the codepoint & trace property & \\
+			\S7.2 & Operates within the envelope of network circuit breakers & trace property & \\
+			\S7.3 & Robust to a significant change in minimum delay & \textbf{paired} & with vs.\ without the delay change \\
+			\S7.6 & Performance with misbehaving nodes or attackers & quantitative trace & \\
+			\S7.8 & Performance under transient events & quantitative trace & \\
+			\S7.9 & Impact of path changes; robust to them & \textbf{paired} & with vs.\ without the path change \\
+			\S7.10 & Failover: harm to performance from a path change & \textbf{paired} & with vs.\ without failover \\
+			\S7.10 & Concurrent multipath: harm to other flows at a shared bottleneck & \textbf{paired} & multipath vs.\ single-path flow \\
 			\bottomrule
 		\end{tabular}
 	\end{table*}
 	
 	Three findings follow.
 	
-	\textbf{Seven invariants are misclassified, all in the unsafe direction.}
-	Each starred row reads as a check a harness author would implement against a
-	single trace, and each is only falsifiable with a pair. Three of the seven
-	are not even framed comparatively in the source text. Anti-windup says the
-	post-saturation response is bounded by the immediate error ``and not by the
-	accumulated saturation window.'' A single trace cannot separate a controller
-	that respects this from one that happened to accumulate little. The
-	falsifying evidence is a pair of executions that share an immediate error
-	and differ in saturation duration. Setpoint-change quiet has the same
-	shape, with pre-step history as the varied dimension. Telemetry schema
-	stability quantifies over all emissions in all scenarios, so a violation is
-	witnessed by two emissions that may live in different traces.
+	\textbf{Eight of eighteen criteria are contrasts between executions.}
+	They ask what an algorithm does \emph{to} something: to competing flows,
+	relative to what a standard algorithm would have done to them, or to its
+	own performance when the path changes. ``Harm'' in this sense is a
+	two-run quantity by definition \cite{ware2019}: the same competitor is
+	measured once against the proposed algorithm and once against the
+	incumbent. The ten single-run criteria concern the algorithm's own
+	absolute behavior---backoff, queue build-up, loss.
 	
-	\textbf{Hard to satisfy and hard to check are different axes.} The
-	specification names its coherence group as the class that surfaces design
-	flaws, the one requiring the author to revisit early decisions. Every
-	coherence invariant is nonetheless plain trace safety: the double-tightening
-	check inspects one tick, the failover check inspects one tick, the alert
-	checks inspect a bounded window. They are difficult to \emph{satisfy} and
-	trivial to \emph{detect}. The adaptive-control group is the inverse. This
-	distinction is worth making explicit for benchmark authors, because effort
-	on harness construction should follow checkability, not difficulty.
+	\textbf{The contrasts are where the judgment is.} The paired criteria
+	are the calibration questions: how aggressive toward others, how
+	sensitive to change. A calibration requirement is a statement about how
+	behavior would differ under a counterfactual input, and counterfactual
+	contrasts are not single-trace objects. We expect this pattern to recur
+	in any specification that asks for judgment rather than conformance.
 	
-	\textbf{The misclassification is systematic, not careless.} Six of the seven
-	starred invariants concern calibration: how strongly to react, how much to
-	weight recent evidence, how conservative to be under uncertainty. Calibration
-	is inherently a statement about how behavior would differ under a
-	counterfactual input, and counterfactual contrasts are not single-trace
-	objects. We expect this pattern to recur in any specification that asks for
-	judgment rather than for conformance.
+	\textbf{The comparison is left unconstructed.} By its own account the
+	document gives no thresholds, and it does not say what must be held
+	fixed between the two runs---the path, the competing traffic, the random
+	losses. Two evaluators can therefore reach different verdicts from the
+	same algorithm, and the natural shortcut for the robustness criteria, a
+	before/after comparison within one run, compares the algorithm at two
+	different internal states. The next subsection shows why that shortcut
+	fails, and Section~\ref{sec:harness} supplies the missing construction.
 	
 	\subsection{The obstruction}
 	
@@ -523,8 +522,8 @@
 		Section~\ref{sec:eval-cost} reports it on live executions.
 	\end{definition}
 	
-	Forking needs a cheap copy of artifact state at $t_p$. The orchestrator
-	task already mandates serialize/restore with bit-identical continuation
+	Forking needs a cheap copy of artifact state at $t_p$. Our task already
+	mandates snapshot/restore with bit-identical continuation
 	(\textsc{FreezeDry}'s axis), so the property that makes an artifact
 	restartable also makes paired grading affordable; we suggest task
 	specifications require it for that reason alone.
@@ -575,7 +574,7 @@
 	construction. \textsc{SatExtend} pairs a saturated arm with its
 	extension and requires every actuator sample on both arms to stay inside
 	the declared saturation and legal bounds, which an unbounded integrator
-	exceeds (Section~\ref{sec:audit}); the recorded-envelope grader checks
+	exceeds; the recorded-envelope grader checks
 	these bounds, while the pilot's live probe (Section~\ref{sec:pilot})
 	compares the first post-release response directly.
 	\textsc{SchemaX} compares emission records across scenarios ($2$-safety
@@ -731,8 +730,8 @@
 	\subsection{Pilot: model-authored controllers}
 	\label{sec:pilot}
 	
-	\textbf{Task and plant.} The industrial specification is not public, so
-	we release a reduced orchestrator task: a controller sets a concurrency
+	\textbf{Task and plant.} The pilot uses the task of
+	Section~\ref{sec:motivating}: a controller sets a concurrency
 	limit each tick so latency tracks a setpoint in a deterministic
 	closed-loop service model, under eight requirements written as
 	specification prose, one per operator. Each probe runs a shared prefix,
@@ -921,7 +920,11 @@
 	\section{Threats to Validity}
 	\label{sec:threats}
 	
-	\textbf{Construct.} Operators encode one reading of each invariant; we
+	\textbf{Audit.} The classification of RFC~9743 is ours, of one document
+	that guides human evaluation rather than specifying a benchmark; moving
+	the borderline rows (\S5.2.2, \S7.6, \S7.8) gives 8 to 11 paired
+	criteria of 18.
+	\textbf{Construct.} Operators encode one reading of each requirement; we
 	publish them as code so intent disputes become artifact disputes.
 	
 	\textbf{Adapter pin drift.} Adapter greens hold at the pinned SHAs only;
@@ -961,8 +964,9 @@
 	
 	Agentic benchmarks grade one trace at a time, yet many requirements on
 	agent-authored systems---especially calibration---are only falsifiable as
-	$2$-safety hyperproperties. We audited a real long-horizon control task
-	(seven of twenty-two invariants misclassified), proved the single-trace
+	$2$-safety hyperproperties. We audited the IETF's evaluation criteria for
+	congestion controllers (eight of eighteen behavioral criteria are
+	contrasts between executions), proved the single-trace
 	confound for stateful artifacts, and presented a paired harness with
 	coupling, an inconclusive verdict, and a probe-tree cost model. A mutation
 	sweep on our own graders found three classes of defect that a fully green
