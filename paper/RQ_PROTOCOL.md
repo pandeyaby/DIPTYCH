@@ -83,18 +83,25 @@ twin contrast + `gate_axis_mutate` at pins in `adapters/PINS.md`.
 
 ## Results ledger
 
-Pilot values come from `python -m diptych.pilot.study` (`diptych/pilot/results.json`):
-40 controllers on the reduced task in `diptych/pilot/TASK.md` — one-shot from four
-Claude models (20) and OpenAI `gpt-5.6-sol` via Codex (5), and tool-using agents
-(Claude Sonnet 5 / Opus 5.5: 10; Codex: 5). Pilot measurements, not a model comparison.
+Pilot values come from `python -m diptych.pilot.study [--task congestion]`
+(`diptych/pilot/results.json`, `results_congestion.json`): 80 controllers, 40 per
+task — one-shot from four Claude models (20) and OpenAI `gpt-5.6-sol` via Codex (5),
+and tool-using agents (Claude Sonnet 5 / Opus 5.5: 10; Codex: 5). Task A is the
+concurrency task (`diptych/pilot/TASK.md`, our requirements); Task B is the
+congestion task (`diptych/pilot/congestion/TASK.md`, RFC 9743 criteria with our
+thresholds). Pilot measurements, not a model comparison.
 
-| RQ | Status | Value |
-|----|--------|-------|
-| RQ1 separation index | pilot | Basic baseline: 0.85 (478/563 pairs); 28 of 34 all-pass controllers fail a paired probe (82%, 95% CI 66–92%); McNemar 33 vs 2, p < 1e-7. Strong baseline: 10 of 11 all-pass fail paired (91%, CI 62–98%); disagrees with paired on asymmetric response for 25/40 (4 missed, 21 flagged) |
-| RQ2 operator information | pilot (descriptive) | TRAJSWAP 23/40 paired fails (22 missed by single trace); VARSCALE 13 (10); SIGNFLIP 10 (7); SATEXTEND 3 (3); HISTSWAP 3 (3); FREEZEDRY/RESEED/SCHEMAX 0 |
-| RQ3 held-out rank corr. | protocol | N/A (no held-out scenarios yet) |
-| RQ4 α (amortization) | pilot, measured ticks | 2.71 (309,790 executed vs 840,190 naive replay) |
-| RQ5 inconclusive rate | pilot | 3.1% of paired verdicts (10/320); 88% of forked verdicts seed-stable |
+| RQ | Status | Task A (concurrency) | Task B (congestion) |
+|----|--------|----------------------|---------------------|
+| RQ1 separation | pilot | 34 pass all basic single-trace checks; 28 fail paired (82%, CI 66–92%); McNemar 33 vs 2 | 16 pass; 3 fail paired (19%, CI 7–43%); McNemar 9 vs 0, p = 0.004 |
+| RQ2 which requirements | pilot (descriptive) | trend recency 23 (22 missed by basic), volatility 13 (10), asymmetric response 10 (7), anti-windup 3 (3), setpoint quiet 3 (3) | delay change 14 (2 missed), harm-latency 9 (0), intra-fairness 8 (0), short flows 7 (3), harm-throughput 6 (0), path change 5 (5) |
+| RQ3 held-out rank corr. | protocol | N/A | N/A |
+| RQ4 α (measured ticks) | pilot | 3.09 (254,076 vs 784,476) | 1.45 (546,000 vs 792,000) |
+| RQ5 inconclusive / stability | pilot | 3.1% inconclusive; 88% seed-stable | 0% inconclusive; 93% seed-stable |
+
+Strong baseline: Task A 10 of 11 all-pass controllers fail paired; disagrees with
+paired on asymmetric response for 25/40. Task B its Jain's-index reading flags 29
+controllers for throughput harm that paired grading passes.
 
 Never back-fill from green×8×3.
 

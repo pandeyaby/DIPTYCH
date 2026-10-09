@@ -30,7 +30,7 @@ paper anywhere else while it is under review.
 | Build | Result |
 |-------|--------|
 | Current draft | Body ends on page 8; references on pages 8–9 (fits "8 pages excluding references") |
-| Largest floats | Operator table (`table*`), audit table (`table*`), Tables IV (adequacy) and V (pilot), Figure 1 |
+| Largest floats | Audit table (`table*`), operator table, pilot table (Table IV), Figure 1 |
 
 If a later edit overflows, trim in this order: related-work density, survivor
 triage prose in §VIII-C, Figure 1 width. Build with `make paper` (needs
@@ -55,15 +55,16 @@ Reproduce from the zip:
 
 ```bash
 ./scripts/run_poc.sh                  # coverage matrix; expect MATRIX CHECK OK
-python -m diptych.adequacy            # Table IV
-python -m diptych.pilot.study         # Table V (no model calls)
+python -m diptych.adequacy                       # §VIII-C numbers
+python -m diptych.pilot.study                    # Table IV, Task A (no model calls)
+python -m diptych.pilot.study --task congestion  # Table IV, Task B
 PYTHONPATH=. python -m pytest -q      # needs pytest
 ```
 
 ## 4. Non-claims
 
 - No accuracy, AUROC, F1, or model ranking; the envelope contract rejects score fields.
-- The pilot shows paired grading changes verdicts on 20 single-shot controllers; it is not a model comparison.
+- The pilot (80 controllers, two tasks) shows where paired grading changes verdicts; it is not a model comparison.
 - A green coverage cell means axis power at the pinned adapters, not a vulnerability finding.
 - `inconclusive` is never counted as green.
 

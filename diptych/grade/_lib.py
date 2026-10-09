@@ -345,6 +345,10 @@ GRADERS: dict[str, Callable] = {
 
 
 def grade_document(doc: dict) -> GradeResult:
+    from diptych.live import grade_live, is_live
+
+    if is_live(doc):  # pair recorded from an artifact under test (diptych.live)
+        return grade_live(doc)
     doc = validate_envelope(doc)
     reason = comparability_reason(doc)
     if reason:
@@ -409,6 +413,28 @@ def _grade_entry(
             "actual_verdict": None,
             "expected_verdict": None,
             "matches_expected": False,
+        }
+
+    from diptych.live import is_live
+
+    if is_live(raw):
+        try:
+            result = grade_document(raw)
+        except ContractError as exc:
+            return {
+                "path": rel, "status": "rejected", "error": str(exc),
+                "diptych_schema": raw.get("diptych_schema"), "operator": raw.get("operator"),
+                "actual_verdict": None, "expected_verdict": None, "matches_expected": False,
+            }
+        return {
+            "path": rel, "status": "graded", "diptych_schema": raw["diptych_schema"],
+            "schema_version": raw["diptych_schema"], "source": raw["source"],
+            "task": raw["task"], "requirement": raw["requirement"], "artifact": raw["artifact"],
+            "operator": result.operator, "probe_id": result.probe_id,
+            "control_role": result.control_role, "coupling": raw["coupling"],
+            "expected_verdict": None, "actual_verdict": result.actual_verdict,
+            # Live envelopes have no expected verdict; nothing to mismatch.
+            "matches_expected": True, "reason": result.reason, "evidence": result.evidence,
         }
 
     try:

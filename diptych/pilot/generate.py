@@ -34,6 +34,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from diptych.pilot.tasks import TASKS, Task
+
 HERE = Path(__file__).resolve().parent
 ARTIFACTS = HERE / "artifacts"
 DEFAULT_MODELS = {
@@ -52,25 +54,16 @@ CODEX_ONESHOT_PROMPT = (
 )
 AGENT_PROMPT = (
     "Implement the task in TASK.md in this directory. Write the final module to "
-    "controller.py. You can run `python3 sim.py controller.py` (or `--scenario NAME "
-    "--trace`) to run your controller in closed loop against the service plant, and "
-    "you may write and run your own tests. Stop when controller.py meets every "
-    "requirement in TASK.md."
+    "controller.py. {sim_hint}, and you may write and run your own tests. Stop when "
+    "controller.py meets every requirement in TASK.md."
 )
 
 _CODE = re.compile(r"```python\s*\n(.*?)```", re.S)
 
 
-def _dir_for(condition: str, agent: str, model: str) -> Path:
-    if condition == "oneshot" and agent == "claude":
-        return ARTIFACTS / model  # original layout of the first pilot batch
-    return ARTIFACTS / f"{condition}-{agent}" / model
-
-
-def _workspace(cwd: Path) -> None:
-    shutil.copy(HERE / "TASK.md", cwd / "TASK.md")
-    shutil.copy(HERE / "plant.py", cwd / "plant.py")
-    shutil.copy(HERE / "agent_sim.py", cwd / "sim.py")
+def _workspace(task: Task, cwd: Path) -> None:
+    for dest, src in task.workspace.items():
+        shutil.copy(task.root / src, cwd / dest)
 
 
 def _save(rec: dict, code: str | None, out: Path) -> dict:
@@ -85,11 +78,11 @@ def _save(rec: dict, code: str | None, out: Path) -> dict:
     return rec
 
 
-def _claude(condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, str | None]:
+def _claude(task: Task, condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, str | None]:
     if condition == "oneshot":
-        args = ["claude", "-p", ONESHOT_PROMPT + (HERE / "TASK.md").read_text(), "--tools", ""]
+        args = ["claude", "-p", ONESHOT_PROMPT + task.text, "--tools", ""]
     else:
-        args = ["claude", "-p", AGENT_PROMPT, "--permission-mode", "acceptEdits",
+        args = ["claude", "-p", AGENT_PROMPT.format(sim_hint=task.sim_hint), "--permission-mode", "acceptEdits",
                 "--allowedTools", "Read,Write,Edit,Glob,Grep,Bash(python3:*),Bash(python:*)",
                 "--disallowedTools", "WebFetch,WebSearch", "--max-turns", "60"]
     args += ["--model", model, "--output-format", "json", "--no-session-persistence"]
@@ -109,9 +102,10 @@ def _claude(condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, 
     return rec, ctrl.read_text() if ctrl.exists() else None
 
 
-def _codex(condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, str | None]:
+def _codex(task: Task, condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, str | None]:
     sandbox = "read-only" if condition == "oneshot" else "workspace-write"
-    prompt = (CODEX_ONESHOT_PROMPT + (HERE / "TASK.md").read_text()) if condition == "oneshot" else AGENT_PROMPT
+    prompt = (CODEX_ONESHOT_PROMPT + task.text) if condition == "oneshot" \
+        else AGENT_PROMPT.format(sim_hint=task.sim_hint)
     proc = subprocess.run(
         ["codex", "exec", "--json", "--sandbox", sandbox, "--skip-git-repo-check", "--ephemeral",
          "-m", model, "-C", str(cwd), prompt],
@@ -141,27 +135,38 @@ def _codex(condition: str, model: str, cwd: Path, timeout: int) -> tuple[dict, s
     return rec, ctrl.read_text() if ctrl.exists() else None
 
 
-def generate_one(condition: str, agent: str, model: str, k: int, timeout: int = 2400) -> dict:
-    rec = {"condition": condition, "agent": agent, "model": model, "sample": k}
+def generate_one(task_name: str, condition: str, agent: str, model: str, k: int, timeout: int = 2400) -> dict:
+    task = TASKS[task_name]
+    rec = {"task": task_name, "condition": condition, "agent": agent, "model": model, "sample": k}
     with tempfile.TemporaryDirectory() as tmp:
         cwd = Path(tmp)
         if condition == "agentic":
-            _workspace(cwd)
+            _workspace(task, cwd)
         try:
             fn = _claude if agent == "claude" else _codex
-            extra, code = fn(condition, model, cwd, timeout)
+            extra, code = fn(task, condition, model, cwd, timeout)
         except subprocess.TimeoutExpired:
             extra, code = {"error": "timed out"}, None
     rec.update(extra)
-    return _save(rec, code, _dir_for(condition, agent, model) / f"{k}.py")
+    return _save(rec, code, task.artifact_dir(condition, agent, model) / f"{k}.py")
+
+
+def _defaults(r: dict) -> dict:
+    """Records from before the task/condition/agent fields existed."""
+    r.setdefault("task", "concurrency")
+    r.setdefault("condition", "oneshot")
+    r.setdefault("agent", "claude")
+    return r
 
 
 def _key(r: dict) -> tuple:
-    return (r.get("condition", "oneshot"), r.get("agent", "claude"), r["model"], r["sample"])
+    return (r.get("task", "concurrency"), r.get("condition", "oneshot"), r.get("agent", "claude"),
+            r["model"], r["sample"])
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="diptych.pilot.generate")
+    p.add_argument("--task", choices=sorted(TASKS), default="concurrency")
     p.add_argument("--condition", choices=("oneshot", "agentic"), default="oneshot")
     p.add_argument("--agent", choices=("claude", "codex"), default="claude")
     p.add_argument("--models", nargs="+", default=None)
@@ -171,13 +176,10 @@ def main(argv: list[str] | None = None) -> int:
     models = args.models or list(DEFAULT_MODELS[(args.condition, args.agent)])
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     manifest_path = ARTIFACTS / "manifest.json"
-    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
-    for r in manifest:  # first batch predates the condition/agent fields
-        r.setdefault("condition", "oneshot")
-        r.setdefault("agent", "claude")
+    manifest = [_defaults(r) for r in (json.loads(manifest_path.read_text()) if manifest_path.exists() else [])]
     done = {_key(r) for r in manifest if r.get("code_block")}
-    todo = [(args.condition, args.agent, m, k) for m in models for k in range(args.samples)
-            if (args.condition, args.agent, m, k) not in done]
+    todo = [(args.task, args.condition, args.agent, m, k) for m in models for k in range(args.samples)
+            if (args.task, args.condition, args.agent, m, k) not in done]
     with cf.ThreadPoolExecutor(max_workers=args.jobs) as ex:
         for rec in ex.map(lambda t: generate_one(*t), todo):
             _record(manifest_path, rec)
@@ -189,10 +191,7 @@ def _record(manifest_path: Path, rec: dict) -> None:
     """Merge one record into the manifest under a lock (parallel generators)."""
     with open(manifest_path.with_suffix(".lock"), "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
-        manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
-        for r in manifest:
-            r.setdefault("condition", "oneshot")
-            r.setdefault("agent", "claude")
+        manifest = [_defaults(r) for r in (json.loads(manifest_path.read_text()) if manifest_path.exists() else [])]
         manifest = [r for r in manifest if _key(r) != _key(rec)]
         manifest.append(rec)
         manifest.sort(key=_key)

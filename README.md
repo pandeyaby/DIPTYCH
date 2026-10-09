@@ -17,9 +17,18 @@ It is aimed at people who build benchmarks or graders for agent- and
 model-written software, especially controllers and other stateful code.
 
 **What we found** (paper §VIII): an exhaustive mutation sweep exposed three
-real bugs in our own graders, and in a pilot with 20 controllers written by
-four Claude models, **12 of the 15 that pass every single-trace check violate
-a stated requirement** once tested in pairs.
+real bugs in our own graders. In a pilot with 80 controllers written by Claude
+and OpenAI models on two tasks, the answer depends on where the reference
+comes from:
+
+- On a concurrency task whose requirements compare a controller with itself
+  from the same state, **28 of the 34 controllers that pass every single-trace
+  check violate a stated requirement** once tested in pairs.
+- On a congestion task built from the IETF's RFC 9743, one run catches every
+  case of harm to a standard flow (the reference is a known constant), and
+  pairing adds only the history-dependent violations.
+
+Pair when the reference depends on the artifact's own state.
 
 > One film can look legal; only the pair shows calibration.
 
@@ -94,8 +103,8 @@ Pandey, Meta):
 - [`paper/ARTIFACT_CHECKLIST.md`](paper/ARTIFACT_CHECKLIST.md) — reviewer reproduction checklist
 - [`CHANGELOG.md`](CHANGELOG.md) — milestone log
 
-Reproduce the evaluation: `python -m diptych.adequacy` (Table IV) and
-`python -m diptych.pilot.study` (Table V, no model calls).
+Reproduce the evaluation (no model calls): `python -m diptych.adequacy`,
+`python -m diptych.pilot.study`, `python -m diptych.pilot.study --task congestion`.
 
 Figures: PNGs referenced in README/tex; editable SVG sources alongside under
 [`docs/images/`](docs/images/).

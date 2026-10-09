@@ -72,15 +72,16 @@
 		amortizes a shared prefix.
 		
 		Third, an evaluation. A mutation sweep over every conforming probe
-		(1{,}030 mutants) exposed three classes of defect in our own graders;
-		fixing them raised the on-axis kill rate from 67.4\% to 82.5\%. In a
-		pilot with 40 controllers written by Claude and OpenAI models, one-shot
-		and as tool-using agents, 28 of the 34 that pass every single-trace
-		check violate a requirement stated to them in plain words, and agents
-		that tested against a simulator fared no better. A stronger
-		single-trace grader does not close the gap: on asymmetric response it
-		disagrees with the fixed-state contrast on 25 of 40 controllers, in
-		both directions, as the confounding result predicts.
+		(1{,}030 mutants) exposed three classes of defect in our own graders.
+		In a pilot with 80 controllers written by Claude and OpenAI models on
+		two tasks, the answer depends on where the reference comes from. On a
+		concurrency task whose requirements compare an artifact with itself at
+		a fixed state, 28 of the 34 controllers that pass every single-trace
+		check violate a requirement stated in plain words. On a congestion
+		task built from RFC~9743, a single run catches every case of harm to a
+		standard flow, because the reference outcome is a known constant, and
+		pairing adds only the history-dependent violations. One trace is not
+		enough exactly when the reference depends on the artifact's own state.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -170,21 +171,21 @@
 		
 		\item \textbf{An evaluation} (Section \ref{sec:protocol}). Control
 		twins, a power-on-axis gate, and an exhaustive mutation sweep that found
-		and fixed real grader defects; and a pilot on model-written controllers
-		for a concurrency-control task we release, with executable controls,
-		where paired probing overturns the single-trace verdict on most
-		artifacts.
+		and fixed real grader defects; and a pilot on 80 model-written
+		controllers for two tasks, with executable controls, that locates
+		where single-trace grading fails and where it suffices.
 	\end{enumerate}
 
-	We are explicit about scope. The pilot is small (40 controllers, one
-	task that we wrote) and shows that paired grading changes verdicts, not
-	how models compare.
+	We are explicit about scope. The pilot is small (80 controllers, two
+	tasks; we wrote one task's requirements and the other's thresholds) and
+	shows where paired grading changes verdicts, not how models compare.
 	
 	\section{Motivating Example}
 	\label{sec:motivating}
 	
-	We ground the paper in a concrete task, the one used in our pilot
-	(Section~\ref{sec:pilot}); its requirements shape the harness operators.
+	We ground the paper in a concrete task, the first of two used in our
+	pilot (Section~\ref{sec:pilot}); its requirements shape the harness
+	operators.
 	
 	\subsection{The running task}
 	
@@ -452,6 +453,17 @@
 	addresses three problems: constructing a valid pair, keeping the pair
 	comparable in a closed loop, and paying for the extra executions.
 	
+	Execution and grading are separate. A \emph{probe} forks a running
+	artifact at a shared state, drives two branches that differ on one axis,
+	and only \emph{records} the pair into an \emph{envelope}: two traces of
+	named value series plus the operator, coupling, and seed. A
+	\emph{predicate} for the requirement then reads the envelope alone, after
+	a comparability check common to all requirements. Hand-written control
+	envelopes (with an expected verdict), envelopes emitted by external
+	tools, and \emph{live} envelopes recorded from an artifact under test
+	share this path, so every verdict can be recomputed offline from the
+	saved envelope.
+	
 	\subsection{Coupling discipline}
 	
 	\begin{definition}[Exogenous coupling]
@@ -571,7 +583,8 @@
 	Three constructions deserve a note.
 	\textsc{TrajSwap} permutes samples inside a window (multiset-fixed) so one arm
 	ends improving and the other degrading; order-insensitive summaries fail by
-	construction. \textsc{SatExtend} pairs a saturated arm with its
+	construction (the pilot scripts this window open-loop; the closed-loop
+	form is the one external tools emit). \textsc{SatExtend} pairs a saturated arm with its
 	extension and requires every actuator sample on both arms to stay inside
 	the declared saturation and legal bounds, which an unbounded integrator
 	exceeds; the recorded-envelope grader checks
@@ -668,185 +681,165 @@
 	on-axis mutant is either a legitimate insensitivity of the predicate or a
 	grader blind spot; we triage every one.
 	
-	\textbf{Defects found.} The first sweep killed 557/827 on-axis mutants
-	(67.4\%) and surfaced three classes of defect in our own graders:
-	\begin{itemize}
-		\item \emph{Self-reported evidence bypass.} \textsc{SignFlip} passed
-		whenever the two twins carried equal emitter-supplied
-		\texttt{sign\_normalized\_fingerprint} values, short-circuiting the
-		odd-symmetry check on the data; 90 of 93 on-axis mutants survived. The
-		fingerprint is now recorded as evidence only.
-		\item \emph{One-sided bound.} \textsc{TrajSwap} checked closed-loop
-		residuals as $r \le b$ rather than $|r| \le b$, so any negative
-		residual passed.
-		\item \emph{Twin-asymmetric parameters.} \textsc{SatExtend} (saturation
-		and legal bounds), \textsc{Reseed} ($\epsilon$), \textsc{TrajSwap}
-		(residual bound), and \textsc{VarScale} (variance-scale bound, CRN mean)
-		read grading parameters from the first twin only, so a second twin
-		could declare anything. Parameters declared by both twins must now
-		agree, or the pair fails.
-	\end{itemize}
-	The fixes change no verdict on any shipped control, adapter fixture, or
-	coverage cell, and each defect is pinned by a regression test that fails
-	on the pre-fix grader.
+	\textbf{Defects found.} The first sweep killed 557 of 827 on-axis mutants
+	(67.4\%) and surfaced three classes of defect in our own graders.
+	\emph{Self-reported evidence bypass:} \textsc{SignFlip} passed whenever
+	the twins carried equal emitter-supplied fingerprints, short-circuiting
+	the check on the data (90 of 93 on-axis mutants survived).
+	\emph{One-sided bound:} \textsc{TrajSwap} checked residuals as $r \le b$
+	rather than $|r| \le b$. \emph{Twin-asymmetric parameters:} four graders
+	read bounds and tolerances from the first twin only, so the second could
+	declare anything. After the fixes the kill rate is 82.5\%
+	(\textsc{SignFlip} 3.2\%$\to$93.5\%, \textsc{SatExtend}
+	30.6\%$\to$51.0\%, \textsc{Reseed} 85.7\%$\to$93.8\%, \textsc{VarScale}
+	92.5\%$\to$100\%); no verdict on any shipped control, adapter fixture, or
+	coverage cell changed, and each defect is pinned by a regression test.
 	
-	\begin{table}[t]
-		\caption{On-axis mutant kill rate before and after the grader fixes,
-			and off-axis fail rate after (18 conforming probes, 1{,}030
-			single-leaf mutants).}
-		\label{tab:adequacy}
-		\centering
-		\scriptsize
-		\begin{tabular}{@{}lrrrr@{}}
-			\toprule
-			Operator & on-axis & kill (before) & kill (after) & off-axis fail \\
-			\midrule
-			\textsc{SignFlip}  &  93 &   3.2\% &  93.5\% & 3/21  \\
-			\textsc{TrajSwap}  & 200 &  65.0\% &  68.0\% & 12/28 \\
-			\textsc{VarScale}  &  80 &  92.5\% & 100.0\% & 20/36 \\
-			\textsc{SatExtend} &  98 &  30.6\% &  51.0\% & 2/14  \\
-			\textsc{HistSwap}  & 140 &  94.3\% &  94.3\% & 32/44 \\
-			\textsc{FreezeDry} &  80 &  85.0\% &  85.0\% & 0/12  \\
-			\textsc{Reseed}    & 112 &  85.7\% &  93.8\% & 6/12  \\
-			\textsc{SchemaX}   &  24 & 100.0\% & 100.0\% & 24/36 \\
-			\midrule
-			All                & 827 &  67.4\% &  82.5\% & 99/203 \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
+	\textbf{Survivors.} Of the 145 surviving on-axis mutants, 133 are
+	legitimate insensitivities (e.g., edits that stay inside a declared
+	bound) and 12 are blind spots: two fields declared on-axis but never
+	read. All 99 off-axis mutants graded \texttt{fail} hit preconditions the
+	axis declaration omits; axis declarations should be derived from the
+	grader, not written beside it.
 	
-	\textbf{Survivor triage.} Of the 145 surviving on-axis mutants, 133 are
-	legitimate insensitivities: 64 \textsc{TrajSwap} residual edits stay under
-	the fixtures' non-binding bound of 5.0 (residuals reach 0.7---a fixture
-	weakness we report rather than tune away), 48 \textsc{SatExtend} edits stay
-	inside symmetric bounds, and 21 edits leave the predicate's inputs
-	unchanged. The other 12 are blind spots: \texttt{hist\_splice\_at} and
-	\texttt{frozen} are declared on-axis but never read.
-	\textbf{Off-axis dependence.} All 99 off-axis \texttt{fail} verdicts are
-	grader preconditions the declared axis omits (e.g., \textsc{SchemaX}
-	required keys, CRN parameters). None is wrong, but axis declarations
-	should be derived from the grader, not written beside it.
-	
-	\subsection{Pilot: model-authored controllers}
+	\subsection{Pilot: model-authored controllers on two tasks}
 	\label{sec:pilot}
 	
-	\textbf{Task and plant.} The pilot uses the task of
-	Section~\ref{sec:motivating}: a controller sets a concurrency
-	limit each tick so latency tracks a setpoint in a deterministic
-	closed-loop service model, under eight requirements written as
-	specification prose, one per operator. Each probe runs a shared prefix,
-	forks the live controller at three points, and drives two branches that
-	differ on one axis (\textsc{VarScale} under CRN; \textsc{Reseed} and
-	\textsc{FreezeDry} across fresh processes). A violation at any fork point
-	or any of three noise seeds fails the requirement.
+	\textbf{Tasks.} Task~A is the concurrency controller of
+	Section~\ref{sec:motivating}; we wrote its eight requirements, one per
+	operator. Task~B is a congestion control algorithm for a simulated
+	drop-tail bottleneck. Its eight requirements paraphrase RFC~9743
+	criteria (Table~\ref{tab:audit}): three single-run (full backoff, rate
+	reduction under loss, fairness within the algorithm) and five paired
+	(throughput and latency harm to a standard Reno flow relative to a
+	Reno competitor, harm to short flows, robustness to a delay change and
+	to a path change). The RFC gives no thresholds, so those are ours, as
+	are two performance goals the standard algorithm does not meet (useful
+	throughput under random loss; a short queue), which give a reason to
+	depart from it. Task~B needed two perturbations beyond the eight
+	operators---substituting a reference algorithm for the candidate, and
+	stepping a path parameter on one arm---and the envelope pipeline took
+	both unchanged. Both simulators pre-draw their noise from a seed, so
+	paired runs share it. Probes run at several fork points and three
+	seeds; a violation at any of them fails the requirement.
 	
 	\textbf{Single-trace baselines.} The \emph{basic} baseline implements,
-	per requirement, the check a harness author would write from its prose on
-	one closed-loop run---for asymmetric response, the ratio of mean downward
-	to upward limit moves above and below setpoint. The \emph{strong}
-	baseline gives single-trace grading every advantage we could find: two
-	or three readings per requirement (e.g., least-squares response slopes,
-	a trend coefficient from regressing limit moves on error and error
-	trend, the correlation between rolling error spread and the limit),
-	each applied to every scenario where it is meaningful, failing the
-	requirement if any reading fires on any trace. Both are calibrated like
-	the paired probes: no reading may flag the conforming control.
+	per requirement, the check a harness author would write from its prose
+	on one run---for asymmetric response, the ratio of mean downward to
+	upward limit moves; for harm, the standard flow's share of the link.
+	The \emph{strong} baseline gives single-trace grading every advantage
+	we could find: two or three readings per requirement (regression
+	slopes, trend coefficients, Jain's index, queue percentiles) over every
+	applicable scenario, failing if any reading fires. Like the paired
+	probes, no reading may flag the conforming control.
 	
-	\textbf{Executable controls.} One conforming controller and eight
-	violators, each changing one design decision, calibrate all graders:
-	the conforming control must pass everything. Paired grading catches all
-	eight violators on their own axis; the basic single-trace baseline
-	catches one and the strong one three. Building the controls was itself instructive: our
-	first symmetric-gain and variance-blind violators \emph{satisfied} the
-	requirements they were meant to break, because the variance penalty
-	already makes the response asymmetric and the asymmetric gain already
-	suppresses volatility. Requirements interact, so a violator is only a
-	violator once a probe says so.
+	\textbf{Executable controls.} Each task has a conforming controller and
+	eight violators that change one design decision. Paired grading catches
+	all sixteen violators on their own requirement. The basic and strong
+	baselines catch one and three of eight on Task~A, and seven and eight of
+	eight on Task~B. Building the controls was instructive: two first-draft
+	Task~A violators \emph{satisfied} the requirements they were meant to
+	break, because requirements interact (asymmetric gain already
+	suppresses volatility). A violator is only a violator once a probe says
+	so.
 	
-	\textbf{Artifacts.} Forty controllers from four conditions: five
-	one-shot, tool-free samples from each of four Claude models (Haiku~4.5,
-	Sonnet~5, Opus~5.5, Fable~5.1); five one-shot samples from OpenAI's
-	\texttt{gpt-5.6-sol} via Codex; and ten Claude (Sonnet~5, Opus~5.5) and
-	five Codex samples in an \emph{agentic} condition, where the agent works
-	in a directory with the task, the plant, and a closed-loop simulator it
-	can run and test against, but never sees our probes. All 40 load and
-	run, and forking by state copy matched replay-from-scratch for every one.
+	\textbf{Artifacts.} Eighty controllers, forty per task, from four
+	conditions: five one-shot, tool-free samples from each of four Claude
+	models (Haiku~4.5, Sonnet~5, Opus~5.5, Fable~5.1); five one-shot samples
+	from OpenAI's \texttt{gpt-5.6-sol} via Codex; and ten Claude and five
+	Codex samples in an \emph{agentic} condition, where the agent works in a
+	directory with the task, the simulator (for Task~B, including the
+	standard algorithm to compete against), and its own tests, but never
+	sees our probes. All 80 load and run; forking by state copy matched
+	replay-from-scratch for every one.
 	
 	\begin{table}[t]
-		\caption{Pilot on 40 model-written controllers. For each single-trace
-			baseline: controllers passing every check, and how many of those
-			violate a requirement under paired probing.}
+		\caption{Pilot on 80 model-written controllers. \emph{single}:
+			pass every basic single-trace check; \emph{viol.}: of those, fail a
+			paired probe; \emph{clean}: pass every requirement under full
+			grading.}
 		\label{tab:pilot}
 		\centering
 		\scriptsize
-		\begin{tabular}{@{}lrrrrr@{}}
+		\begin{tabular}{@{}lrrrrrrr@{}}
 			\toprule
-			& & \multicolumn{2}{c}{basic} & \multicolumn{2}{c}{strong} \\
-			Condition & $n$ & pass & \dots fail & pass & \dots fail \\
+			& & \multicolumn{3}{c}{Task A (ours)} & \multicolumn{3}{c}{Task B (RFC 9743)} \\
+			Condition & $n$ & single & viol. & clean & single & viol. & clean \\
 			\midrule
-			One-shot, Claude (4 models) & 20 & 15 & 12 & 6 & 5 \\
-			One-shot, Codex             &  5 &  4 &  3 & 2 & 2 \\
-			Agentic, Claude (2 models)  & 10 & 10 &  8 & 2 & 2 \\
-			Agentic, Codex              &  5 &  5 &  5 & 1 & 1 \\
+			One-shot, Claude & 20 & 15 & 12 & 2 &  6 & 2 & 4 \\
+			One-shot, Codex  &  5 &  4 &  3 & 1 &  0 & 0 & 0 \\
+			Agentic, Claude  & 10 & 10 &  8 & 2 &  6 & 0 & 6 \\
+			Agentic, Codex   &  5 &  5 &  5 & 0 &  4 & 1 & 3 \\
 			\midrule
-			All                         & 40 & 34 & 28 & 11 & 10 \\
+			All              & 40 & 34 & 28 & 5 & 16 & 3 & 13 \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
 	
-	\textbf{What the results can and cannot show.} Several requirements are
-	\emph{stated} comparatively (trend recency: ``after a run of improving
-	latency the limit must end higher than after the same observations in
-	worsening order''), so a single-trace check can only approximate them and
-	Proposition~\ref{prop:confound} already predicts that it will err. The
-	informative results are therefore how often controllers violate
-	requirements given to them in plain words, whether a best-effort
-	single-trace grader recovers those violations, and whether agents that
-	test their own code avoid them.
+	\textbf{Task A: a single trace misses most violations.} 34 of 40
+	controllers pass every basic single-trace check, and 28 of those violate
+	a stated requirement under paired probing (82\%, 95\% Wilson CI
+	66--92\%; per controller, 33 paired-only vs.\ 2 single-only detections,
+	exact McNemar $p<10^{-7}$). Trend recency dominates (23 violations, one
+	caught): most controllers add a trend term too weak to overcome their
+	estimator lag, so after improving latency the limit ends \emph{lower}
+	than after the same observations worsening. Volatility suppression
+	fails for 13, asymmetric response for 10, anti-windup and
+	setpoint-change quiet for 3 each. Because several Task~A requirements
+	are stated comparatively, a single-trace check can only approximate
+	them; the result is how often controllers violate requirements given
+	to them in plain words, not that an approximation errs.
 	
-	\textbf{Violations are common.} 34 of the 40 controllers pass every basic
-	single-trace check, and 28 of those 34 violate a stated requirement under
-	paired probing (82\%, 95\% Wilson CI 66--92\%). Per artifact, paired
-	probing finds a violation the basic baseline misses in 33 controllers and
-	the reverse in 2 (exact McNemar $p < 10^{-7}$). Trend recency dominates
-	(23 violations): most controllers add a trend term too weak to overcome
-	their estimator lag, so after improving latency the limit ends
-	\emph{lower} than after the same observations worsening. Volatility
-	suppression fails for 13, asymmetric response for 10, anti-windup and
-	setpoint-change quiet for 3 each; every controller met determinism,
-	round-trip, and schema stability.
+	\textbf{Task B: a single trace is often enough.} 27 of 40 controllers
+	violate at least one requirement, but here the basic baseline finds
+	most of it: of the 16 controllers it passes, 3 fail a paired probe
+	(19\%, CI 7--43\%). Harm to a standard flow, the RFC's central
+	comparative criterion, was caught in a single run in all 15 cases. The
+	ten violations only pairing found (nine controllers; McNemar $p=0.004$)
+	are path change (5 of 5 missed), short flows (3 of 7), and delay change
+	(2 of 14). One agentic controller loses 97\% of its throughput when the
+	delay doubles at tick 350 but not at tick 250, which a single run with
+	one change point cannot see; another keeps a standing queue four times
+	larger after a capacity drop than on a path that was always slow.
 	
-	\textbf{A stronger baseline errs differently, not less.} The strong
-	baseline flags 29 controllers, but of the 11 it passes, 10 still violate a
-	requirement (91\%, CI 62--98\%). It still misses 16 of 23 trend-recency
-	and 8 of 13 volatility violations. On asymmetric response it disagrees
-	with the fixed-state contrast on 25 of 40 controllers: it misses 4
-	violations and flags 21 controllers whose fixed-state responses satisfy
-	the requirement at all three seeds. That two-sided disagreement is
-	Proposition~\ref{prop:confound} observed: its estimates compare responses
-	from different states. Overall the two graders disagree too often to be
-	substitutes (29 paired-only vs.\ 21 strong-only artifacts; McNemar
-	$p = 0.32$).
+	\textbf{When is one trace enough?} The two tasks differ in where the
+	reference arm of the contrast comes from. For harm, the reference
+	outcome is a constant the harness knows in advance---a standard flow's
+	fair share is half the link---so one run against that constant
+	suffices. For Task~A's requirements and Task~B's path, delay, and
+	short-flow requirements, the reference is the same artifact from the
+	same state under a different input, or with a different history; no
+	constant stands in for it, and that is where single-trace grading
+	failed. This is Proposition~\ref{prop:confound} read as a design rule:
+	pair when the reference depends on the artifact's own state.
 	
-	\textbf{Testing does not help.} Every agentic controller passes every
-	basic single-trace check---agents ran the simulator and polished what one
-	run shows---yet 13 of the 15 violate a requirement under paired probing,
-	including three (two Opus, one Sonnet) with integrator windup that no
-	single-trace check flagged. The effect is not vendor-specific: Codex
-	controllers fail in the same pattern as Claude's. With five samples per
-	cell we make no model or vendor comparison.
+	\textbf{Stronger baselines err differently.} On Task~A the strong
+	baseline flags 29 controllers, yet 10 of the 11 it passes violate a
+	requirement, and on asymmetric response it disagrees with the
+	fixed-state contrast on 25 of 40 (4 missed, 21 flagged that satisfy the
+	requirement at all three seeds). On Task~B its Jain's-index reading
+	flags 29 controllers for throughput harm that cause none: they take
+	\emph{less} than their share, the known objection to fairness as a
+	proxy for harm \cite{ware2019}.
 	
-	\textbf{Stability.} 3.1\% of paired verdicts are inconclusive (a branch
-	hit a bound or never saturated). 88\% of forked verdicts agree across
-	seeds; instability concentrates in Codex controllers near decision
-	boundaries (14 of 24 unstable cells), and 13 of 200 final verdicts would
-	differ under one seed---hence the any-seed rule.
+	\textbf{Agents fix what they can observe.} On Task~A every agentic
+	controller passes every basic single-trace check, yet 13 of 15 violate
+	a requirement, three with integrator windup: the simulator shows one
+	run, and agents polished one run. On Task~B the simulator shows the
+	candidate beside a standard flow, and 9 of 15 agentic controllers are
+	clean against 4 of 25 one-shot. With five samples per cell we make no
+	model or vendor comparison.
 	
-	\textbf{Cost.}
+	\textbf{Stability and cost.}
 	\label{sec:eval-cost}
-	Counting every executed tick, prefix sharing ran all pilot probes in
-	309{,}790 controller ticks; replaying each branch's prefix from scratch
-	would take 840{,}190, so $\alpha = 2.71$ (Definition~\ref{def:cost}).
+	3.1\% of Task~A paired verdicts are inconclusive (a branch hit a bound
+	or never saturated); none on Task~B. Forked verdicts agree across seeds
+	in 88\% (A) and 93\% (B) of cases, and 26 of the 55 paired-only
+	violations hold at all three seeds; the any-seed rule resolves the rest
+	conservatively. Counting executed controller ticks, prefix sharing
+	gives $\alpha = 3.09$ on Task~A (254{,}076 vs.\ 784{,}476) and
+	$1.45$ on Task~B (546{,}000 vs.\ 792{,}000), where reference-swap probes
+	share no candidate prefix (Definition~\ref{def:cost}).
 	\label{sec:future}
 	
 	\section{Related Work}
@@ -906,13 +899,14 @@
 	coverage matrix; self-reported evidence (fingerprints, hashes, summary
 	flags) should never short-circuit a check on the underlying data.
 	
-	\textbf{Single-trace grading passes the defect it cannot see.} In the
-	pilot, 28 controllers that a basic single-trace grader would ship violate
-	a stated requirement, agents that tested their own code included, and a
-	stronger grader trades misses for false alarms. The dominant failure
-	(estimator lag overriding trend recency) is precisely a counterfactual
-	contrast: the same observations in a different order.
-
+	\textbf{Pair when the reference depends on the artifact.} The pilot does
+	not show that single-trace grading always fails. It shows a boundary: a
+	threshold in one run works when the other arm of the contrast is a
+	constant known to the harness, and fails when the other arm is the
+	artifact itself from the same state or with a different history. A
+	benchmark author can apply this to each requirement before writing a
+	check.
+	
 	\textbf{Non-claims.} A green cell is not a vulnerability finding, and no
 	result here is an accuracy, AUROC, or model ranking; the envelope
 	contract rejects such fields.
@@ -942,17 +936,18 @@
 	incompleteness it exposed (Section~\ref{sec:eval-adequacy}).
 	
 	\textbf{Open-loop vs.\ CRN.} Open-loop greens do not transfer to the
-	two closed-loop operators, and CRN coupling is not universal; the pilot's
+	two closed-loop operators, and CRN coupling is not universal; on Task~A
 	seed instability concentrates in closed-loop \textsc{VarScale}.
 	
-	\textbf{Pilot validity.} We wrote the reduced task, its requirement
-	wording, and both baselines, calibrated on our own controls; a different
-	single-trace design could catch more, though
-	Proposition~\ref{prop:confound} bounds what any can identify. Paired
-	verdicts are ground truth only relative to our reading of each
-	requirement at a fixed state. Artifacts are 40 samples from
-	two vendors, five per model and condition, with bounded agent sessions;
-	12\% of forked verdicts depend on the noise seed.
+	\textbf{Pilot validity.} We wrote Task~A's requirements, Task~B's
+	thresholds and performance goals, both simulators, and both baselines,
+	calibrated on our own controls; a different single-trace design could
+	catch more, though Proposition~\ref{prop:confound} bounds what any can
+	identify. Paired verdicts are ground truth only relative to our reading
+	of each requirement, and Task~B's fluid simulator is far simpler than a
+	real network. Artifacts are 80 samples from two vendors, five per model,
+	condition, and task; 7--12\% of forked verdicts depend on the noise
+	seed.
 
 	\textbf{External.} Findings come from one task family: we claim
 	generality for the classification and harness architecture, not the
@@ -970,17 +965,19 @@
 	confound for stateful artifacts, and presented a paired harness with
 	coupling, an inconclusive verdict, and a probe-tree cost model. A mutation
 	sweep on our own graders found three classes of defect that a fully green
-	coverage matrix had hidden, and a pilot on 40 model-written controllers
-	found that most controllers passing every single-trace check---including
-	those written by agents that tested their own code---violate a
-	requirement once probed in pairs. When a requirement is about a
-	counterfactual, a counterfactual needs two executions---and the grader
-	that compares them needs testing too.
+	coverage matrix had hidden. A pilot on 80 model-written controllers
+	located the boundary: where a requirement compares an artifact with
+	itself from the same state, most controllers that pass every
+	single-trace check violate it; where the reference is a constant the
+	harness already knows, one run suffices. When the counterfactual depends
+	on the artifact, it needs two executions---and the grader that compares
+	them needs testing too.
 	
 	{\raggedright\textbf{Artifact availability.}
-	\url{https://github.com/pandeyaby/DIPTYCH} (MIT): code, controls, and all 40
-	controllers. Tables IV and V: \texttt{python -m diptych.adequacy},
-	\texttt{python -m diptych.pilot.study}.\par}
+	\url{https://github.com/pandeyaby/DIPTYCH} (MIT): code, controls, and all 80
+	controllers. Section~\ref{sec:eval-adequacy}: \texttt{python -m
+	diptych.adequacy}; Table~\ref{tab:pilot}: \texttt{python -m
+	diptych.pilot.study [--task congestion]}.\par}
 	
 	\balance
 	
