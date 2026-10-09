@@ -1,5 +1,5 @@
-% Genuine citations only — verify DOIs/pages for camera-ready (see NOTES.md).
-% Do not invent metrics, AUROC, or model scores in the paper body.
+% Bibliography for one-trace-is-not-enough.tex.
+% Entries checked against publisher / arXiv / DBLP records (2026-09).
 
 @article{clarkson2010,
   author  = {Clarkson, Michael R. and Schneider, Fred B.},
@@ -169,31 +169,32 @@
 }
 
 @inproceedings{liu2023,
-  author    = {Liu, Xiao and Yu, Hao and Zhang, Hanchen and Xu, Yifan and Lei, Xiangrong
-               and Lai, Hanyu and Gu, Yu and Ding, Hangliang and Men, Kaijie and Yang, Kejuan
+  author    = {Liu, Xiao and Yu, Hao and Zhang, Hanchen and Xu, Yifan and Lei, Xuanyu
+               and Lai, Hanyu and Gu, Yu and Ding, Hangliang and Men, Kaiwen and Yang, Kejuan
                and others},
   title     = {{AgentBench}: Evaluating {LLMs} as Agents},
   booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2024},
-  note      = {Also arXiv:2308.03688, 2023}
+  year      = {2024}
 }
 
 @inproceedings{zhou2024,
   author    = {Zhou, Shuyan and Xu, Frank F. and Zhu, Hao and Zhou, Xuhui and Lo, Robert
-               and Zhou, Abishek and Ortega, Xianyi and Yu, Tianyue and others},
+               and Sridhar, Abishek and Cheng, Xianyi and Ou, Tianyue and Bisk, Yonatan
+               and Fried, Daniel and Alon, Uri and Neubig, Graham},
   title     = {{WebArena}: A Realistic Web Environment for Building Autonomous Agents},
   booktitle = {International Conference on Learning Representations (ICLR)},
   year      = {2024}
 }
 
-@inproceedings{chen2021,
-  author    = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming
-               and Pinto, Henrique Ponde de Oliveira and Kaplan, Jared and Edwards, Harri
-               and Burda, Yuri and Joseph, Nicholas and Brockman, Greg and others},
-  title     = {Evaluating Large Language Models Trained on Code},
-  booktitle = {Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks},
-  year      = {2021},
-  note      = {Also arXiv:2107.03374}
+@misc{chen2021,
+  author       = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming
+                  and Pinto, Henrique Ponde de Oliveira and Kaplan, Jared and Edwards, Harri
+                  and Burda, Yuri and Joseph, Nicholas and Brockman, Greg and others},
+  title        = {Evaluating Large Language Models Trained on Code},
+  year         = {2021},
+  eprint       = {2107.03374},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG}
 }
 
 @inproceedings{finkbeiner2015,
@@ -209,14 +210,133 @@
 }
 
 @inproceedings{dimitrova2014,
-  author    = {Dimitrova, Rayna and Finkbeiner, Bernd and Kov{\'a}cs, Marijana
+  author    = {Dimitrova, Rayna and Finkbeiner, Bernd and Kov{\'a}cs, M{\'a}t{\'e}
                and Rabe, Markus N. and Seidl, Helmut},
   title     = {Model Checking Information Flow in Reactive Systems},
   booktitle = {Verification, Model Checking, and Abstract Interpretation (VMCAI)},
   series    = {LNCS},
-  volume    = {8318},
+  volume    = {7148},
   pages     = {169--185},
-  year      = {2014},
+  year      = {2012},
   publisher = {Springer},
-  doi       = {10.1007/978-3-642-54013-4_10}
+  doi       = {10.1007/978-3-642-27940-9_12}
+}
+
+@inproceedings{christakis2023,
+  author    = {Christakis, Maria and Eniser, Hasan Ferit and Hoffmann, J{\"o}rg
+               and Singla, Adish and W{\"u}stholz, Valentin},
+  title     = {Specifying and Testing $k$-Safety Properties for Machine-Learning Models},
+  booktitle = {International Joint Conference on Artificial Intelligence (IJCAI)},
+  pages     = {4748--4757},
+  year      = {2023},
+  doi       = {10.24963/ijcai.2023/528}
+}
+
+@inproceedings{agrawal2016,
+  author    = {Agrawal, Shreya and Bonakdarpour, Borzoo},
+  title     = {Runtime Verification of $k$-Safety Hyperproperties in {HyperLTL}},
+  booktitle = {IEEE Computer Security Foundations Symposium (CSF)},
+  pages     = {239--252},
+  year      = {2016}
+}
+
+@article{finkbeiner2019,
+  author  = {Finkbeiner, Bernd and Hahn, Christopher and Stenger, Marvin and Tentrup, Leander},
+  title   = {Monitoring Hyperproperties},
+  journal = {Formal Methods in System Design},
+  volume  = {54},
+  number  = {3},
+  pages   = {336--363},
+  year    = {2019},
+  doi     = {10.1007/s10703-019-00334-z}
+}
+
+@inproceedings{sousa2016,
+  author    = {Sousa, Marcelo and Dillig, Isil},
+  title     = {Cartesian {H}oare Logic for Verifying $k$-Safety Properties},
+  booktitle = {ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI)},
+  pages     = {57--69},
+  year      = {2016},
+  doi       = {10.1145/2908080.2908092}
+}
+
+@article{holland1986,
+  author  = {Holland, Paul W.},
+  title   = {Statistics and Causal Inference},
+  journal = {Journal of the American Statistical Association},
+  volume  = {81},
+  number  = {396},
+  pages   = {945--960},
+  year    = {1986},
+  doi     = {10.1080/01621459.1986.10478354}
+}
+
+@article{glasserman1992,
+  author  = {Glasserman, Paul and Yao, David D.},
+  title   = {Some Guidelines and Guarantees for Common Random Numbers},
+  journal = {Management Science},
+  volume  = {38},
+  number  = {6},
+  pages   = {884--908},
+  year    = {1992},
+  doi     = {10.1287/mnsc.38.6.884}
+}
+
+@article{jia2011,
+  author  = {Jia, Yue and Harman, Mark},
+  title   = {An Analysis and Survey of the Development of Mutation Testing},
+  journal = {IEEE Transactions on Software Engineering},
+  volume  = {37},
+  number  = {5},
+  pages   = {649--678},
+  year    = {2011},
+  doi     = {10.1109/TSE.2010.62}
+}
+
+@inproceedings{claessen2000,
+  author    = {Claessen, Koen and Hughes, John},
+  title     = {{QuickCheck}: A Lightweight Tool for Random Testing of {H}askell Programs},
+  booktitle = {ACM SIGPLAN International Conference on Functional Programming (ICFP)},
+  pages     = {268--279},
+  year      = {2000},
+  doi       = {10.1145/351240.351266}
+}
+
+@inproceedings{tian2018,
+  author    = {Tian, Yuchi and Pei, Kexin and Jana, Suman and Ray, Baishakhi},
+  title     = {{DeepTest}: Automated Testing of Deep-Neural-Network-Driven Autonomous Cars},
+  booktitle = {International Conference on Software Engineering (ICSE)},
+  pages     = {303--314},
+  year      = {2018}
+}
+
+@inproceedings{liu2023evalplus,
+  author    = {Liu, Jiawei and Xia, Chunqiu Steven and Wang, Yuyao and Zhang, Lingming},
+  title     = {Is Your Code Generated by {ChatGPT} Really Correct? Rigorous Evaluation of
+               Large Language Models for Code Generation},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {36},
+  year      = {2023}
+}
+
+@techreport{rfc9743,
+  author      = {Duke, Martin and Fairhurst, Gorry},
+  title       = {Specifying New Congestion Control Algorithms},
+  type        = {{RFC}},
+  number      = {9743},
+  institution = {Internet Engineering Task Force},
+  note        = {BCP 133},
+  month       = mar,
+  year        = {2025},
+  doi         = {10.17487/RFC9743}
+}
+
+@inproceedings{ware2019,
+  author    = {Ware, Ranysha and Mukerjee, Matthew K. and Seshan, Srinivasan and Sherry, Justine},
+  title     = {Beyond {J}ain's Fairness Index: Setting the Bar for the Deployment of
+               Congestion Control Algorithms},
+  booktitle = {ACM Workshop on Hot Topics in Networks (HotNets)},
+  pages     = {17--24},
+  year      = {2019},
+  doi       = {10.1145/3365609.3365855}
 }

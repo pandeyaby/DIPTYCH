@@ -90,7 +90,7 @@ Claude models (20) and OpenAI `gpt-5.6-sol` via Codex (5), and tool-using agents
 
 | RQ | Status | Value |
 |----|--------|-------|
-| RQ1 separation index | pilot | 0.85 (478 of 563 single-trace-equivalent pairs); 28 of 34 all-single-pass controllers fail a paired probe |
+| RQ1 separation index | pilot | Basic baseline: 0.85 (478/563 pairs); 28 of 34 all-pass controllers fail a paired probe (82%, 95% CI 66–92%); McNemar 33 vs 2, p < 1e-7. Strong baseline: 10 of 11 all-pass fail paired (91%, CI 62–98%); disagrees with paired on asymmetric response for 25/40 (4 missed, 21 flagged) |
 | RQ2 operator information | pilot (descriptive) | TRAJSWAP 23/40 paired fails (22 missed by single trace); VARSCALE 13 (10); SIGNFLIP 10 (7); SATEXTEND 3 (3); HISTSWAP 3 (3); FREEZEDRY/RESEED/SCHEMAX 0 |
 | RQ3 held-out rank corr. | protocol | N/A (no held-out scenarios yet) |
 | RQ4 α (amortization) | pilot, measured ticks | 2.71 (309,790 executed vs 840,190 naive replay) |

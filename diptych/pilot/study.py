@@ -77,7 +77,7 @@ def _all_error(path: str, why: str) -> dict[str, Any]:
 def control_power(rows: list[dict]) -> dict[str, Any]:
     """Per grader: own-axis detection on violators, false alarms on conforming."""
     out: dict[str, Any] = {}
-    for grader in ("paired", "single_trace"):
+    for grader in ("paired", "single_trace", "single_trace_strong"):
         conf = next(r for r in rows if r["violates"] is None)
         viol = [r for r in rows if r["violates"]]
         caught = [r["violates"] for r in viol if r[grader][r["violates"]] == "fail"]
@@ -92,15 +92,37 @@ def control_power(rows: list[dict]) -> dict[str, Any]:
     return out
 
 
-def artifact_metrics(rows: list[dict]) -> dict[str, Any]:
+def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float] | None:
+    """Wilson score 95% interval for k successes in n trials."""
+    if n == 0:
+        return None
+    ph = k / n
+    den = 1 + z * z / n
+    c = (ph + z * z / (2 * n)) / den
+    h = z * ((ph * (1 - ph) / n + z * z / (4 * n * n)) ** 0.5) / den
+    return (max(0.0, c - h), min(1.0, c + h))
+
+
+def mcnemar_exact(b: int, c: int) -> float:
+    """Two-sided exact McNemar p-value for discordant counts b, c."""
+    from math import comb
+    n = b + c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    p = sum(comb(n, i) for i in range(k + 1)) / 2 ** n
+    return min(1.0, 2 * p)
+
+
+def artifact_metrics(rows: list[dict], single: str = "single_trace") -> dict[str, Any]:
     per_op: dict[str, Any] = {}
     for op in OPERATORS:
         paired = Counter(r["paired"][op] for r in rows)
-        single = Counter(r["single_trace"][op] for r in rows)
-        both = [r for r in rows if r["paired"][op] in DECIDED and r["single_trace"][op] in DECIDED]
-        confusion = Counter(f"{r['single_trace'][op]}/{r['paired'][op]}" for r in both)
+        single_c = Counter(r[single][op] for r in rows)
+        both = [r for r in rows if r["paired"][op] in DECIDED and r[single][op] in DECIDED]
+        confusion = Counter(f"{r[single][op]}/{r['paired'][op]}" for r in both)
         per_op[op] = {
-            "paired": dict(paired), "single_trace": dict(single),
+            "paired": dict(paired), "single_trace": dict(single_c),
             "decided_by_both": len(both),
             "single_pass_paired_fail": confusion["pass/fail"],
             "single_fail_paired_pass": confusion["fail/pass"],
@@ -110,10 +132,10 @@ def artifact_metrics(rows: list[dict]) -> dict[str, Any]:
     # verdict vectors are identical, the fraction whose paired vectors differ.
     eq_pairs = diff = 0
     for a, b in itertools.combinations(rows, 2):
-        if a["single_trace"] == b["single_trace"]:
+        if a[single] == b[single]:
             eq_pairs += 1
             diff += a["paired"] != b["paired"]
-    fully_single_pass = [r for r in rows if all(v == "pass" for v in r["single_trace"].values())]
+    fully_single_pass = [r for r in rows if all(v == "pass" for v in r[single].values())]
     seed_cells = seed_stable = 0
     for r in rows:
         by_seed = r.get("paired_by_seed") or {}
@@ -124,9 +146,17 @@ def artifact_metrics(rows: list[dict]) -> dict[str, Any]:
     forked = sum(t["forked"] for t in ticks)
     naive = sum(t["naive_equivalent"] for t in ticks)
     n_verdicts = len(rows) * len(OPERATORS)
+    k_fail = sum(1 for r in fully_single_pass if "fail" in r["paired"].values())
+    # Artifact-level McNemar: paired flags a violation single-trace misses (b)
+    # vs. single-trace flags one paired does not (c), counted per artifact.
+    b = sum(1 for r in rows if any(r["paired"][o] == "fail" and r[single][o] == "pass" for o in OPERATORS))
+    c = sum(1 for r in rows if any(r[single][o] == "fail" and r["paired"][o] == "pass" for o in OPERATORS))
     return {
+        "single_grader": single,
         "n_artifacts": len(rows),
         "per_operator": per_op,
+        "all_single_pass_paired_fail_ci95": wilson(k_fail, len(fully_single_pass)),
+        "artifact_mcnemar": {"paired_only": b, "single_only": c, "p_exact": mcnemar_exact(b, c)},
         "separation": {"trace_equivalent_pairs": eq_pairs, "hyper_distinct": diff,
                        "index": (diff / eq_pairs) if eq_pairs else None},
         "all_single_trace_pass": len(fully_single_pass),
@@ -172,7 +202,10 @@ def main(argv: list[str] | None = None) -> int:
     report = {"study_schema": "1.1", "operators": list(OPERATORS),
               "controls": control_power(controls),
               "artifacts": artifact_metrics(artifacts) if artifacts else None,
+              "artifacts_strong": artifact_metrics(artifacts, "single_trace_strong") if artifacts else None,
               "by_group": {g: artifact_metrics([r for r in artifacts if r["group"] == g]) for g in groups},
+              "by_group_strong": {g: artifact_metrics([r for r in artifacts if r["group"] == g],
+                                                      "single_trace_strong") for g in groups},
               "rows": rows}
     RESULTS.write_text(json.dumps(report, indent=2, sort_keys=True, default=repr) + "\n")
     print("operators:", " ".join(OPERATORS))
@@ -182,6 +215,19 @@ def main(argv: list[str] | None = None) -> int:
               + (f"  errors={r['errors'][:1]}" if r.get("errors") else ""))
     print(json.dumps({"controls": report["controls"], "artifacts": {
         k: v for k, v in (report["artifacts"] or {}).items() if k != "per_operator"}}, indent=2))
+    for label, key in (("basic", "by_group"), ("strong", "by_group_strong")):
+        for g, m in report[key].items():
+            print(f"[{label}:{g}] n={m['n_artifacts']} all_single_pass={m['all_single_trace_pass']} "
+                  f"of_which_paired_fail={m['all_single_trace_pass_but_paired_fail']} sep={m['separation']['index']}")
+        agg = report["artifacts" if key == "by_group" else "artifacts_strong"]
+        if agg:
+            print(f"[{label}:ALL] all_single_pass={agg['all_single_trace_pass']} "
+                  f"paired_fail={agg['all_single_trace_pass_but_paired_fail']} "
+                  f"ci95={agg['all_single_pass_paired_fail_ci95']} sep={agg['separation']} "
+                  f"mcnemar={agg['artifact_mcnemar']}")
+            for op, m in agg["per_operator"].items():
+                print(f"   {op:<10} paired_fail={m['paired'].get('fail', 0)} single_fail={m['single_trace'].get('fail', 0)} "
+                      f"missed={m['single_pass_paired_fail']} single_only={m['single_fail_paired_pass']}")
     for g, m in report["by_group"].items():
         print(f"[{g}] n={m['n_artifacts']} all_single_pass={m['all_single_trace_pass']} "
               f"of_which_paired_fail={m['all_single_trace_pass_but_paired_fail']} "
