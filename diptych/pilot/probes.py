@@ -16,6 +16,7 @@ ill-formed decision).
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import json
 import math
@@ -26,13 +27,14 @@ from pathlib import Path
 from typing import Any, Callable
 
 from diptych import OPERATORS
+from diptych.grade import grade_document
+from diptych.live import live_envelope, twin
 from diptych.pilot.plant import CONFIG, SCENARIOS, Plant
+from diptych.pilot.predicates import REQUIREMENT, TASK
 
 FORK_POINTS = (80, 140, 200)
 BOUND_EPS = 1e-9
-PAIR_RTOL = 1e-3
 SAT_SHORT, SAT_LONG = 5, 165
-SAT_RTOL = 0.05  # estimators still settling on the short arm
 
 
 class ArtifactError(Exception):
@@ -105,118 +107,123 @@ def _feed(ctrl: Counted, base: dict, latencies: list[float], setpoint: float | N
     return out
 
 
-def _at_bound(x: float) -> bool:
-    return x <= CONFIG["min_limit"] + BOUND_EPS or x >= CONFIG["max_limit"] - BOUND_EPS
-
-
-def _strictly_greater(a: float, b: float) -> bool:
-    """``a > b`` by more than float noise (same relative scale as ``_close``)."""
-    return a - b > PAIR_RTOL * max(1.0, abs(a), abs(b))
-
-
-def _close(a: float, b: float) -> bool:
-    return abs(a - b) <= PAIR_RTOL * max(1.0, abs(a), abs(b))
-
-
 # ---------------------------------------------------------------------------
-# Paired probes. Each gets a forked controller at a shared state plus the
-# last closed-loop observation and limit; returns (verdict, evidence).
+# Paired probes. A probe only RECORDS: it forks the controller at a shared
+# state, drives two branches that differ on one axis, and returns a live
+# envelope (diptych.live). The verdict comes from the requirement predicate in
+# diptych.pilot.predicates, applied by the shared grader, so every verdict can
+# be recomputed from the saved envelope.
 # ---------------------------------------------------------------------------
 
-Probe = Callable[[Counted, dict, float, dict], tuple[str, dict]]
+Recorder = Callable[[Counted, dict, float, dict], dict]
 
 
-def probe_signflip(c: Counted, base: dict, last: float, ctx: dict) -> tuple[str, dict]:
-    if _at_bound(last):
-        return "inconclusive", {"reason": "fork state at a limit bound"}
-    sp = base["setpoint_ms"]
+def _envelope(op: str, coupling: str, ctx: dict, twins: list[dict], **meta: Any) -> dict:
+    return live_envelope(
+        task=TASK, requirement=REQUIREMENT[op], operator=op, coupling=coupling,
+        artifact=ctx.get("artifact", ""),
+        probe_id=f"live.{TASK}.{op.lower()}.s{ctx.get('seed', 0)}.t{ctx.get('t_p', 0)}",
+        twins=twins, min_limit=CONFIG["min_limit"], max_limit=CONFIG["max_limit"],
+        fork_tick=ctx.get("t_p"), **meta,
+    )
+
+
+def record_signflip(c: Counted, base: dict, last: float, ctx: dict) -> dict:
+    sp, seed = base["setpoint_ms"], ctx["seed"]
     a, b = c.fork(), c.fork()
-    lim_hi = _feed(a, base, [sp * 1.2])[0]
-    lim_lo = _feed(b, base, [sp * 0.8])[0]
-    down, up = last - lim_hi, lim_lo - last
-    return ("pass" if down > 0 and down > 2 * up else "fail"), {"down": down, "up": up}
+    hi, lo = sp * 1.2, sp * 0.8
+    return _envelope("SIGNFLIP", "open_loop", ctx, [
+        twin("deviation_up", {"latency": [hi], "limit": [last] + _feed(a, base, [hi])}, seed, deviation=0.2),
+        twin("deviation_down", {"latency": [lo], "limit": [last] + _feed(b, base, [lo])}, seed, deviation=-0.2),
+    ])
 
 
-def probe_trajswap(c: Counted, base: dict, last: float, ctx: dict) -> tuple[str, dict]:
-    sp = base["setpoint_ms"]
+def record_trajswap(c: Counted, base: dict, last: float, ctx: dict) -> dict:
+    sp, seed = base["setpoint_ms"], ctx["seed"]
     improving = [sp * (1.30 - 0.05 * i) for i in range(8)]
+    worsening = list(reversed(improving))
     a, b = c.fork(), c.fork()
-    la = _feed(a, base, improving)
-    lb = _feed(b, base, list(reversed(improving)))
-    if any(_at_bound(x) for x in la + lb):
-        return "inconclusive", {"reason": "branch hit a limit bound"}
-    return ("pass" if _strictly_greater(la[-1], lb[-1]) else "fail"), {"improving_end": la[-1], "worsening_end": lb[-1]}
+    return _envelope("TRAJSWAP", "open_loop", ctx, [
+        twin("improving", {"latency": improving, "limit": _feed(a, base, improving)}, seed, order="improving"),
+        twin("worsening", {"latency": worsening, "limit": _feed(b, base, worsening)}, seed, order="worsening"),
+    ])
 
 
-def probe_satextend(c: Counted, base: dict, last: float, ctx: dict) -> tuple[str, dict]:
-    sp = base["setpoint_ms"]
-    probe = c.fork()
-    k0 = None
-    for k, lim in enumerate(_feed(probe, base, [sp * 0.3] * 200), start=1):
-        if lim >= CONFIG["max_limit"] - BOUND_EPS:
-            k0 = k
-            break
-    if k0 is None:
-        return "inconclusive", {"reason": "controller never saturates at max_limit"}
+def record_satextend(c: Counted, base: dict, last: float, ctx: dict) -> dict:
+    sp, seed = base["setpoint_ms"], ctx["seed"]
+    hi = CONFIG["max_limit"]
+    search = _feed_until(c.fork(), base, sp * 0.3, 200, hi - BOUND_EPS)
+    k0 = len(search) if search and search[-1] >= hi - BOUND_EPS else None
+    if k0 is None:  # never saturates: record the search so the predicate can say so
+        top = max(search) if search else last
+        return _envelope("SATEXTEND", "open_loop", ctx, [
+            twin("short", {"release": [top, top]}, seed, saturated_ticks=0),
+            twin("long", {"release": [top, top]}, seed, saturated_ticks=0),
+        ], search_max_limit=top, k0=None)
     a, b = c.fork(), c.fork()
     # Short arm is barely saturated; long arm saturates 160 ticks longer. A
     # wound-up integrator responds late on the long arm only.
     la = _feed(a, base, [sp * 0.3] * (k0 + SAT_SHORT))
     lb = _feed(b, base, [sp * 0.3] * (k0 + SAT_LONG))
-    if la[-1] < CONFIG["max_limit"] - BOUND_EPS or lb[-1] < CONFIG["max_limit"] - BOUND_EPS:
-        return "inconclusive", {"reason": "saturation not sustained on both arms"}
-    base_a = dict(base, t=base["t"] + k0 + SAT_SHORT)
-    base_b = dict(base, t=base["t"] + k0 + SAT_LONG)
-    da = CONFIG["max_limit"] - _feed(a, base_a, [sp * 1.3])[0]
-    db = CONFIG["max_limit"] - _feed(b, base_b, [sp * 1.3])[0]
-    same = abs(da - db) <= SAT_RTOL * max(1.0, abs(da), abs(db))
-    return ("pass" if same else "fail"), {"short_arm_drop": da, "long_arm_drop": db, "k0": k0}
+    ra = _feed(a, dict(base, t=base["t"] + k0 + SAT_SHORT), [sp * 1.3])[0]
+    rb = _feed(b, dict(base, t=base["t"] + k0 + SAT_LONG), [sp * 1.3])[0]
+    return _envelope("SATEXTEND", "open_loop", ctx, [
+        twin("short", {"release": [la[-1], ra]}, seed, saturated_ticks=k0 + SAT_SHORT),
+        twin("long", {"release": [lb[-1], rb]}, seed, saturated_ticks=k0 + SAT_LONG),
+    ], search_max_limit=hi, k0=k0)
 
 
-def probe_varscale(c: Counted, base: dict, last: float, ctx: dict) -> tuple[str, dict]:
+def _feed_until(ctrl: Counted, base: dict, latency: float, max_ticks: int, target: float) -> list[float]:
+    """Feed a constant latency until the limit reaches ``target`` (or give up)."""
+    out: list[float] = []
+    t = int(base["t"])
+    for _ in range(max_ticks):
+        t += 1
+        out.append(ctrl.tick(dict(base, t=t, latency_ms=latency))["limit"])
+        if out[-1] >= target:
+            break
+    return out
+
+
+def record_varscale(c: Counted, base: dict, last: float, ctx: dict) -> dict:
     t_p, seed = int(base["t"]) + 1, ctx["seed"]
     stop = t_p + 150
     # Same seed => identical per-tick draws (CRN); only the variance scale differs.
-    lo_p = Plant(SCENARIOS["steady_long"], seed=seed, var_scale=1.0)
-    hi_p = Plant(SCENARIOS["steady_long"], seed=seed, var_scale=3.0)
-    a, b = c.fork(), c.fork()
-    ta: list[dict] = []
-    tb: list[dict] = []
-    run_closed_loop(a, lo_p, t_p, stop, last, ta)
-    run_closed_loop(b, hi_p, t_p, stop, last, tb)
-    half = len(ta) // 2
-    ma = sum(r["limit"] for r in ta[half:]) / max(1, len(ta) - half)
-    mb = sum(r["limit"] for r in tb[half:]) / max(1, len(tb) - half)
-    return ("pass" if _strictly_greater(ma, mb) else "fail"), {"mean_limit_low_var": ma, "mean_limit_high_var": mb}
+    stream = f"steady_long:{seed}"
+    twins = []
+    for name, scale in (("low_variance", 1.0), ("high_variance", 3.0)):
+        trace: list[dict] = []
+        run_closed_loop(c.fork(), Plant(SCENARIOS["steady_long"], seed=seed, var_scale=scale),
+                        t_p, stop, last, trace)
+        twins.append(twin(name, {"limit": [r["limit"] for r in trace]}, seed,
+                          crn_stream_id=stream, crn_closed_loop=True, var_scale=scale))
+    return _envelope("VARSCALE", "crn_closed_loop", ctx, twins)
 
 
-def probe_histswap(c: Counted, base: dict, last: float, ctx: dict) -> tuple[str, dict]:
-    sp = base["setpoint_ms"]
+def record_histswap(c: Counted, base: dict, last: float, ctx: dict) -> dict:
+    sp, seed = base["setpoint_ms"], ctx["seed"]
     new_sp = sp * 0.7
-    a, b = c.fork(), c.fork()
-    pa = _feed(a, base, [sp * 1.1] * 15)
-    pb = _feed(b, base, [sp * 0.9] * 15)
     post = [new_sp * 1.1] * 6
     base2 = dict(base, t=base["t"] + 15)
-    la = _feed(a, base2, post, setpoint=new_sp)
-    lb = _feed(b, base2, post, setpoint=new_sp)
-    if any(_at_bound(x) for x in pa[-1:] + pb[-1:] + la + lb):
-        return "inconclusive", {"reason": "branch hit a limit bound"}
-    da = [x - y for x, y in zip(la, [pa[-1]] + la[:-1])]
-    db = [x - y for x, y in zip(lb, [pb[-1]] + lb[:-1])]
-    ra = [x / y for x, y in zip(la, [pa[-1]] + la[:-1])]
-    rb = [x / y for x, y in zip(lb, [pb[-1]] + lb[:-1])]
-    same = all(_close(x, y) for x, y in zip(da, db)) or all(_close(x, y) for x, y in zip(ra, rb))
-    return ("pass" if same else "fail"), {"corrections_a": da, "corrections_b": db}
+    twins = []
+    for name, level in (("history_high", 1.1), ("history_low", 0.9)):
+        arm = c.fork()
+        pre = _feed(arm, base, [sp * level] * 15)
+        twins.append(twin(name, {"limit": pre[-1:] + _feed(arm, base2, post, setpoint=new_sp)}, seed,
+                          pre_step_level=level))
+    return _envelope("HISTSWAP", "open_loop", ctx, twins, new_setpoint_ms=new_sp)
 
 
-PAIRED_PROBES: dict[str, Probe] = {
-    "SIGNFLIP": probe_signflip,
-    "TRAJSWAP": probe_trajswap,
-    "SATEXTEND": probe_satextend,
-    "VARSCALE": probe_varscale,
-    "HISTSWAP": probe_histswap,
+RECORDERS: dict[str, Recorder] = {
+    "SIGNFLIP": record_signflip,
+    "TRAJSWAP": record_trajswap,
+    "SATEXTEND": record_satextend,
+    "VARSCALE": record_varscale,
+    "HISTSWAP": record_histswap,
 }
+# Name kept for callers that iterate the in-process paired operators.
+PAIRED_PROBES = RECORDERS
+BRANCHES = {"SATEXTEND": 3}  # saturation search + two arms
 
 
 def _combine(results: list[tuple[str, dict]]) -> str:
@@ -230,7 +237,24 @@ def _combine(results: list[tuple[str, dict]]) -> str:
     return "inconclusive"
 
 
-def run_forked_probes(cls: type, seed: int = 0) -> tuple[dict[str, Any], dict[str, int]]:
+def _save(envelope: dict, ctx: dict) -> None:
+    out = os.environ.get("PILOT_ENVELOPE_DIR")
+    if out:
+        d = Path(out) / Path(str(ctx.get("artifact") or "artifact")).with_suffix("").name
+        d.mkdir(parents=True, exist_ok=True)
+        (d / f"{envelope['probe_id']}.json").write_text(json.dumps(envelope, sort_keys=True))
+
+
+def _grade(envelope: dict, ctx: dict) -> tuple[str, dict]:
+    _save(envelope, ctx)
+    res = grade_document(envelope)
+    ev = dict(res.evidence)
+    if res.actual_verdict == "inconclusive":
+        ev.setdefault("reason", res.reason)
+    return res.actual_verdict, ev
+
+
+def run_forked_probes(cls: type, seed: int = 0, artifact: str = "") -> tuple[dict[str, Any], dict[str, int]]:
     """Run the in-process paired probes; return per-operator results and tick counts."""
     plant = Plant(SCENARIOS["steady"], seed=seed)
     counter = [0]
@@ -246,19 +270,19 @@ def run_forked_probes(cls: type, seed: int = 0) -> tuple[dict[str, Any], dict[st
         forks.append((t_p, root.fork(), prefix_trace[-1]["obs"], prev))
     prefix_ticks = counter[0]
     out: dict[str, Any] = {}
-    for op, probe in PAIRED_PROBES.items():
+    for op, record in RECORDERS.items():
         per_fork = []
         for t_p, snap, base, last in forks:
             before = counter[0]
+            ctx = {"seed": seed, "t_p": t_p, "artifact": artifact}
             try:
-                v, ev = probe(snap, base, last, {"seed": seed})
+                v, ev = _grade(record(snap, base, last, ctx), ctx)
             except ArtifactError as exc:
                 v, ev = "error", {"reason": str(exc)}
             suffix = counter[0] - before
             # Without prefix sharing every branch would replay the t_p-tick
             # prefix from scratch; count the branches this probe executed.
-            branches = 3 if op == "SATEXTEND" else 2
-            naive += branches * t_p + suffix
+            naive += BRANCHES.get(op, 2) * t_p + suffix
             per_fork.append({"t_p": t_p, "verdict": v, "evidence": ev})
         out[op] = {"verdict": _combine([(r["verdict"], {}) for r in per_fork]), "forks": per_fork}
     ticks = {"forked": counter[0], "prefix_shared": prefix_ticks, "naive_equivalent": naive}
@@ -312,28 +336,47 @@ def _worker(artifact: str, mode: str, env_extra: dict[str, str], stdin: str = ""
     return json.loads(proc.stdout)
 
 
+def _decision_twin(name: str, decisions: list, **meta: Any) -> dict:
+    """Twin from a decoded decision sequence ``[[limit, telemetry], ...]``."""
+    blob = json.dumps(decisions, sort_keys=True)
+    return twin(name, {"limit": [d[0] for d in decisions]}, 0,
+                decision_digest="sha256:" + hashlib.sha256(blob.encode()).hexdigest(), **meta)
+
+
 def probe_reseed(artifact: str) -> dict:
     a = _worker(artifact, "trace", {"PYTHONHASHSEED": "1", "PILOT_GLOBAL_SEED": "11"})
     b = _worker(artifact, "trace", {"PYTHONHASHSEED": "2", "PILOT_GLOBAL_SEED": "22"})
-    same = a["decisions"] == b["decisions"]
-    return {"verdict": "pass" if same else "fail", "evidence": {"identical": same}}
+    ctx = {"artifact": artifact}
+    env = _envelope("RESEED", "open_loop", ctx, [
+        _decision_twin("process_1", json.loads(a["decisions"]), hash_seed=1, global_seed=11),
+        _decision_twin("process_2", json.loads(b["decisions"]), hash_seed=2, global_seed=22),
+    ])
+    v, ev = _grade(env, ctx)
+    return {"verdict": v, "evidence": ev}
 
 
 def probe_freezedry(artifact: str) -> dict:
     full = _worker(artifact, "trace", {"PYTHONHASHSEED": "0"})
     snap = _worker(artifact, "snapshot", {"PYTHONHASHSEED": "0"})
     resumed = _worker(artifact, "resume", {"PYTHONHASHSEED": "0"}, stdin=json.dumps(snap))
-    tail = json.loads(full["decisions"])[snap["at"]:]
-    same = json.loads(resumed["decisions"]) == tail
-    return {"verdict": "pass" if same else "fail", "evidence": {"identical_after_restore": same, "at": snap["at"]}}
+    ctx = {"artifact": artifact}
+    env = _envelope("FREEZEDRY", "open_loop", ctx, [
+        _decision_twin("uninterrupted", json.loads(full["decisions"])[snap["at"]:]),
+        _decision_twin("restored", json.loads(resumed["decisions"])),
+    ], restored_at=snap["at"])
+    v, ev = _grade(env, ctx)
+    ev["at"] = snap["at"]
+    return {"verdict": v, "evidence": ev}
 
 
-def probe_schemax(cls: type) -> dict:
-    keysets = set()
+def probe_schemax(cls: type, artifact: str = "") -> dict:
+    twins = []
     for sc in ("steady", "saturate", "setpoint_step"):
-        for r in closed_loop_trace(cls, sc):
-            keysets.add(tuple(sorted(map(str, r["telemetry"]))))
-    return {"verdict": "pass" if len(keysets) == 1 else "fail", "evidence": {"distinct_keysets": len(keysets)}}
+        keysets = sorted({"|".join(sorted(map(str, r["telemetry"]))) for r in closed_loop_trace(cls, sc)})
+        twins.append(twin(sc, {"schema": keysets}, 0, scenario=sc))
+    ctx = {"artifact": artifact}
+    v, ev = _grade(_envelope("SCHEMAX", "open_loop", ctx, twins), ctx)
+    return {"verdict": v, "evidence": ev}
 
 
 # ---------------------------------------------------------------------------
@@ -614,7 +657,7 @@ def evaluate(artifact: str, seeds: tuple[int, ...] = SEEDS) -> dict[str, Any]:
         ticks = {"forked": 0, "prefix_shared": 0, "naive_equivalent": 0}
         fidelity = []
         for seed in seeds:
-            forked, t = run_forked_probes(cls, seed)
+            forked, t = run_forked_probes(cls, seed, artifact)
             fidelity.append(forked.pop("_fork_fidelity"))
             per_seed[seed] = forked
             for k in ticks:
@@ -632,7 +675,7 @@ def evaluate(artifact: str, seeds: tuple[int, ...] = SEEDS) -> dict[str, Any]:
         result["paired"].update({op: "error" for op in PAIRED_PROBES})
     for op, fn in (("RESEED", lambda: probe_reseed(artifact)),
                    ("FREEZEDRY", lambda: probe_freezedry(artifact)),
-                   ("SCHEMAX", lambda: probe_schemax(cls))):
+                   ("SCHEMAX", lambda: probe_schemax(cls, artifact))):
         try:
             result["paired"][op] = fn()["verdict"]
         except (ArtifactError, subprocess.TimeoutExpired, Exception) as exc:  # noqa: BLE001

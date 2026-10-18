@@ -22,8 +22,17 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="diptych.pilot.worker")
     p.add_argument("--artifact", required=True)
     p.add_argument("--mode", choices=("trace", "snapshot", "resume", "evaluate"), required=True)
+    p.add_argument("--task", default="concurrency")
     args = p.parse_args(argv)
     random.seed(int(os.environ.get("PILOT_GLOBAL_SEED", "0")))
+
+    if args.task != "concurrency":
+        from diptych.pilot.tasks import TASKS
+
+        if args.mode != "evaluate":
+            p.error(f"mode {args.mode} is only defined for the concurrency task")
+        print(json.dumps(TASKS[args.task].evaluate()(args.artifact), default=repr))
+        return 0
 
     from diptych.pilot.plant import CONFIG, SCENARIOS, Plant
     from diptych.pilot.probes import (
