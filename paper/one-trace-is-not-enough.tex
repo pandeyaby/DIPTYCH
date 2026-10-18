@@ -129,6 +129,19 @@
 	guidance for assessing congestion controllers asks whether a new
 	algorithm causes more harm to competing flows than a standard one
 	would \cite{rfc9743}, a comparison between two runs.
+	The same shape appears outside agentic evaluation. Classic Linux
+	kernel information leaks copy uninitialized stack or struct-padding
+	bytes to userspace via \texttt{ioctl} or \texttt{copy\_to\_user}: the
+	public input (syscall and arguments) is fixed while the secret is the
+	prior contents of those holes, and the observable output is the bytes
+	returned to the caller. Fixes zero the object before filling it---for
+	example WAN ioctl padding leaks
+	\cite{linux-cve-2014-1444,linux-cve-2014-1445} and a uinput compat
+	structure \cite{linux-cve-2025-40035}. Each is a $2$-safety
+	noninterference violation in the sense of observational determinism
+	\cite{clarkson2010,zdancewic2003}: one run shows some bytes, but only
+	a paired run with a different secret state exposes the dependence.
+	A single trace cannot falsify the hyperproperty.
 	
 	The practical consequence is a silent failure mode in benchmark design. A
 	specification author writes an invariant in single-trace prose. A harness
