@@ -340,3 +340,29 @@
   year      = {2019},
   doi       = {10.1145/3365609.3365855}
 }
+
+% Verified Linux kernel info-leak fixes (memset / zero-init of padding holes).
+% Commit hashes checked against torvalds/linux; CVE mappings against NVD.
+@misc{linux-cve-2014-1444,
+  author       = {Peir{\'o}, Salva},
+  title        = {farsync: fix info leak in ioctl},
+  howpublished = {Linux kernel commit \texttt{96b340406724d87e4621284ebac5e059d67b2194}},
+  year         = {2013},
+  note         = {{CVE}-2014-1444; \url{https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=96b340406724d87e4621284ebac5e059d67b2194}}
+}
+
+@misc{linux-cve-2014-1445,
+  author       = {Peir{\'o}, Salva},
+  title        = {wanxl: fix info leak in ioctl},
+  howpublished = {Linux kernel commit \texttt{2b13d06c9584b4eb773f1e80bbaedab9a1c344e1}},
+  year         = {2013},
+  note         = {{CVE}-2014-1445; \url{https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b13d06c9584b4eb773f1e80bbaedab9a1c344e1}}
+}
+
+@misc{linux-cve-2025-40035,
+  author       = {Ni, Zhen},
+  title        = {Input: uinput --- zero-initialize \texttt{uinput\_ff\_upload\_compat} to avoid info leak},
+  howpublished = {Linux kernel commit \texttt{d3366a04770eea807f2826cbdb96934dd8c9bf79}},
+  year         = {2025},
+  note         = {{CVE}-2025-40035; \url{https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d3366a04770eea807f2826cbdb96934dd8c9bf79}}
+}
