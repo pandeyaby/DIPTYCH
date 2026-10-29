@@ -1,0 +1,833 @@
+{
+  "items": [
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-125",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-fable-5-1#3",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-178",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#2",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 3,
+        "violates": 2
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-191",
+      "key": "HISTSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#2",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 1,
+        "violates": 4
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-192",
+      "key": "path-change",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#4",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "fail",
+      "category": "both_fail",
+      "id": "item-219",
+      "key": "harm-throughput",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-fable-5-1#4",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": false,
+      "agrees_strong": false,
+      "basic": "fail",
+      "category": "both_fail",
+      "id": "item-244",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#1",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 3,
+        "violates": 2
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-357",
+      "key": "TRAJSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "agentic-codex:gpt-5.6-sol#0",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 2,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-394",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-claude:claude-opus-5-5#0",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-399",
+      "key": "SATEXTEND",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-claude:claude-fable-5-1#1",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-416",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-fable-5-1#2",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-448",
+      "key": "SATEXTEND",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "agentic-claude:claude-sonnet-5#2",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-456",
+      "key": "TRAJSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#3",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-465",
+      "key": "TRAJSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-sonnet-5#1",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 2,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-472",
+      "key": "short-flows",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-sonnet-5#1",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "unsure": 1,
+        "violates": 4
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-477",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#3",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 4,
+        "unsure": 1
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-485",
+      "key": "TRAJSWAP",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "agentic-codex:gpt-5.6-sol#4",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-508",
+      "key": "harm-throughput",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-claude:claude-sonnet-5#0",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-532",
+      "key": "delay-change",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-sonnet-5#3",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "strong_only",
+      "id": "item-535",
+      "key": "harm-throughput",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-claude:claude-sonnet-5#2",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "fail",
+      "category": "both_fail",
+      "id": "item-568",
+      "key": "VARSCALE",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#2",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": false,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-572",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-sonnet-5#1",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-610",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-claude:claude-sonnet-5#0",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "strong_only",
+      "id": "item-618",
+      "key": "harm-throughput",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-codex:gpt-5.6-sol#4",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-625",
+      "key": "VARSCALE",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#2",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-650",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-claude:claude-sonnet-5#3",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 4,
+        "violates": 1
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-667",
+      "key": "short-flows",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-claude:claude-opus-5-5#0",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-670",
+      "key": "TRAJSWAP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-codex:gpt-5.6-sol#1",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-691",
+      "key": "delay-change",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "agentic-codex:gpt-5.6-sol#1",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 2,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "both_pass",
+      "id": "item-699",
+      "key": "short-flows",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-claude:claude-opus-5-5#3",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-753",
+      "key": "VARSCALE",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-opus-5-5#1",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "strong_only",
+      "id": "item-760",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "oneshot-claude:claude-fable-5-1#0",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "control",
+      "id": "item-820",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "control:conforming",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 4,
+        "violates": 1
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-827",
+      "key": "short-flows",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#1",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 2,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "control",
+      "id": "item-833",
+      "key": "TRAJSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "control:violating-trajswap",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-840",
+      "key": "SIGNFLIP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-haiku-4-5-20251001#0",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 2,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-863",
+      "key": "VARSCALE",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#3",
+      "strong": "pass",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 1,
+        "violates": 4
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "control",
+      "id": "item-868",
+      "key": "path-change",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "control:violating-path_change",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "control",
+      "id": "item-921",
+      "key": "path-change",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "control:conforming",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": true,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-924",
+      "key": "TRAJSWAP",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-codex:gpt-5.6-sol#3",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "violates": 5
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "paired_only",
+      "id": "item-968",
+      "key": "short-flows",
+      "majority": "violates",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-fable-5-1#4",
+      "strong": "pass",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 1,
+        "unsure": 1,
+        "violates": 3
+      }
+    },
+    {
+      "agrees_basic": false,
+      "agrees_paired": false,
+      "agrees_strong": false,
+      "basic": "fail",
+      "category": "both_fail",
+      "id": "item-988",
+      "key": "harm-latency",
+      "majority": "satisfies",
+      "paired": "fail",
+      "row": "oneshot-claude:claude-opus-5-5#4",
+      "strong": "fail",
+      "task": "congestion",
+      "votes": {
+        "satisfies": 3,
+        "unsure": 1,
+        "violates": 1
+      }
+    },
+    {
+      "agrees_basic": true,
+      "agrees_paired": true,
+      "agrees_strong": false,
+      "basic": "pass",
+      "category": "strong_only",
+      "id": "item-997",
+      "key": "SIGNFLIP",
+      "majority": "satisfies",
+      "paired": "pass",
+      "row": "agentic-claude:claude-opus-5-5#4",
+      "strong": "fail",
+      "task": "concurrency",
+      "votes": {
+        "satisfies": 5
+      }
+    }
+  ],
+  "summary": {
+    "by_category": {
+      "A/both_fail": {
+        "agrees_basic": 1,
+        "agrees_paired": 1,
+        "agrees_strong": 1,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 1
+      },
+      "A/both_pass": {
+        "agrees_basic": 4,
+        "agrees_paired": 4,
+        "agrees_strong": 3,
+        "majority_decided": 4,
+        "n": 4,
+        "unanimous": 3
+      },
+      "A/control": {
+        "agrees_basic": 1,
+        "agrees_paired": 2,
+        "agrees_strong": 1,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 1
+      },
+      "A/paired_only": {
+        "agrees_basic": 3,
+        "agrees_paired": 9,
+        "agrees_strong": 7,
+        "majority_decided": 12,
+        "n": 12,
+        "unanimous": 6
+      },
+      "A/strong_only": {
+        "agrees_basic": 2,
+        "agrees_paired": 2,
+        "agrees_strong": 0,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 2
+      },
+      "B/both_fail": {
+        "agrees_basic": 1,
+        "agrees_paired": 1,
+        "agrees_strong": 1,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 1
+      },
+      "B/both_pass": {
+        "agrees_basic": 4,
+        "agrees_paired": 4,
+        "agrees_strong": 3,
+        "majority_decided": 4,
+        "n": 4,
+        "unanimous": 4
+      },
+      "B/control": {
+        "agrees_basic": 1,
+        "agrees_paired": 2,
+        "agrees_strong": 2,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 2
+      },
+      "B/paired_only": {
+        "agrees_basic": 5,
+        "agrees_paired": 5,
+        "agrees_strong": 7,
+        "majority_decided": 10,
+        "n": 10,
+        "unanimous": 5
+      },
+      "B/strong_only": {
+        "agrees_basic": 2,
+        "agrees_paired": 2,
+        "agrees_strong": 0,
+        "majority_decided": 2,
+        "n": 2,
+        "unanimous": 2
+      }
+    },
+    "fleiss_kappa": 0.6179039301310043,
+    "items": 42,
+    "overall": {
+      "agrees_basic": 24,
+      "agrees_paired": 32,
+      "majority_decided": 42
+    },
+    "raters": [
+      "packet-r1",
+      "packet-r2",
+      "packet-r3",
+      "packet-r4",
+      "packet-r5"
+    ]
+  }
+}

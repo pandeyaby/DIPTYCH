@@ -1,0 +1,257 @@
+{
+ "rater": "r5",
+ "items": {
+  "item-125": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "I halved capacity at t=1000 and compared against a path that was always at half capacity. Throughput ratio was 1.0 and loss was unchanged. Queue ratio was 0.74-1.08 over the settled window [2000,4000) across 10 seeds. One seed exceeded 1.25 only in a short window just after the change."
+  },
+  "item-178": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Down/up ratio was 4.4-5 every time (down gain 0.30 vs up gain 0.06, plus a trend term). It can fail only when earlier error history makes the trend term dominate."
+  },
+  "item-191": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "I gave two different pre-change histories the same post-change observations. Every correction from the second tick on was identical. But the first post-change limit change differed (0.57 vs 1.75), because the pre-change volatility reserve is dropped while the core limit is kept. So the first correction depends on pre-change history."
+  },
+  "item-192": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "After capacity halves, 2 of 10 seeds settle with a mean queue of 6.2-6.4 packets vs 1.45 on the always-low path (ratio about 4.3, persisting to t=4000). The cause: the rtt-jump detector mistakes the new queueing delay for a base-RTT change and re-anchors base_rtt."
+  },
+  "item-219": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow sharing with this controller got 0.57-0.62 of the throughput it gets beside another standard flow, across 6 seeds. That is below the 0.8 threshold."
+  },
+  "item-244": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was 3.0-5.7 every time (Kp_down 0.3 vs Kp_up 0.1, and the up gain is further reduced by volatility). In noisy warm states the EWMA signal is driven by history, so the comparison there is unclear."
+  },
+  "item-357": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "I compared improving and reversed (worsening) latency ramps over many ranges and lengths. For ranges that cross the setpoint (e.g. 85->145 or 95->135 over 20 ticks), the improving order ended lower (5.2 vs 7.1, 8.9 vs 10.8). So the 'improving ends higher' property fails for plausible runs."
+  },
+  "item-394": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was exactly 4 in every state (DOWN_RATIO 4, and the trend modulation is bounded by design)."
+  },
+  "item-399": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "I saturated at max_limit for 1 to 500 ticks, then applied a latency excursion. The first response was identical for every saturation length and scaled with the excursion size. The limit is the only integrated state, and the trend term is capped at |error|."
+  },
+  "item-416": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "After capacity halving, throughput ratio was about 1.0, queue ratio 0.55-0.93 and loss change at most 0 pp across 5 seeds."
+  },
+  "item-448": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "I saturated at max_limit for 1 to 500 ticks, then applied an excursion. The first response was identical for every duration and grew with the excursion. There is no separate accumulator; the limit itself is clamped. The response is bounded by gain times the clipped error."
+  },
+  "item-456": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Improving-order ramps ended lower than worsening-order ramps in 198 of 252 cases that cross the setpoint (e.g. 120->80 over 20 ticks: 2.0 vs 84.1). Recency is not honoured."
+  },
+  "item-465": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "For ramps that cross the setpoint (e.g. 155->95 or 135->95 over 5-20 ticks), the improving order ended lower than the worsening order (e.g. 12.65 vs 15.34). It also failed widely for runs entirely above the setpoint. Symmetric ranges passed, but the requirement fails on plausible runs."
+  },
+  "item-472": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "I averaged over many start times. A 10-packet standard flow took 1.27-1.35 times as long beside this controller as beside a standard flow, in every start-time window. 30-packet flows were at 1.19-1.31, so the 1.25 threshold is exceeded for the shortest flows."
+  },
+  "item-477": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "In the settled window [2000,4000) across 10 seeds, throughput ratio was 1.0, queue ratio at most 1.035 and loss unchanged. Shorter windows right after the change showed transient excess queue only."
+  },
+  "item-485": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Across 816 ramp comparisons, every failure came from 3-tick runs on a fresh controller (differences of about 0.01), where the first-sample initialisation dominates. Every other failure was a tie at the min_limit clamp. All runs of 5 or more ticks ended higher in improving order."
+  },
+  "item-508": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow beside this controller got 1.41-1.52 times the throughput it gets beside a standard flow, across 6 seeds."
+  },
+  "item-532": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After base RTT doubles from 2 to 4 ticks at t=1000, throughput stayed at 0.98-0.99 of the unchanged run across 6 seeds."
+  },
+  "item-535": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow beside this controller got 1.58-1.67 times its standard-vs-standard throughput."
+  },
+  "item-568": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "In closed loop (steady_long, var_scale 1 vs 1.5/2/3, 20 seeds) and in volatile_step, the higher-variance workload always got a higher limit (by 0.8-8). Volatility only scales the size of corrections and never biases the limit down."
+  },
+  "item-572": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "After capacity halving: throughput ratio about 1.0, queue ratio 0.59-1.07, loss within 0.4 pp across 5 seeds."
+  },
+  "item-610": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After capacity halving: throughput ratio 1.0, queue ratio about 1.0, loss unchanged across 5 seeds."
+  },
+  "item-618": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow beside this controller got 1.56-1.64 times its standard-vs-standard throughput."
+  },
+  "item-625": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "On closed-loop steady_long with different var_scale, the higher-variance limit was lower in only 3-17 of 20 seeds, and mean differences were about 0.1, mostly the wrong sign. volatile_step was mixed too. The volatility reserve is offset by the integrating core limit, so the limit is not strictly lower."
+  },
+  "item-650": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was 3.0-4.0 every time (KD 0.40 vs KU 0.10 in log space)."
+  },
+  "item-667": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Short standard flows (10-300 packets) finished in 0.49-0.66 of the time they take beside a standard established flow."
+  },
+  "item-670": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ended strictly higher in every comparison except ties where both runs were pinned at min_limit=1.0 (runs entirely above the setpoint). I found no ordering reversals."
+  },
+  "item-691": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After base RTT doubles, throughput collapsed to about 0.25 packets/tick (2.5% of the unchanged run) in 5 of 6 seeds."
+  },
+  "item-699": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Short standard flows (10-300 packets) finished in 0.62-0.66 of the time they take beside a standard established flow."
+  },
+  "item-753": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Closed-loop tests (steady_long with varied var_scale, 20 seeds; volatile_step, 10 seeds) mostly gave a higher or equal limit on the higher-variance workload (e.g. var 0.5 vs 2: high-var lower in 0 of 20). The volatility penalty is applied after the integrator, which compensates for it."
+  },
+  "item-760": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was 3.0-4.5 every time (KP_DOWN 0.6 vs KP_UP 0.2, with asymmetric caps). The only failures I saw were ties while clamped at max_limit."
+  },
+  "item-820": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was 3.4 in every state (G_DOWN 3 vs G_UP 1 on the risk signal)."
+  },
+  "item-827": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Mean completion-time ratio was 0.80-1.07 for 10-30 packet flows and at most 1.22 for 300-packet flows, in all start-time windows. Always within 1.25."
+  },
+  "item-833": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Improving order ended lower than worsening order in 234 of 252 setpoint-crossing ramps (e.g. 120->80 over 20 ticks: 33.0 vs 37.5)."
+  },
+  "item-840": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "The error is in absolute ms with gain 2.5 vs 1.0. From a fresh state at limit 50, a 30% or 50% excursion drives the cut into min_limit, so down/up was 1.63 and 0.98. In warm closed-loop states the EMA history often makes both responses go the same way. The 2x asymmetry does not hold over realistic deviations."
+  },
+  "item-863": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Closed-loop steady_long, varied var_scale, 20 seeds: the higher-variance limit was lower in only 6-13 of 20 seeds. volatile_step was mixed in sign. There is no reliable strictly lower limit, except large drops on a few very noisy runs."
+  },
+  "item-868": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After capacity halving the flow keeps the buffer full and has about 5.9-8.3 pp more loss than on an always-low path, against a limit of 2 pp. This holds in all 5 seeds."
+  },
+  "item-921": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Behaves identically to the standard algorithm (matching numbers): throughput ratio 1.0, queue ratio about 1.0, loss unchanged after capacity halving."
+  },
+  "item-924": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Improving order ended lower than worsening order in all 816 ramp comparisons I ran (e.g. 120->80 over 20 ticks: 33.0 vs 41.4)."
+  },
+  "item-968": {
+   "verdict": "unsure",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "Completion-time ratios were 1.0-1.22 for 10-30 packet flows but 1.15-1.34 for 50-300 packet flows, straddling 1.25 depending on start window and size. Too close to the threshold to call."
+  },
+  "item-988": {
+   "verdict": "satisfies",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "The standard flow's queueing delay beside this controller was 1.16-1.28 times the standard-vs-standard delay, depending on seed and window. The mean was about 1.22 and all long-horizon seeds were at most 1.247. This is borderline and just under the 1.25 threshold on average."
+  },
+  "item-997": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "I fed one tick with latency setpoint*(1+d) and one with setpoint*(1-d) from the same state (fresh, or after 1-50 ticks at the setpoint), for d from 0.01 to 0.9. Ratio was 2.3 from a fresh state and 3.2 after any history, so always above 2."
+  }
+ }
+}

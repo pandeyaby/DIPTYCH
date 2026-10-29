@@ -14,6 +14,7 @@ references · IEEE template · single-anonymous. Details and fallback plan:
 | Pilot on 80 model-written controllers, two tasks (Table IV) | `python -m diptych.pilot.study [--task congestion]`; [`diptych/pilot/`](../diptych/pilot/) |
 | One pipeline: pilot probes record live envelopes graded by `diptych.grade` | [`diptych/live.py`](../diptych/live.py), `tests/test_live.py` |
 | §IV audits a public document (RFC 9743) | [`AUDIT_RFC9743.md`](AUDIT_RFC9743.md) |
+| Blinded model-based adjudication of 42 verdicts (5 raters, κ = 0.62); not human validation | [`diptych/pilot/adjudication_data/`](../diptych/pilot/adjudication_data/) |
 | Grader defects found by the sweep fixed, with regression tests | `tests/test_adequacy.py` |
 | Author block: Abhinav Pandey (Independent Researcher), Abhishek Pandey (Meta) | `.tex` author block |
 | Venue fields filled | [`SUBMISSION.md`](SUBMISSION.md) §0 |

@@ -1,0 +1,257 @@
+{
+ "rater": "r3",
+ "items": {
+  "item-125": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Capacity halved at t=600 vs always-low path over 10 seeds: throughput ratio 1.00, queue ratio ~1 and loss within 0.1pp once settled (long window)."
+  },
+  "item-178": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Down gain 0.30 vs up gain 0.06 (5x); measured single-tick down/up correction ratio ~4.4 at all deviation sizes."
+  },
+  "item-191": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Observation stats reset on setpoint change, but output limit = core - volatility reserve; reserve from pre-change variance vanishes at first post-change tick, so first limit move depends on history (0.469 vs 0.043 in test). Later moves match."
+  },
+  "item-192": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "On 3/10 seeds after capacity halving the steady queue stays ~4.3x that of an always-low path (6.3 vs 1.45) persistently, from stale base_rtt/jump state."
+  },
+  "item-219": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Standard flow gets only ~0.56-0.60 of its throughput vs a standard peer, below 0.8."
+  },
+  "item-244": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Kp_down 0.3 vs Kp_up 0.1/(1+2*vol) gives ratio >=3 from neutral state; small-d symmetry in perturbation tests was an artifact of the sign kink in the smoothed signal."
+  },
+  "item-357": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Improving order ends higher than worsening in all unclamped symmetric tests (explicit trend term); exceptions only in clamp-affected cases."
+  },
+  "item-394": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Down weight 4x up (odd shaping), measured first-tick ratio ~4 at all sizes; arrival-cv target offset is a volatility feature."
+  },
+  "item-399": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "First-response delta to excursion identical (-8.498) after 20, 60, 200, 600 saturated ticks; resets on saturation."
+  },
+  "item-416": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Over 10 seeds with long window, throughput ratio 1.00, loss within 0.1pp, queue ratio within ~+/-15% (noisy cycling, no persistent excess)."
+  },
+  "item-448": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "First-response delta identical (-6.18) after 60, 200, 600 saturated ticks."
+  },
+  "item-456": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "After improving latency the limit usually ends lower than after the same observations worsening (e.g. 36.7 vs 44.7); only some cases satisfy."
+  },
+  "item-465": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Explicit EWMA recency term; improving ends higher in most tests (symmetric ramps); only fails for sequences wholly above setpoint with multiplicative path effects."
+  },
+  "item-472": {
+   "verdict": "violates",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "Short standard flow completion time ratio of means 1.32 (size 50) and 1.21 (size 100), per-seed up to 1.6 vs standard established flow; delay-based plateau behaviour. Noisy baseline."
+  },
+  "item-477": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Settled behaviour matches always-low path in long windows (throughput ratio 1, queue ratio 1.0 except transient seed 0, loss equal)."
+  },
+  "item-485": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ends higher than worsening in every test (12/12 plus 6/6)."
+  },
+  "item-508": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Standard flow gets 1.4-1.6x its baseline throughput beside this flow; well above 0.8."
+  },
+  "item-532": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "After RTT doubling throughput ratio to no-change run is ~0.99-1.0 once settled (0.84 only in transient window on one seed)."
+  },
+  "item-535": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Standard flow gets 1.6x baseline throughput; >0.8."
+  },
+  "item-568": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Higher-variance workload converges to a higher limit (80.2 -> 82-83) across all seeds."
+  },
+  "item-572": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Across 10 seeds, long-window throughput, queue and loss match always-low path (loss diff <0.3pp, queue ratio ~1)."
+  },
+  "item-610": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Settled behaviour identical to always-low path on all 10 seeds (thr, queue, loss)."
+  },
+  "item-618": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Standard flow gets ~1.55x baseline throughput; >0.8."
+  },
+  "item-625": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Limit essentially equal (79.8-79.9) across variance scales, not strictly lower on high-variance workloads; sometimes higher."
+  },
+  "item-650": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "KD=0.40 vs KU=0.10; single-tick ratio ~3.9 at all deviation sizes."
+  },
+  "item-667": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Short standard flow finishes in ~0.3-0.6 of the baseline time (never above 1.25x)."
+  },
+  "item-670": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Improving ends higher than worsening in all unclamped tests; only clamp-at-min cases ambiguous."
+  },
+  "item-691": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Throughput after base RTT doubling equals no-change throughput (ratio 1.0) on all seeds."
+  },
+  "item-699": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Short standard flow finishes faster than baseline (ratio ~0.4-0.8)."
+  },
+  "item-753": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "High-variance workloads yield equal or higher limits (80.1-80.5 vs 79.9), no suppression, including volatile_step."
+  },
+  "item-760": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Down gain 3x up; single-tick ratio ~4.5 at all sizes."
+  },
+  "item-820": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "G_DOWN vs G_UP gives single-tick ratio ~3.4 at all sizes."
+  },
+  "item-827": {
+   "verdict": "satisfies",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "Short-flow completion ratio of means 1.1-1.2 over many seeds/start offsets, under 1.25, though noisy against sawtooth baseline."
+  },
+  "item-833": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Improving order usually ends lower than worsening (e.g. 42.3 vs 45.5), no recency benefit."
+  },
+  "item-840": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "down_gain 2.5 vs up_gain 1.0 (further reduced upward by volatility); ratio >=2.5."
+  },
+  "item-863": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Limit at sd 20 vs sd 5 is mostly equal or higher (e.g. 80.17 vs 79.82); only extreme variance lowers it."
+  },
+  "item-868": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After capacity halving loss is 5.9-8.3pp higher than on always-low path (40.9% vs 35.1%), exceeding 2pp."
+  },
+  "item-921": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Matches always-low path on every seed for throughput, queue and loss."
+  },
+  "item-924": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ends lower than worsening in every test (12/12)."
+  },
+  "item-968": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Short-flow ratio of means 0.88-1.03 (sizes 50-300), below 1.25."
+  },
+  "item-988": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Queue ratio vs standard-standard 1.18-1.25 over 8 seeds with long windows; borderline but within 1.25."
+  },
+  "item-997": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "DOWN_RATIO 3 vs upward gain; single-tick ratio ~3.2 at all sizes."
+  }
+ }
+}

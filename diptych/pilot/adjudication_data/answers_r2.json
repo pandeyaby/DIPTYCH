@@ -1,0 +1,257 @@
+{
+ "rater": "r2",
+ "items": {
+  "item-178": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "Gains 0.30 down vs 0.06 up, but there is also an extra symmetric trend term (error minus previous error). From a fresh or at-rest state the ratio is about 4.4-5x. In ordinary steady-run states where the previous latency was 104-109 ms, probing +/-5% around the setpoint gave downward corrections smaller than twice the upward ones (e.g. up 0.76, down 0.60), failing in 25 of 372 sampled states."
+  },
+  "item-244": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "The asymmetric gain acts on an EWMA of the error history, not on the current deviation. From rest the ratio is about 3x, but in most sampled in-run states (192 of 342) the downward correction to +d was not more than twice the upward correction to -d. In some states both probes even moved the limit the same way."
+  },
+  "item-394": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "DOWN_RATIO 4 times an odd shaping function, and the trend and volatility modulation only widen the ratio. The ratio was 4.0 from fresh and from rest. The absolute-correction test held in all 354 sampled in-run states."
+  },
+  "item-650": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Log-step gains are 0.40 down vs 0.10 up. The ratio measured from fresh and from rest was about 3.4-4.0. The absolute-correction test held in all 339 sampled in-run states."
+  },
+  "item-760": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "KP_DOWN 0.6 vs KP_UP 0.2, with asymmetric step caps. The ratio was 3.0 fresh and 4.5 at rest, and the test held in all sampled in-run states."
+  },
+  "item-820": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "G_DOWN 3 vs G_UP 1 on a risk signal. The ratio was about 3.4 fresh and at rest, and held in all 351 sampled in-run states."
+  },
+  "item-840": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Gains 2.5 down vs 1.0 up act on an EMA of the error with alpha 0.6, so history shifts the response. At rest the ratio is about 2.5, but the requirement failed in 217 of 300 sampled in-run states, often with both probes moving the limit in the same direction. Large deviations also fail from fresh because the cut is clamped at min."
+  },
+  "item-997": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "DOWN_RATIO 3 with KP 1.5 on positive errors gives about 2.31x fresh and 3.2x at rest (the trend boost and volatility margin only add downward). The test held in all 369 sampled in-run states."
+  },
+  "item-357": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "In my canonical crossing runs (e.g. 130->70 vs 70->130) improving order ended higher. But in 44 of 300 random monotone runs (30 of them crossing the setpoint) the improving order ended lower, with gaps up to 50% (e.g. 133->107 ms over 16 ticks: 4.79 vs 5.75), so the requirement does not hold in general."
+  },
+  "item-456": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "The recency-weighted error is computed but never used; the correction is a plain asymmetric integrator. Improving order ended lower in 12 of 16 canonical runs and 124 of 300 random runs, often by a large margin."
+  },
+  "item-465": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "It has a recency term, but the order-dependent volatility risk is integrated too. Improving order ended strictly lower in 79 of 300 random monotone runs (e.g. 128->107 ms over 7 ticks: 32.28 vs 33.0), including runs that cross the setpoint."
+  },
+  "item-485": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ended higher in all 16 canonical runs. In 300 random monotone runs there were only 2 negligible exceptions (relative gap 1e-4, essentially ties) plus ties when both runs hit min_limit."
+  },
+  "item-670": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ended higher in all non-saturated canonical and random runs. The only non-wins were ties with both runs pinned at min_limit."
+  },
+  "item-833": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "This subclass sets KD=0, leaving an integrator of an EWMA error with asymmetric gains. Improving order ended lower in 10 of 16 canonical runs (e.g. 130->70: 35.8 vs 41.1) and 144 of 300 random runs."
+  },
+  "item-924": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Improving order ended lower in 14 of 16 canonical runs and 295 of 300 random monotone runs (e.g. 130->70: 32.7 vs 44.5)."
+  },
+  "item-399": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "There is no integrator besides the clamped limit, and the trend term is capped at |error|. The first response after 3 to 300 extra ticks at max_limit was identical. In plant runs with 17 to 237 saturated ticks the first response was also identical (-19.9)."
+  },
+  "item-448": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "The limit itself is the clamped state, and the filters converge during saturation. The first response was identical after 3 to 300 extra saturated ticks, and was about -19 regardless of 3 to 223 saturated ticks in plant runs (small differences from noise only)."
+  },
+  "item-568": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "At mean 85 and 95 rps it converged to a higher limit on the higher-variance workload in every seed (e.g. steady_long var_scale 1 vs 2: 81.0 vs 82.4, 0/20 seeds lower; volatile_step second half higher in 20/20)."
+  },
+  "item-625": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "The volatility reserve is subtracted only from the output, and the core integrator cancels it in closed loop. The converged limits were essentially equal (79.94 vs 79.98), with the higher-variance limit lower in only 4-15 of 20 seeds. No strict, reliable lowering."
+  },
+  "item-753": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "At mean 85 and 95 the high-variance limit was slightly higher, or equal within noise (e.g. sd 5 vs 20: 79.91 vs 80.15, lower in 0/8 seeds; steady_long 0.5 vs 2: lower in 0/20)."
+  },
+  "item-863": {
+   "verdict": "violates",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "The latency-error volatility term barely registers arrival variance when admission is limit-bound. The high-variance limit was lower in only about half the seeds at moderate variance (steady_long 1 vs 2: 10/20; volatile_step: 6/20). It was clearly lower only at sd 30."
+  },
+  "item-191": {
+   "verdict": "violates",
+   "confidence": 2,
+   "method": "both",
+   "rationale": "The estimator state is reset on a setpoint change, but the output is core_limit minus a volatility reserve. The first post-change output change includes releasing the pre-change reserve: with the same post-change observations, the first correction differed across pre-change histories (0.338 / 0.292 / 0.317). Later corrections were identical."
+  },
+  "item-125": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "After capacity 10->5, throughput, queue and loss matched an always-5 path over long windows (average queue 3.19 vs 3.37, worst per-run ratio 1.17; same loss)."
+  },
+  "item-192": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Its delay-change heuristic sometimes misreads the halving as a base-RTT increase and keeps a standing queue: 5 of 30 runs had about 6.2 queue vs 1.45 on an always-low path (about 4.3x). The pooled ratio was 1.5x, well over 1.25."
+  },
+  "item-416": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Over long windows, queue 13.62 vs 13.34 (ratio 1.02, worst 1.25), with matching throughput and loss. Short-window failures were noise in the sawtooth."
+  },
+  "item-477": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Over long windows, queue 1.81 vs 1.79 with matching throughput and loss; worst per-run ratio 1.11."
+  },
+  "item-572": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Over long windows, queue 13.50 vs 13.57, with matching throughput and loss (0.48% vs 0.48%)."
+  },
+  "item-610": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Throughput, queue and loss after halving matched an always-low path in all 30 runs (queue 3.74 vs 3.73)."
+  },
+  "item-868": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After halving it pins the buffer full with far more loss than on an always-low path (e.g. 8.3% vs 0.12%, or 40.9% vs 35.1%), failing the +2 point loss limit in all 30 runs."
+  },
+  "item-921": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "It behaves identically to standard Reno: after halving, throughput, queue and loss matched an always-low path in all 30 runs."
+  },
+  "item-219": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow sharing with this controller got only about 0.57-0.59 of the throughput it gets beside another standard flow, in every start order and seed (threshold 0.8)."
+  },
+  "item-508": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow got about 1.41-1.48 times its standard-vs-standard throughput in every start order and seed."
+  },
+  "item-535": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow got about 1.58-1.64 times its standard-vs-standard throughput in all configurations."
+  },
+  "item-618": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow got about 1.56-1.60 times its standard-vs-standard throughput in all configurations."
+  },
+  "item-988": {
+   "verdict": "satisfies",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "This is borderline. The standard flow's queueing delay beside this flow vs beside another standard flow was 1.214-1.238 per seed over 10000-tick runs (pooled 1.229 <= 1.25). Short windows (400-700 ticks) are noisy and sometimes exceed 1.25 (up to 1.34)."
+  },
+  "item-472": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "A short standard flow behind this controller took up to 4.4x as long (mean 1.81x for 10 packets, 1.49x for 30, 1.30x for 100) as behind a standard flow."
+  },
+  "item-667": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Short standard flows finished in at most 1.00x (mean 0.5-0.8x) the time they take behind a standard flow, for sizes 10-300."
+  },
+  "item-699": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Short standard flows finished in at most 1.00x the standard-case time for all sizes, start times and seeds."
+  },
+  "item-827": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Short-flow completion-time ratios averaged 1.19-1.30 for 30-300 packet flows, with a maximum of 1.75, exceeding 1.25."
+  },
+  "item-968": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Short standard flows took on average 1.4-1.8x (up to 3.45x) longer than behind a standard flow."
+  },
+  "item-532": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "After the base RTT doubles, settled throughput is about 99% of the no-change run and the whole post-change period is 0.92 or more. There is an occasional transient dip (3 of 40 500-tick windows below 0.8, minimum 0.75) lasting about 300 ticks."
+  },
+  "item-691": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "In some runs throughput collapses after the base RTT doubles (0.02-0.03 of the no-change throughput, sustained); settled-ratio minimum was 0.025."
+  }
+ }
+}
