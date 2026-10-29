@@ -35,7 +35,9 @@ class TestAdjudication(unittest.TestCase):
     def test_packets_carry_no_verdicts_or_hints(self):
         for pk in sorted(self.out.glob("packet-r*")):
             for f in pk.rglob("*"):
-                if f.is_file() and f.name != "INSTRUCTIONS.md":
+                # Text the raters read; skip bytecode other tests may leave behind.
+                if f.is_file() and f.suffix in (".py", ".md", ".txt") and f.name != "INSTRUCTIONS.md" \
+                        and "__pycache__" not in f.parts:
                     text = f.read_text()
                     self.assertNotIn('"paired"', text, f)
                     if f.name == "controller.py":
