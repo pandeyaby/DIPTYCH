@@ -1,0 +1,257 @@
+{
+ "rater": "r1",
+ "items": {
+  "item-125": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Capacity halved 10->5 at t=500 vs path always at 5 (5 seeds, settled window t>=1000): throughput ratio ~1.0, queue ratio 0.97-1.04, loss difference ~0pp. All within the 80% / 1.25x / 2pp thresholds."
+  },
+  "item-178": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "The trend term 0.08*(e - prev_e) shifts both responses, so the ratio falls below 2 whenever the previous error was latency above setpoint, e.g. down 0.08 vs up 0.14. 65/680 plant-reached and 21/112 synthetic cases fail."
+  },
+  "item-191": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "both",
+   "rationale": "On a setpoint change the observation state resets, but the volatility reserve from pre-change variance is released into the output limit. The first post-change correction therefore differs with pre-change history (-4.26 / -4.17 / -4.02 for history sd 0/3/8). Later corrections match."
+  },
+  "item-192": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "In 6 of 10 seeds, after the capacity halves the controller reads the rise in RTT as a change in path delay ('path-delay-change' rebase of base_rtt). It then settles at about 4.3x the queueing of a path that always had the lower capacity, even over t=1500-2900. This breaks the 1.25x queueing bound."
+  },
+  "item-219": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "A standard flow sharing with this controller gets only 0.54-0.65 of the throughput it gets beside another standard flow (5 seeds, both start orders). That is well below the 80% threshold."
+  },
+  "item-244": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "The signal is an EWMA of past errors, not the current deviation. In plant-reached and synthetic states, a +d latency deviation can even raise the limit while -d raises it more, so down > 2*up fails in many states (43/112 synthetic cases)."
+  },
+  "item-357": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Crossing-setpoint ramps pass, but 36 of 288 random latency multisets give improving order a limit <= worsening order (sorted descending vs ascending, with setpoint-level pre-history). An example is latencies above setpoint after 30 ticks at setpoint. The filtered-error and volatility terms put more weight on older samples."
+  },
+  "item-394": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "The response is multiplicative with down/up weight DOWN_RATIO/(1+TREND_GAIN) >= 2.67, and vf and af only widen it. The MIN_FACTOR clamp never binds below 2x the up cap. 0 failures across plant-reached, synthetic and ramp states for d in 1-60%."
+  },
+  "item-399": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "After reaching max_limit and staying there 1, 10, 50 or 300 more ticks, the first response to excursions of 105-250 ms is identical across durations. It scales with the error and is capped by SIGNAL_CAP. There is no saturation-dependent accumulator (the limit is the only integrated quantity)."
+  },
+  "item-416": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "After capacity halving vs always-low capacity (5 seeds): throughput ratio ~1.0, queue ratio 0.48-1.09, loss difference within +/-0.15pp."
+  },
+  "item-448": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "The limit itself is the clamped integrator, with no windup state. The first response to an excursion after 1, 10, 50 or 300 ticks at max_limit is identical across durations and grows with the error, clipped at ERR_CLIP."
+  },
+  "item-456": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The limit uses only the instantaneous error (weighted_error is computed but unused). Improving-order sequences end lower than worsening order in most tests, e.g. 1.2 vs 91 for a 140->60 vs 60->140 ramp."
+  },
+  "item-465": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Fails for 78/300 random latency multisets and for one-sided ramps after setpoint pre-history: improving order ends lower than worsening order, e.g. 7.2 vs 9.3. The multiplicative integral with a volatility risk term weights early samples heavily."
+  },
+  "item-472": {
+   "verdict": "unsure",
+   "confidence": 2,
+   "method": "experiment",
+   "rationale": "Mean completion-time ratio over many start phases is <=1.16 for sizes 50-500 and on 10/40-packet buffers. For 20-packet flows on the default path the 10-seed average is about 1.26, right at the 1.25 threshold, and single start phases vary widely. The verdict depends on the exact short-flow scenario."
+  },
+  "item-477": {
+   "verdict": "satisfies",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Over t>=1500 (10 seeds) throughput ratio ~1.0, queue ratio <=1.16, loss difference ~0. One seed showed 1.85x queueing in t=1000-2000, but that was a slow transient that settles."
+  },
+  "item-485": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ends higher than worsening order for all crossing ramps, one-sided ramps (with and without pre-history) and 300 random multisets. Only ties occurred, both pinned at min_limit."
+  },
+  "item-508": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow gets 1.38-1.54x its throughput beside another standard flow (5 seeds, both orders), well above 80%."
+  },
+  "item-532": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Base RTT doubling at t=500: throughput after the change is 0.99-0.995 of the unchanged run (5 seeds)."
+  },
+  "item-535": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow gets 1.55-1.72x its throughput beside another standard flow, above the 80% threshold."
+  },
+  "item-568": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "In closed loop (seeds 0-5, var_scale pairs 0.2/1 through 0.5/4), the higher-variance workload always converges to a higher mean limit, by +1 to +3.5. Volatility only shrinks correction size."
+  },
+  "item-572": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "After capacity halving vs always-low capacity: throughput ~1.0, queue ratio 0.67-1.05, loss difference within +/-0.19pp."
+  },
+  "item-610": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After capacity halving vs always-low capacity: throughput 1.0, queue ratio 0.997-1.007, loss difference 0."
+  },
+  "item-618": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "The standard flow gets 1.50-1.65x its throughput beside another standard flow, above 80%."
+  },
+  "item-625": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Closed loop, 6 seeds, 1500-tick tails: the higher-variance workload converges to a higher limit in every seed for var_scale 0 vs 1 (default sd=10), 0.5 vs 1 and 1 vs 1.5. It is lower only at larger variances."
+  },
+  "item-650": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "From a neutral state the ratio is 4x. But the trend term C*(s_new - s) adds in the same direction for both signs, so after even one tick at 5% above setpoint a +/-1% deviation gives down/up ~1.77 (<2). 11/112 synthetic states fail."
+  },
+  "item-667": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Averaged over start phases and seeds, short standard flows finish in 0.48-0.61x the time they take beside a standard flow."
+  },
+  "item-670": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Improving order ends strictly higher in all crossing ramps, one-sided ramps and 253 non-degenerate random multisets. The only ties occurred with both runs pinned at min_limit."
+  },
+  "item-691": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "After base RTT doubles, throughput collapses to about 2.5% of the no-change run (0.25 vs 10 packets/tick)."
+  },
+  "item-699": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Averaged over start phases, short flow completion-time ratio is 0.58-0.66, well under 1.25."
+  },
+  "item-753": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Closed loop, 6 seeds: the higher-variance workload converges to a higher mean limit for every var_scale pair tested (0.2/1, 1/2, 1/3, 0.5/4)."
+  },
+  "item-760": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Down gain is 3x up gain, and the per-tick caps (0.6 vs 0.15) keep down > 2*up. The trend and std terms shift both responses but did not break the 2x margin. 0 non-clamped failures across plant-reached, synthetic and ramp states."
+  },
+  "item-820": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Gain switches on a risk signal that includes the prior filtered error, std and derivative, not the current deviation. After a tick at 5% above setpoint, a -1% deviation raises the limit more than a +1% deviation lowers it. 37/112 synthetic states fail, plus one plant state (setpoint_step t=122)."
+  },
+  "item-827": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Default path: mean short-flow completion ratio 1.15-1.23, just under the threshold, with individual start phases up to 2x. On a 10-packet buffer (path parameters can change per the task) the ratio is 1.59-1.76, a clear violation."
+  },
+  "item-833": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "Integrates an EWMA of errors (KD=0), so older observations accumulate more weight. Improving order ends lower than worsening order in most tests, e.g. 31.1 vs 38.1."
+  },
+  "item-840": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "Corrections use the EMA of past errors and the gain sign follows the EMA, not the current deviation. After a stretch below setpoint, a +d deviation still raises the limit (down negative), so down > 2*up fails."
+  },
+  "item-863": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Higher variance gives a lower limit for larger variances. But for var_scale 0 vs 1 and 0.5 vs 1 the higher-variance workload converged to a higher limit in all 6 seeds, so a strictly lower limit does not hold for every pair."
+  },
+  "item-868": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "The window is latched at >= 0.8 x its historic peak. After the capacity halves it stays above BDP+buffer, giving 5.9-8.3pp more loss than a path that always had the lower capacity (2pp limit)."
+  },
+  "item-921": {
+   "verdict": "satisfies",
+   "confidence": 5,
+   "method": "both",
+   "rationale": "Code is the standard Reno-style AIMD. After capacity halving: throughput ~1.0, queue ratio 0.98-1.0, loss difference ~0."
+  },
+  "item-924": {
+   "verdict": "violates",
+   "confidence": 5,
+   "method": "experiment",
+   "rationale": "Improving order ends lower than worsening order in 70/72 ramp tests, e.g. 28.2 vs 42.6."
+  },
+  "item-968": {
+   "verdict": "violates",
+   "confidence": 4,
+   "method": "experiment",
+   "rationale": "Averaged over start phases (3 seeds), short standard flows take 1.20-1.40x as long beside this flow as beside a standard flow. Every size >= 50 is above 1.25."
+  },
+  "item-988": {
+   "verdict": "violates",
+   "confidence": 3,
+   "method": "experiment",
+   "rationale": "Default path: the standard flow's queueing delay ratio averages 1.22-1.24, with individual seeds up to 1.28. On a 10-packet buffer it is 1.52-1.56. The delay-based flow keeps a standing queue that the Reno flow never sees drained."
+  },
+  "item-997": {
+   "verdict": "satisfies",
+   "confidence": 4,
+   "method": "both",
+   "rationale": "Shaped error uses DOWN_RATIO=3, and the boost and target margin only push downward. The KP term analysis gives down - 2*up >= 2d > 0 in every state. 0 failures across plant-reached, synthetic and ramp states."
+  }
+ }
+}

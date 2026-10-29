@@ -18,7 +18,10 @@ Status and pre-upload checklist: [`READINESS.md`](READINESS.md).
 
 - Extend the pilot: more vendors, larger samples, a packet-level network
   simulator for Task B, held-out scenarios for predictive validity (RQ3).
-- Blinded human validation of flagged violations (both authors).
+- Blinded human validation of flagged violations (both authors). Model-based
+  adjudication is done (`diptych/pilot/adjudication_data/`); it rejected 8 of 10
+  disputed verdicts as short-window transients — consider settled-window probes
+  for Task B path/delay change.
 - Derive operator axis declarations from the graders instead of writing them
   separately (§VIII-C).
 - `hist_splice_at` and `frozen` are declared on-axis but never read by their

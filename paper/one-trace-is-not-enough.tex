@@ -80,8 +80,10 @@
 		check violate a requirement stated in plain words. On a congestion
 		task built from RFC~9743, a single run catches every case of harm to a
 		standard flow, because the reference outcome is a known constant, and
-		pairing adds only the history-dependent violations. One trace is not
-		enough exactly when the reference depends on the artifact's own state.
+		pairing adds only the history-dependent violations. Blinded
+		model-based raters confirm most of the first task's pairing-only
+		violations and half of the second's. One trace is not enough exactly
+		when the reference depends on the artifact's own state.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -814,6 +816,8 @@
 	delay doubles at tick 350 but not at tick 250, which a single run with
 	one change point cannot see; another keeps a standing queue four times
 	larger after a capacity drop than on a path that was always slow.
+	Independent raters (below) confirmed five of the ten, including both
+	examples (the first by 3--2).
 	
 	\textbf{When is one trace enough?} The two tasks differ in where the
 	reference arm of the contrast comes from. For harm, the reference
@@ -854,6 +858,27 @@
 	$1.45$ on Task~B (546{,}000 vs.\ 792{,}000), where reference-swap probes
 	share no candidate prefix (Definition~\ref{def:cost}).
 	\label{sec:future}
+	
+	\textbf{Independent adjudication.} To check our ground truth, five
+	model-based raters (three Claude Opus~5.5, two Sonnet)---not
+	people---each judged the same 42 (controller, requirement) items blind
+	to every verdict, from the requirement text, the code, and the
+	simulator, running their own experiments; an audit of their 185 tool
+	calls found no access outside their packets. Items covered the
+	paired-only violations (12 sampled from Task~A, all 10 from Task~B),
+	agreements, strong-only flags, and four controls. Raters agreed with
+	each other (Fleiss' $\kappa=0.62$) and got all four controls right;
+	their majority matched the paired verdict on 32 of 42 items and the
+	basic baseline on 24. They confirmed 9 of 12 Task~A and 5 of 10 Task~B
+	paired-only violations, and judged all four strong-only flags false
+	alarms. Eight of the ten disagreements are transients or near-threshold
+	cases that our short post-change windows and any-seed rule fail and a
+	long-run reading does not (four are Task~B path-change verdicts), so
+	Task~B's paired-only count is an upper bound. In the other two, an
+	asymmetric-response split 3--2, the raters who sampled many states found
+	the violation and those who tested from rest did not. The raters share
+	a model family with some of the code they judged; this checks our
+	verdicts, not human judgment.
 	
 	\section{Related Work}
 	\label{sec:related}
@@ -958,7 +983,9 @@
 	catch more, though Proposition~\ref{prop:confound} bounds what any can
 	identify. Paired verdicts are ground truth only relative to our reading
 	of each requirement, and Task~B's fluid simulator is far simpler than a
-	real network. Artifacts are 80 samples from two vendors, five per model,
+	real network. Probes judge short post-change windows and fail on any
+	fork point or seed; raters reading long-run behaviour rejected eight
+	such verdicts. Artifacts are 80 samples from two vendors, five per model,
 	condition, and task; 7--12\% of forked verdicts depend on the noise
 	seed.
 
