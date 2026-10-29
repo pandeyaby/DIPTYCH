@@ -4,7 +4,7 @@ Packaging notes for [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex)
 Status and pre-upload checklist: [`READINESS.md`](READINESS.md).
 
 **Corresponding author:** Abhinav Pandey (Independent Researcher) · `pandey.aby@gmail.com`
-**Co-author:** Abhishek Pandey (Meta) · `pandeyabhi1987@gmail.com`
+**Co-author:** Abhishek Pandey (Independent Researcher) · `pandeyabhi1987@gmail.com`
 
 ## 1. Venue
 
@@ -20,10 +20,16 @@ Status and pre-upload checklist: [`READINESS.md`](READINESS.md).
 | **Artifact option** | Not stated in the CFP; the paper links the public repository |
 | **Topic fit** | Verification and testing of agentic systems; evaluation methodology |
 
-**Fallback if rejected (sequential, never concurrent).** AGENT'27 notifies on
-2026-12-11, before the ICST 2027 New Ideas and Emerging Results deadline
-(2027-01-13). Revise with the reviews and resubmit there. Do not submit this
-paper anywhere else while it is under review.
+**Then: ISSTA 2027 research track (sequential, never concurrent).** AGENT'27
+notifies on 2026-12-11; ISSTA 2027 (Singapore, 7–10 Sep 2027) takes a
+mandatory abstract on 2027-01-08 and the paper on 2027-01-11 (AoE). The ISSTA
+submission is a substantially extended paper (larger study, a third task,
+human validation, held-out predictive validity), built separately as a
+double-blind ACM version. Before submitting, check ISSTA's CFP (not yet
+posted) on prior workshop publication: if AGENT'27 accepts into archival
+proceedings, the ISSTA paper must cite it and state what is new, or the
+authors withdraw from one venue. If AGENT'27 rejects, revise with the
+reviews into the ISSTA version.
 
 ## 2. Page budget
 

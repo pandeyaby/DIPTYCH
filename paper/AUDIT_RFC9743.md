@@ -54,8 +54,29 @@ property.
 - §7.10 failover (row 17) also asks to show no starvation, a trace property;
   we classify the row by its harm clause.
 
-Moving the borderline rows gives a range of 8 to 11 paired criteria out of 18.
+- §5.2 and §5.2.1 (rows 6, 8) use the same contrast (the proposed algorithm
+  vs. a standard one, as seen by competing flows). §5.2 is the general harm
+  criterion and §5.2.1 the MUST to evaluate against standard competitors; we
+  list both because the RFC states both. Merging them gives 7 paired of 17.
+- §7.10 also says synchronization (several flows switching path, or changing
+  behavior, on similar time frames) "can also contribute to harm" and
+  "ought to be evaluated", once under failover and once under concurrent
+  multipath. We fold these into rows 17 and 18. Listing them as rows of
+  their own would add two paired criteria (harm with vs. without
+  synchronized switching).
+
+Moving the borderline rows gives a range of 8 to 11 paired criteria out of
+18; with the merge and the synchronization rows the full range is 7 of 17
+to 13 of 20. Under every reading, between 41% and 65% of the behavioral
+criteria are contrasts between executions.
 
 **Status.** The classification is the authors' reading of one document that
-guides human evaluation; it is not a benchmark specification. Both authors
-should re-check each row against the RFC text before submission.
+guides human evaluation; it is not a benchmark specification.
+
+**Second reading (2026-10-29).** Every row re-checked against the RFC text
+(rfc-editor.org plain text). All 18 classifications stand under the rule.
+Two findings were added above: the rows 6/8 overlap and the §7.10
+synchronization clauses. No excluded section was found to state a
+behavioral criterion: §7.4 names control-packet volume as a possible metric
+but does not require it; §7.11 asks the proposal to *indicate* coexisting
+algorithms (documentation).

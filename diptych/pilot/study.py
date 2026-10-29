@@ -150,16 +150,23 @@ def artifact_metrics(rows: list[dict], single: str = "single_trace") -> dict[str
     naive = sum(t["naive_equivalent"] for t in ticks)
     n_verdicts = len(rows) * len(KEYS)
     k_fail = sum(1 for r in fully_single_pass if "fail" in r["paired"].values())
-    # Artifact-level McNemar: paired flags a violation single-trace misses (b)
-    # vs. single-trace flags one paired does not (c), counted per artifact.
-    b = sum(1 for r in rows if any(r["paired"][o] == "fail" and r[single][o] == "pass" for o in KEYS))
-    c = sum(1 for r in rows if any(r[single][o] == "fail" and r["paired"][o] == "pass" for o in KEYS))
+    # Exact McNemar on two paired binary outcomes. Per artifact: "flags any
+    # violation" under paired vs. single-trace grading, so each artifact is
+    # discordant in at most one direction. Per requirement: each (artifact,
+    # requirement) cell; cells within an artifact are not independent.
+    flags_p = ["fail" in r["paired"].values() for r in rows]
+    flags_s = ["fail" in r[single].values() for r in rows]
+    b = sum(p and not s for p, s in zip(flags_p, flags_s))
+    c = sum(s and not p for p, s in zip(flags_p, flags_s))
+    cb = sum(r["paired"][o] == "fail" and r[single][o] == "pass" for r in rows for o in KEYS)
+    cc = sum(r[single][o] == "fail" and r["paired"][o] == "pass" for r in rows for o in KEYS)
     return {
         "single_grader": single,
         "n_artifacts": len(rows),
         "per_operator": per_op,
         "all_single_pass_paired_fail_ci95": wilson(k_fail, len(fully_single_pass)),
         "artifact_mcnemar": {"paired_only": b, "single_only": c, "p_exact": mcnemar_exact(b, c)},
+        "requirement_mcnemar": {"paired_only": cb, "single_only": cc, "p_exact": mcnemar_exact(cb, cc)},
         "separation": {"trace_equivalent_pairs": eq_pairs, "hyper_distinct": diff,
                        "index": (diff / eq_pairs) if eq_pairs else None},
         "all_single_trace_pass": len(fully_single_pass),
