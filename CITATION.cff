@@ -27,11 +27,13 @@ abstract: >-
   Agentic coding benchmarks grade artifacts from single execution traces.
   Many requirements on agent-authored control systems are hyperproperties
   (predicates over sets of traces). DIPTYCH is a paired-trace grading harness
-  with eight perturbation operators, coupling discipline, and a probe-tree
-  cost model. A mutation sweep found and fixed three classes of defect in its
-  own graders, and in a pilot with 20 model-written controllers, 12 of the 15
-  that pass every single-trace check violate a requirement under paired
-  probing. No accuracy, AUROC, or model rankings are claimed.
+  with perturbation operators, coupling discipline, and a probe-tree cost
+  model. A mutation sweep found and fixed three classes of defect in its own
+  graders. In a pilot with 80 model-written controllers on two tasks, 28 of
+  the 34 that pass every single-trace check on a concurrency task violate a
+  requirement under paired probing, while on a congestion task built from
+  RFC 9743 a single run catches every case of harm to a standard flow.
+  No accuracy, AUROC, or model rankings are claimed.
 preferred-citation:
   type: article
   title: "One Trace Is Not Enough: Hyperproperty Grading for Agent-Authored Control Systems"

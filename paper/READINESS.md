@@ -10,8 +10,10 @@ references · IEEE template · single-anonymous. Details and fallback plan:
 | Item | Where |
 |------|-------|
 | Paper compiles (IEEEtran conference); body 8 pages + references | `make paper` or CI artifact `one-trace-is-not-enough-pdf` |
-| Evaluation §VIII: controls, coverage, mutation-sweep adequacy (Table IV) | `python -m diptych.adequacy` |
-| Pilot on 20 model-written controllers (Table V) | `python -m diptych.pilot.study`; [`diptych/pilot/`](../diptych/pilot/) |
+| Evaluation §VIII: controls, coverage, mutation-sweep adequacy | `python -m diptych.adequacy` |
+| Pilot on 80 model-written controllers, two tasks (Table IV) | `python -m diptych.pilot.study [--task congestion]`; [`diptych/pilot/`](../diptych/pilot/) |
+| One pipeline: pilot probes record live envelopes graded by `diptych.grade` | [`diptych/live.py`](../diptych/live.py), `tests/test_live.py` |
+| §IV audits a public document (RFC 9743) | [`AUDIT_RFC9743.md`](AUDIT_RFC9743.md) |
 | Grader defects found by the sweep fixed, with regression tests | `tests/test_adequacy.py` |
 | Author block: Abhinav Pandey (Independent Researcher), Abhishek Pandey (Meta) | `.tex` author block |
 | Venue fields filled | [`SUBMISSION.md`](SUBMISSION.md) §0 |
