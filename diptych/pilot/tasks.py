@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -25,20 +26,19 @@ class Task:
     def controls(self) -> Path:
         return self.root / "controls"
 
+    def _probes(self) -> Any:
+        mod = "diptych.pilot.probes" if self.name == "concurrency" else f"diptych.pilot.{self.name}.probes"
+        return importlib.import_module(mod)
+
     def keys(self) -> tuple[str, ...]:
         """Requirement keys, in report order."""
         if self.name == "concurrency":
             from diptych import OPERATORS
             return tuple(OPERATORS)
-        from diptych.pilot.congestion.probes import KEYS
-        return KEYS
+        return self._probes().KEYS
 
     def evaluate(self) -> Callable[[str], dict[str, Any]]:
-        if self.name == "concurrency":
-            from diptych.pilot.probes import evaluate
-        else:
-            from diptych.pilot.congestion.probes import evaluate
-        return evaluate
+        return self._probes().evaluate
 
     def violated_key(self, stem: str) -> str:
         """Requirement key a violating control named ``stem`` targets."""
@@ -69,5 +69,12 @@ TASKS: dict[str, Task] = {
                   "to run your controller on the simulated link, alone and beside a standard flow "
                   "(reference.py is the standard algorithm)"),
         results="results_congestion.json",
+    ),
+    "autoscale": Task(
+        name="autoscale", root=HERE / "autoscale",
+        workspace={"TASK.md": "TASK.md", "plant.py": "plant.py", "sim.py": "agent_sim.py"},
+        sim_hint=("You can run `python3 sim.py controller.py` (add `--scenario NAME` or `--trace`) "
+                  "to run your autoscaler against the simulated service"),
+        results="results_autoscale.json",
     ),
 }

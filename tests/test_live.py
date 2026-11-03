@@ -157,3 +157,47 @@ class TestCongestionTask(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestAutoscaleTask(unittest.TestCase):
+    CONTROLS = PILOT / "autoscale" / "controls"
+
+    @classmethod
+    def setUpClass(cls):
+        from diptych.pilot.autoscale.probes import evaluate
+
+        cls.evaluate = staticmethod(evaluate)
+        cls.conforming, cls.paths, cls.dir = _saved_envelopes(cls.CONTROLS / "conforming.py", evaluate)
+
+    def test_conforming_passes_every_grader(self):
+        self.assertEqual(self.conforming["errors"], [])
+        for grader in ("paired", "single_trace", "single_trace_strong"):
+            self.assertEqual(set(self.conforming[grader].values()), {"pass"}, grader)
+        self.assertTrue(self.conforming["fork_fidelity"]["ok"])
+
+    def test_each_violator_fails_its_own_requirement(self):
+        from diptych.pilot.autoscale.probes import KEYS
+
+        for key in KEYS:
+            with self.subTest(requirement=key):
+                r = self.evaluate(str(self.CONTROLS / "violating" / f"{key.replace('-', '_')}.py"))
+                self.assertEqual(r["paired"][key], "fail", r["paired"])
+
+    def test_paired_requirements_go_through_live_envelopes(self):
+        from diptych.grade import build_grade_report
+        from diptych.pilot.autoscale.predicates import PAIRED
+
+        report = build_grade_report(self.dir)
+        self.assertEqual(report["rejected"], 0)
+        self.assertEqual({e["requirement"] for e in report["results"]}, set(PAIRED))
+        self.assertEqual({e["actual_verdict"] for e in report["results"]}, {"pass"})
+
+    def test_saved_envelopes_regrade_in_a_fresh_process(self):
+        import subprocess
+        import sys
+
+        out = subprocess.run([sys.executable, "-m", "diptych.grade", "--input", str(self.dir)],
+                             capture_output=True, text=True, cwd=PILOT.parents[1], check=False)
+        self.assertEqual(out.returncode, 0, out.stderr[-500:])
+        self.assertNotIn("no predicate registered", out.stdout + out.stderr)
+

@@ -95,6 +95,8 @@ def _claude(task: Task, condition: str, model: str, cwd: Path, timeout: int) -> 
         return rec, None
     rec["cost_usd"] = reply.get("total_cost_usd")
     rec["num_turns"] = reply.get("num_turns")
+    if proc.returncode != 0 or reply.get("is_error"):
+        rec["error"] = str(reply.get("result") or proc.stderr)[-500:]
     if condition == "oneshot":
         m = _CODE.search(reply.get("result") or "")
         return rec, m.group(1) if m else None
@@ -123,11 +125,13 @@ def _codex(task: Task, condition: str, model: str, cwd: Path, timeout: int) -> t
             last_text = item.get("text") or last_text
         if item.get("type") == "command_execution" and ev.get("type") == "item.completed":
             rec["commands_run"] += 1
+        if ev.get("type") in ("turn.failed", "error"):
+            rec["error"] = str((ev.get("error") or {}).get("message") or ev.get("message"))[-500:]
         if ev.get("type") == "turn.completed":
             for k, v in (ev.get("usage") or {}).items():
                 rec["usage"][k] = rec["usage"].get(k, 0) + v
     if proc.returncode != 0 and not last_text:
-        rec["error"] = proc.stderr[-500:]
+        rec.setdefault("error", proc.stderr[-500:])
     if condition == "oneshot":
         m = _CODE.search(last_text)
         return rec, m.group(1) if m else None

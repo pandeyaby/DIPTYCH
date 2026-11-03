@@ -38,8 +38,9 @@ LIVE_ROLE = "artifact"
 # Perturbation families used by live probes beyond the eight control
 # operators: REFSWAP substitutes a reference artifact for the one under test
 # (everything else held fixed); PATHSTEP steps one exogenous environment
-# parameter on one arm after the fork.
-LIVE_OPERATORS: tuple[str, ...] = OPERATORS + ("REFSWAP", "PATHSTEP")
+# parameter on one arm after the fork; RESCALE multiplies an input and the
+# threshold it is compared with by the same factor on one arm.
+LIVE_OPERATORS: tuple[str, ...] = OPERATORS + ("REFSWAP", "PATHSTEP", "RESCALE")
 
 Predicate = Callable[[dict[str, Any]], tuple[str, str, dict[str, Any]]]
 PREDICATES: dict[tuple[str, str], Predicate] = {}
