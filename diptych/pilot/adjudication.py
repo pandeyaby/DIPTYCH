@@ -42,12 +42,16 @@ REQ_NUMBER = {
     "congestion": {k: i + 1 for i, k in enumerate(
         ("full-backoff", "loss-reduction", "intra-fairness", "harm-throughput", "harm-latency",
          "short-flows", "delay-change", "path-change"))},
+    "autoscale": {k: i + 1 for i, k in enumerate(
+        ("tolerance", "scale-up-rate", "downscale-stabilization", "missing-metrics", "not-ready",
+         "window-history", "ratio-only", "flapping"))},
 }
 PAIRED_KEYS = {
     "concurrency": ("SIGNFLIP", "TRAJSWAP", "VARSCALE", "SATEXTEND", "HISTSWAP"),
     "congestion": ("harm-throughput", "harm-latency", "short-flows", "delay-change", "path-change"),
+    "autoscale": ("missing-metrics", "not-ready", "window-history", "ratio-only", "flapping"),
 }
-LABEL = {"concurrency": "A", "congestion": "B"}
+LABEL = {"concurrency": "A", "congestion": "B", "autoscale": "C"}
 
 INSTRUCTIONS = """# Instructions for raters
 
@@ -61,7 +65,7 @@ Each item contains:
 - `REQUIREMENT.md` — the single requirement under review
 - `controller.py` — the controller
 
-The task's simulator is in `../../task_<A|B>/` (`plant.py`, `sim.py`, and for
+The task's simulator is in `../../task_<A|B|C>/` (`plant.py`, `sim.py`, and for
 task B `reference.py`, the "standard" algorithm). You may read the code,
 reason about it, and write and run your own experiments in your workspace
 with `python3` (standard library only). Judge the requirement exactly as
@@ -92,6 +96,41 @@ Answer every item.
 """
 
 
+HUMAN_INSTRUCTIONS = """# Instructions for raters
+
+Thank you for rating. Each directory `items/<id>/` holds one review item: a
+controller written for a task, and ONE requirement from that task. Decide
+whether the controller **satisfies** or **violates** that requirement as
+stated.
+
+Each item contains `TASK.md` (the full task the controller was written for),
+`REQUIREMENT.md` (the requirement under review) and `controller.py`. The
+task's simulator is in `task_<A|B|C>/` at the top of this packet (`plant.py`,
+`sim.py`, and for task B `reference.py`). You may read the code, reason
+about it, and run your own experiments with `python3` (standard library
+only); copying the simulator next to the controller and driving it from a
+short script is usually the quickest check.
+
+Rules:
+- Rate independently. Do not discuss items with the other rater until both
+  of you have finished.
+- Use only this packet: not the DIPTYCH repository, its results, the paper,
+  or an AI assistant. Item ids and order carry no information.
+- Judge the requirement exactly as worded, including thresholds; where it is
+  silent, use the most natural reading and say so in the rationale.
+- If you cannot decide with reasonable confidence, answer `unsure`.
+- Budget about 4 minutes per item; take breaks. Stop and resume any time.
+
+Record answers with the rating tool, run from the repository root:
+
+    python3 -m diptych.pilot.rate --packet PATH/TO/THIS/PACKET --rater YOUR_NAME
+
+It shows one item at a time, saves after every answer to `answers.json` in
+this packet, and resumes where you stopped. Send `answers.json` back when
+done.
+"""
+
+
 def _strip(src: str) -> str:
     """Source without docstrings, bare string statements, or comments."""
     import ast
@@ -119,6 +158,7 @@ def standalone_control(path: Path) -> str:
         "from diptych.pilot.controls.conforming import Controller as _Conforming": (HERE / "controls" / "conforming.py", "_Conforming"),
         "from diptych.pilot.congestion.reference import Controller as _Reno": (HERE / "congestion" / "reference.py", "_Reno"),
         "from diptych.pilot.congestion.reference import Controller  # noqa: F401": (HERE / "congestion" / "reference.py", None),
+        "from diptych.pilot.autoscale.controls.conforming import Controller as _HPA": (HERE / "autoscale" / "controls" / "conforming.py", "_HPA"),
     }
     for line, (base_path, alias) in bases.items():
         if line in src:
@@ -191,29 +231,25 @@ def select_items(rng: random.Random) -> list[dict[str, Any]]:
     return items
 
 
-def build(out: Path, raters: int) -> None:
-    rng = random.Random(SEED)
-    items = select_items(rng)
-    ids = rng.sample(range(100, 1000), len(items))
-    for it, i in zip(items, ids):
-        it["id"] = f"item-{i}"
+def _write_packets(out: Path, items: list[dict], names: list[str], instructions: str, seed: int) -> None:
     out.mkdir(parents=True, exist_ok=True)
     key = {it["id"]: it for it in items}
     (out / "KEY.json").write_text(json.dumps(key, indent=2, sort_keys=True))
-    for n in range(1, raters + 1):
-        pk = out / f"packet-r{n}"
+    tasks = sorted({it["task"] for it in items}, key=lambda t: LABEL[t])
+    for n, name in enumerate(names, 1):
+        pk = out / f"packet-{name}"
         if pk.exists():
             shutil.rmtree(pk)
         (pk / "items").mkdir(parents=True)
-        (pk / "INSTRUCTIONS.md").write_text(INSTRUCTIONS)
-        for task, label in LABEL.items():
-            td = pk / f"task_{label}"
+        (pk / "INSTRUCTIONS.md").write_text(instructions)
+        for task in tasks:
+            td = pk / f"task_{LABEL[task]}"
             td.mkdir()
             for dest, src in TASKS[task].workspace.items():
                 if dest != "TASK.md":
                     shutil.copy(TASKS[task].root / src, td / dest)
         order = list(items)
-        random.Random(SEED + n).shuffle(order)  # each rater sees a different order
+        random.Random(seed + n).shuffle(order)  # each rater sees a different order
         for it in order:
             d = pk / "items" / it["id"]
             d.mkdir()
@@ -231,8 +267,57 @@ def build(out: Path, raters: int) -> None:
                 shutil.copy(src, d / "controller.py")
         (pk / "ORDER.txt").write_text("\n".join(it["id"] for it in order) + "\n")
     cats = Counter((it["task"], it["category"]) for it in items)
-    print(json.dumps({"items": len(items), "by_category": {f"{t}/{c}": n for (t, c), n in sorted(cats.items())}},
-                     indent=2))
+    print(json.dumps({"items": len(items), "raters": names,
+                      "by_category": {f"{t}/{c}": n for (t, c), n in sorted(cats.items())}}, indent=2))
+
+
+def build(out: Path, raters: int) -> None:
+    rng = random.Random(SEED)
+    items = select_items(rng)
+    ids = rng.sample(range(100, 1000), len(items))
+    for it, i in zip(items, ids):
+        it["id"] = f"item-{i}"
+    _write_packets(out, items, [f"r{n}" for n in range(1, raters + 1)], INSTRUCTIONS, SEED)
+
+
+def select_autoscale(rng: random.Random) -> list[dict[str, Any]]:
+    """Task C items for the human study, by the same categories."""
+    task = "autoscale"
+    rows = _load(task)
+    cells = _cells(rows, task, PAIRED_KEYS[task])
+    items: list[dict[str, Any]] = []
+
+    def add(r: dict, key: str, category: str) -> None:
+        items.append({"task": task, "row": r["name"], "artifact": r["artifact"], "key": key,
+                      "category": category, "paired": r["paired"][key],
+                      "basic": r["single_trace"][key], "strong": r["single_trace_strong"][key]})
+
+    pools = {
+        "paired_only": [(r, k) for r, k in cells if r["paired"][k] == "fail" and r["single_trace"][k] == "pass"],
+        "both_pass": [(r, k) for r, k in cells if r["paired"][k] == "pass" and r["single_trace"][k] == "pass"],
+        "both_fail": [(r, k) for r, k in cells if r["paired"][k] == "fail" and r["single_trace"][k] == "fail"],
+        "strong_only": [(r, k) for r, k in cells if r["paired"][k] == "pass" and r["single_trace_strong"][k] == "fail"],
+    }
+    for cat, n in (("paired_only", 8), ("both_pass", 5), ("both_fail", 3), ("strong_only", 2)):
+        for r, k in rng.sample(pools[cat], min(n, len(pools[cat]))):
+            add(r, k, cat)
+    ctrl = {r["name"]: r for r in rows if r["kind"] == "control"}
+    add(ctrl["control:conforming"], "missing-metrics", "control")
+    add(ctrl["control:violating-ratio_only"], "ratio-only", "control")
+    return items
+
+
+def build_human(out: Path, names: list[str]) -> None:
+    """The 42 model-adjudicated items (same ids) plus Task C items."""
+    prior = json.loads((HERE / "adjudication_data" / "KEY.json").read_text())
+    items = [dict(it) for it in prior.values()]
+    rng = random.Random(SEED + 100)
+    new = select_autoscale(rng)
+    used = {int(i.split("-")[1]) for i in prior}
+    ids = rng.sample(sorted(set(range(100, 1000)) - used), len(new))
+    for it, i in zip(new, ids):
+        it["id"] = f"item-{i}"
+    _write_packets(out, items + new, names, HUMAN_INSTRUCTIONS, SEED + 100)
 
 
 def fleiss_kappa(table: list[list[int]]) -> float | None:
@@ -251,7 +336,7 @@ def fleiss_kappa(table: list[list[int]]) -> float | None:
 def score(out: Path) -> dict[str, Any]:
     key = json.loads((out / "KEY.json").read_text())
     answers = {}
-    for f in sorted(out.glob("packet-r*/answers.json")):
+    for f in sorted(out.glob("packet-*/answers.json")):
         a = json.loads(f.read_text())
         answers[f.parent.name] = a.get("items", {})
     cats = ("violates", "satisfies", "unsure")
@@ -295,12 +380,15 @@ def score(out: Path) -> dict[str, Any]:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="diptych.pilot.adjudication")
-    p.add_argument("command", choices=("build", "score"))
+    p.add_argument("command", choices=("build", "build-human", "score"))
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--raters", type=int, default=5)
+    p.add_argument("--names", nargs="+", default=["abhinav", "abhishek"], help="human raters (build-human)")
     a = p.parse_args(argv)
     if a.command == "build":
         build(a.out, a.raters)
+    elif a.command == "build-human":
+        build_human(a.out, a.names)
     else:
         print(json.dumps(score(a.out)["summary"], indent=2))
     return 0
