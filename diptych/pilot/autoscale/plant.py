@@ -57,12 +57,13 @@ class Workload:
 
 class Sim:
     def __init__(self, controller: Any, workload: Workload | None = None, seed: int = 0,
-                 config: dict | None = None, horizon: int = 1500):
+                 config: dict | None = None, horizon: int = 1500, startup: int = STARTUP):
         self.ctrl = controller
         self.w = workload or Workload()
         self.cfg = dict(CONFIG, **(config or {}))
         self.t = 0
-        self.ages = [STARTUP] * int(self.cfg["initial_replicas"])   # initial pods are ready
+        self.startup = startup
+        self.ages = [startup] * int(self.cfg["initial_replicas"])   # initial pods are ready
         self.log: list[dict] = []
         rng = random.Random(seed)
         self._z = [[rng.gauss(0.0, 1.0) for _ in range(MAX_PODS)] for _ in range(horizon)]
@@ -75,11 +76,11 @@ class Sim:
     def observe(self) -> dict:
         """The observation for the current tick (does not advance time)."""
         t = self.t
-        ready = sum(a >= STARTUP for a in self.ages)
+        ready = sum(a >= self.startup for a in self.ages)
         true_u = self.demand(t) / (ready * POD_CAPACITY) if ready else UTIL_CAP
         pods = []
         for i, age in enumerate(self.ages):
-            if age < STARTUP:
+            if age < self.startup:
                 pods.append({"ready": False, "utilization": None})
             elif self._m[t][i] < self.w.missing:
                 pods.append({"ready": True, "utilization": None})
@@ -92,7 +93,7 @@ class Sim:
         """Advance one tick; ``obs`` overrides what the autoscaler sees."""
         t = self.t
         seen = obs if obs is not None else self.observe()
-        ready = sum(a >= STARTUP for a in self.ages)
+        ready = sum(a >= self.startup for a in self.ages)
         demand = self.demand(t)
         served = min(demand, ready * POD_CAPACITY)
         d = self.ctrl.tick(seen)
