@@ -138,6 +138,15 @@ class TestCongestionTask(unittest.TestCase):
         self.assertEqual({e["requirement"] for e in report["results"]}, set(PAIRED))
         self.assertEqual({e["actual_verdict"] for e in report["results"]}, {"pass"})
 
+    def test_saved_envelopes_regrade_in_a_fresh_process(self):
+        import subprocess
+        import sys
+
+        out = subprocess.run([sys.executable, "-m", "diptych.grade", "--input", str(self.dir)],
+                             capture_output=True, text=True, cwd=PILOT.parents[1], check=False)
+        self.assertEqual(out.returncode, 0, out.stderr[-500:])
+        self.assertNotIn("no predicate registered", out.stdout + out.stderr)
+
     def test_live_only_operators_are_rejected_in_control_envelopes(self):
         from diptych import OPERATORS
         from diptych.live import LIVE_OPERATORS

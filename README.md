@@ -93,8 +93,8 @@ Machine-readable: [`CITATION.cff`](CITATION.cff) (no DOI yet).
 
 ## Paper
 
-IEEEtran conference source (Abhinav Pandey, Independent Researcher; Abhishek
-Pandey, Meta):
+IEEEtran conference source (Abhinav Pandey and Abhishek Pandey, Independent
+Researchers):
 
 - **[`paper/one-trace-is-not-enough.tex`](paper/one-trace-is-not-enough.tex)** — the paper; PDF from `make paper` or the CI artifact `one-trace-is-not-enough-pdf`
 - [`paper/READINESS.md`](paper/READINESS.md) — submission status and pre-upload checklist

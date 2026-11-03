@@ -5,7 +5,7 @@ needed for it. Use this file only if a future venue requires double-blind
 review, and to restore the named author block afterwards.
 
 **Corresponding author (camera-ready):** Abhinav Pandey · `pandey.aby@gmail.com`  
-**Co-author:** Abhishek Pandey (Meta) · `pandeyabhi1987@gmail.com`
+**Co-author:** Abhishek Pandey (Independent Researcher) · `pandeyabhi1987@gmail.com`
 
 **CI note:** GitHub Actions job `paper-pdf` builds the **named** (default)
 author block only. Anonymization is a **local / pre-upload** dry-run — do

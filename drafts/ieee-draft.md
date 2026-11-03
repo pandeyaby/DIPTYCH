@@ -7,7 +7,7 @@
 **Living IEEEtran (source of truth):**
 [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)
 
-**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
+**Authors:** Abhinav Pandey, Abhishek Pandey (Independent Researcher)  
 **Artifact:** https://github.com/pandeyaby/DIPTYCH · schema `0.2`  
 **Pins:** ZeroDay@`fb5b39da` · AOMB@`667e475` (`adapters/PINS.md`)  
 **RQ ledger:** [`paper/RQ_PROTOCOL.md`](../paper/RQ_PROTOCOL.md) (all result cells **N/A**)  

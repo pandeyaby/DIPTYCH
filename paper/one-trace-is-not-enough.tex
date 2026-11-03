@@ -38,7 +38,7 @@
 			pandey.aby@gmail.com}
 		\and
 		\IEEEauthorblockN{Abhishek Pandey}
-		\IEEEauthorblockA{Meta\\
+		\IEEEauthorblockA{Independent Researcher\\
 			pandeyabhi1987@gmail.com}
 	}
 	% \author{
@@ -76,7 +76,7 @@
 		In a pilot with 80 controllers written by Claude and OpenAI models on
 		two tasks, the answer depends on where the reference comes from. On a
 		concurrency task whose requirements compare an artifact with itself at
-		a fixed state, 28 of the 34 controllers that pass every single-trace
+		a fixed state, 28 of the 34 controllers that pass every basic single-trace
 		check violate a requirement stated in plain words. On a congestion
 		task built from RFC~9743, a single run catches every case of harm to a
 		standard flow, because the reference outcome is a known constant, and
@@ -180,8 +180,8 @@
 		\item \textbf{\sys{}, a paired-trace grading harness} (Sections
 		\ref{sec:harness} and \ref{sec:operators}). Eight perturbation operators, a
 		coupling discipline for closed-loop simulators based on common random
-		numbers, a validity check that detects when a pair has drifted out of
-		comparability, and a probe-tree execution strategy with an amortized cost
+		numbers, a comparability check that returns \emph{inconclusive}
+		instead of a verdict on a malformed or uncoupled pair, and a probe-tree execution strategy with an amortized cost
 		model (Proposition \ref{prop:prefix}).
 		
 		\item \textbf{An evaluation} (Section \ref{sec:protocol}). Control
@@ -226,8 +226,8 @@
 	Asymmetric gain on its own shifts the operating point (noise now drives
 	the limit down more than up), but other free parameters---setpoint
 	offset, estimator bandwidth, gain magnitude---shift it too. $A_{\mathrm{sym}}$
-	can therefore be tuned to match $A_{\mathrm{asym}}$ on every aggregate a
-	trace grader scores: mean limit, admitted load, latency attainment. Such a
+	can therefore be tuned to match $A_{\mathrm{asym}}$ on the aggregates a
+	trace grader typically scores: mean limit, admitted load, latency attainment. Such a
 	grader sees two equally good artifacts.
 	
 	One might object that a single long trace contains both upward and downward
@@ -428,7 +428,7 @@
 		$D$, and let $T = \exec(A, c, \bar{o})$ be a trace in which no state
 		recurs ($s_i \neq s_j$ for $i \neq j$). For a visited state $s = s_{i-1}$
 		with observation $o = o_i$ and a perturbation $e$ with
-		$o \oplus e \neq o \neq o \ominus e$, define the sign contrast
+		$o \oplus e$, $o$, and $o \ominus e$ pairwise distinct, define the sign contrast
 		\[
 		\rho_A(s, o, e) = \big\| \lambda(s, o \oplus e) - \lambda(s, o) \big\|
 		- \big\| \lambda(s, o \ominus e) - \lambda(s, o) \big\| .
@@ -459,7 +459,8 @@
 	at $s$. The no-recurrence hypothesis is mild: a controller carrying
 	real-valued estimators over a non-stationary stream essentially never
 	revisits a state, and detecting recurrence would require the state
-	inspection a black-box contract forbids.
+	inspection a black-box contract forbids. Forking needs only a copy of the
+	state, never a reading of it.
 	
 	\section{\sys{}: Paired-Trace Grading}
 	\label{sec:harness}
@@ -497,8 +498,10 @@
 	common-random-numbers stream \cite{glasserman1992}; the arms diverge only
 	through the perturbation and the artifact's reaction. It measures
 	outcomes---which operating point the system settles into---and is
-	required for \textsc{TrajSwap} and \textsc{VarScale}; the envelope
-	contract rejects open-loop tagging of either.
+	required for \textsc{VarScale}; the recorded-envelope contract also
+	rejects open-loop \textsc{TrajSwap}, whose external emitters run it
+	closed-loop, while the pilot scripts its window open-loop
+	(Section~\ref{sec:operators}).
 	
 	\subsection{Comparability and inconclusive verdicts}
 	
@@ -794,8 +797,9 @@
 	\textbf{Task A: a single trace misses most violations.} 34 of 40
 	controllers pass every basic single-trace check, and 28 of those violate
 	a stated requirement under paired probing (82\%, 95\% Wilson CI
-	66--92\%; per controller, 33 paired-only vs.\ 2 single-only detections,
-	exact McNemar $p<10^{-7}$). Trend recency dominates (23 violations, one
+	66--92\%). Exact McNemar tests: per controller (flags any violation),
+	28 paired-only vs.\ 0 single-only, $p<10^{-8}$; per (controller,
+	requirement), 45 vs.\ 2, $p<10^{-10}$. Trend recency dominates (23 violations, one
 	caught): most controllers add a trend term too weak to overcome their
 	estimator lag, so after improving latency the limit ends \emph{lower}
 	than after the same observations worsening. Volatility suppression
@@ -810,8 +814,8 @@
 	most of it: of the 16 controllers it passes, 3 fail a paired probe
 	(19\%, CI 7--43\%). Harm to a standard flow, the RFC's central
 	comparative criterion, was caught in a single run in all 15 cases. The
-	ten violations only pairing found (nine controllers; McNemar $p=0.004$)
-	are path change (5 of 5 missed), short flows (3 of 7), and delay change
+	ten violations only pairing found (per requirement 10 vs.\ 0, $p=0.002$;
+	per controller only 3 vs.\ 0, $p=0.25$, not significant) are path change (5 of 5 missed), short flows (3 of 7), and delay change
 	(2 of 14). One agentic controller loses 97\% of its throughput when the
 	delay doubles at tick 350 but not at tick 250, which a single run with
 	one change point cannot see; another keeps a standing queue four times
@@ -828,7 +832,9 @@
 	same state under a different input, or with a different history; no
 	constant stands in for it, and that is where single-trace grading
 	failed. This is Proposition~\ref{prop:confound} read as a design rule:
-	pair when the reference depends on the artifact's own state.
+	pair when the reference depends on the artifact's own state. The separation index (Section~\ref{sec:metrics}) agrees: among
+	controller pairs with identical basic single-trace verdicts, paired
+	verdicts differ for 85\% on Task~A and 35\% on Task~B.
 	
 	\textbf{Stronger baselines err differently.} On Task~A the strong
 	baseline flags 29 controllers, yet 10 of the 11 it passes violate a
@@ -955,7 +961,9 @@
 	\textbf{Audit.} The classification of RFC~9743 is ours, of one document
 	that guides human evaluation rather than specifying a benchmark; moving
 	the borderline rows (\S5.2.2, \S7.6, \S7.8) gives 8 to 11 paired
-	criteria of 18.
+	criteria of 18. Two rows (\S5.2, \S5.2.1) share one contrast; merging
+	them gives 7 of 17. Listing \S7.10's two synchronization clauses (harm
+	when flows switch together) as rows of their own gives up to 13 of 20.
 	\textbf{Construct.} Operators encode one reading of each requirement; we
 	publish them as code so intent disputes become artifact disputes.
 	
@@ -992,7 +1000,8 @@
 	\textbf{External.} Findings come from one task family: we claim
 	generality for the classification and harness architecture, not the
 	operator set. Grading is deterministic, so every number in
-	Section~\ref{sec:protocol} is exactly reproducible.
+	Section~\ref{sec:protocol} except the raters' judgments is exactly
+	reproducible; their answers are released.
 	
 	\section{Conclusion}
 	\label{sec:conclusion}

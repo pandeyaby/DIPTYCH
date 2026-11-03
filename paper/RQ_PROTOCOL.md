@@ -93,7 +93,7 @@ thresholds). Pilot measurements, not a model comparison.
 
 | RQ | Status | Task A (concurrency) | Task B (congestion) |
 |----|--------|----------------------|---------------------|
-| RQ1 separation | pilot | 34 pass all basic single-trace checks; 28 fail paired (82%, CI 66–92%); McNemar 33 vs 2 | 16 pass; 3 fail paired (19%, CI 7–43%); McNemar 9 vs 0, p = 0.004 |
+| RQ1 separation | pilot | 34 pass all basic single-trace checks; 28 fail paired (82%, CI 66–92%); exact McNemar per controller 28 vs 0 (p < 1e-8), per requirement 45 vs 2; separation index 0.85 | 16 pass; 3 fail paired (19%, CI 7–43%); exact McNemar per controller 3 vs 0 (p = 0.25, n.s.), per requirement 10 vs 0 (p = 0.002); separation index 0.35 |
 | RQ2 which requirements | pilot (descriptive) | trend recency 23 (22 missed by basic), volatility 13 (10), asymmetric response 10 (7), anti-windup 3 (3), setpoint quiet 3 (3) | delay change 14 (2 missed), harm-latency 9 (0), intra-fairness 8 (0), short flows 7 (3), harm-throughput 6 (0), path change 5 (5) |
 | RQ3 held-out rank corr. | protocol | N/A | N/A |
 | RQ4 α (measured ticks) | pilot | 3.09 (254,076 vs 784,476) | 1.45 (546,000 vs 792,000) |

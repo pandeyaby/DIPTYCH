@@ -16,7 +16,9 @@ references · IEEE template · single-anonymous. Details and fallback plan:
 | §IV audits a public document (RFC 9743) | [`AUDIT_RFC9743.md`](AUDIT_RFC9743.md) |
 | Blinded model-based adjudication of 42 verdicts (5 raters, κ = 0.62); not human validation | [`diptych/pilot/adjudication_data/`](../diptych/pilot/adjudication_data/) |
 | Grader defects found by the sweep fixed, with regression tests | `tests/test_adequacy.py` |
-| Author block: Abhinav Pandey (Independent Researcher), Abhishek Pandey (Meta) | `.tex` author block |
+| Both authors listed as Independent Researcher (Meta affiliation removed, 2026-10-29) | `.tex` author block |
+| Corresponding contact `pandey.aby@gmail.com` confirmed for HotCRP | [`SUBMISSION.md`](SUBMISSION.md) |
+| RFC 9743 audit second reading: 18 rows stand; overlap and synchronization notes added | [`AUDIT_RFC9743.md`](AUDIT_RFC9743.md) |
 | Venue fields filled | [`SUBMISSION.md`](SUBMISSION.md) §0 |
 | CI green (pytest, PoC, artifact pack, paper PDF) | `.github/workflows/ci.yml` |
 | License (MIT) and citation metadata (no DOI) | [`LICENSE`](../LICENSE), [`CITATION.cff`](../CITATION.cff) |
@@ -24,8 +26,6 @@ references · IEEE template · single-anonymous. Details and fallback plan:
 ## Before upload (authors)
 
 - [ ] Both authors read the CI-built PDF end to end, especially §VIII and Threats
-- [ ] Abhishek confirms the Meta affiliation line is approved for publication
-- [ ] Confirm `pandey.aby@gmail.com` as corresponding contact in HotCRP
 - [ ] Verify `refs.bib` entries (venues, pages) for camera-ready
 - [ ] Do not submit elsewhere while under review at AGENT'27
 
