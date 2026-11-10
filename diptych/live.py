@@ -26,6 +26,7 @@ that hit an actuator bound).
 
 from __future__ import annotations
 
+import importlib
 import json
 from typing import Any, Callable
 
@@ -42,6 +43,13 @@ LIVE_OPERATORS: tuple[str, ...] = OPERATORS + ("REFSWAP", "PATHSTEP")
 
 Predicate = Callable[[dict[str, Any]], tuple[str, str, dict[str, Any]]]
 PREDICATES: dict[tuple[str, str], Predicate] = {}
+# Module that registers each task's predicates; imported on first use so a
+# saved envelope re-grades in a fresh process (``diptych-grade --input``).
+PREDICATE_MODULES: dict[str, str] = {
+    "concurrency": "diptych.pilot.predicates",
+    "congestion": "diptych.pilot.congestion.predicates",
+    "autoscale": "diptych.pilot.autoscale.predicates",
+}
 
 
 def predicate(task: str, requirement: str) -> Callable[[Predicate], Predicate]:
@@ -117,6 +125,11 @@ def validate_live_envelope(doc: dict[str, Any]) -> dict[str, Any]:
         raise ContractError("bad coupling")
     if "control_role" in doc or "expected_verdict" in doc:
         raise ContractError("live envelopes carry no control_role / expected_verdict")
+    if (doc["task"], doc["requirement"]) not in PREDICATES and doc["task"] in PREDICATE_MODULES:
+        try:
+            importlib.import_module(PREDICATE_MODULES[doc["task"]])
+        except ImportError:
+            pass
     if (doc["task"], doc["requirement"]) not in PREDICATES:
         raise ContractError(f"no predicate registered for {doc['task']}/{doc['requirement']}")
     traces = doc["traces"]

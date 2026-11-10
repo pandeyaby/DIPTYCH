@@ -7,9 +7,9 @@
     "all_single_trace_pass": 34,
     "all_single_trace_pass_but_paired_fail": 28,
     "artifact_mcnemar": {
-      "p_exact": 3.6729034036397934e-08,
-      "paired_only": 33,
-      "single_only": 2
+      "p_exact": 7.450580596923828e-09,
+      "paired_only": 28,
+      "single_only": 0
     },
     "error_rate": 0.0,
     "fork_fidelity_ok": 40,
@@ -125,6 +125,11 @@
         }
       }
     },
+    "requirement_mcnemar": {
+      "p_exact": 1.6044054973463062e-11,
+      "paired_only": 45,
+      "single_only": 2
+    },
     "seed_stability": {
       "cells": 200,
       "rate": 0.88,
@@ -150,9 +155,9 @@
     "all_single_trace_pass": 11,
     "all_single_trace_pass_but_paired_fail": 10,
     "artifact_mcnemar": {
-      "p_exact": 0.3222363203575469,
-      "paired_only": 29,
-      "single_only": 21
+      "p_exact": 0.3017578125,
+      "paired_only": 10,
+      "single_only": 5
     },
     "error_rate": 0.0,
     "fork_fidelity_ok": 40,
@@ -267,6 +272,11 @@
           "pass": 34
         }
       }
+    },
+    "requirement_mcnemar": {
+      "p_exact": 0.14089542359848076,
+      "paired_only": 34,
+      "single_only": 22
     },
     "seed_stability": {
       "cells": 200,
@@ -406,6 +416,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 0.00390625,
+        "paired_only": 9,
+        "single_only": 0
+      },
       "seed_stability": {
         "cells": 50,
         "rate": 0.9,
@@ -539,6 +554,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 0.00390625,
+        "paired_only": 9,
+        "single_only": 0
+      },
       "seed_stability": {
         "cells": 25,
         "rate": 0.64,
@@ -564,9 +584,9 @@
       "all_single_trace_pass": 15,
       "all_single_trace_pass_but_paired_fail": 12,
       "artifact_mcnemar": {
-        "p_exact": 0.000274658203125,
-        "paired_only": 16,
-        "single_only": 1
+        "p_exact": 0.00048828125,
+        "paired_only": 12,
+        "single_only": 0
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 20,
@@ -681,6 +701,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 2.09808349609375e-05,
+        "paired_only": 20,
+        "single_only": 1
+      },
       "seed_stability": {
         "cells": 100,
         "rate": 0.95,
@@ -706,9 +731,9 @@
       "all_single_trace_pass": 4,
       "all_single_trace_pass_but_paired_fail": 3,
       "artifact_mcnemar": {
-        "p_exact": 0.375,
-        "paired_only": 4,
-        "single_only": 1
+        "p_exact": 0.25,
+        "paired_only": 3,
+        "single_only": 0
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 5,
@@ -818,6 +843,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 0.0703125,
+        "paired_only": 7,
+        "single_only": 1
+      },
       "seed_stability": {
         "cells": 25,
         "rate": 0.8,
@@ -846,8 +876,8 @@
       "all_single_trace_pass_but_paired_fail": 2,
       "artifact_mcnemar": {
         "p_exact": 1.0,
-        "paired_only": 7,
-        "single_only": 7
+        "paired_only": 2,
+        "single_only": 2
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 10,
@@ -959,6 +989,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 1.0,
+        "paired_only": 8,
+        "single_only": 8
+      },
       "seed_stability": {
         "cells": 50,
         "rate": 0.9,
@@ -984,9 +1019,9 @@
       "all_single_trace_pass": 1,
       "all_single_trace_pass_but_paired_fail": 1,
       "artifact_mcnemar": {
-        "p_exact": 0.453125,
-        "paired_only": 5,
-        "single_only": 2
+        "p_exact": 1.0,
+        "paired_only": 1,
+        "single_only": 0
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 5,
@@ -1093,6 +1128,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 0.1796875,
+        "paired_only": 7,
+        "single_only": 2
+      },
       "seed_stability": {
         "cells": 25,
         "rate": 0.64,
@@ -1118,9 +1158,9 @@
       "all_single_trace_pass": 6,
       "all_single_trace_pass_but_paired_fail": 5,
       "artifact_mcnemar": {
-        "p_exact": 0.6776394844055176,
-        "paired_only": 13,
-        "single_only": 10
+        "p_exact": 0.453125,
+        "paired_only": 5,
+        "single_only": 2
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 20,
@@ -1235,6 +1275,11 @@
           }
         }
       },
+      "requirement_mcnemar": {
+        "p_exact": 0.5412561893463135,
+        "paired_only": 14,
+        "single_only": 10
+      },
       "seed_stability": {
         "cells": 100,
         "rate": 0.95,
@@ -1260,9 +1305,9 @@
       "all_single_trace_pass": 2,
       "all_single_trace_pass_but_paired_fail": 2,
       "artifact_mcnemar": {
-        "p_exact": 0.6875,
-        "paired_only": 4,
-        "single_only": 2
+        "p_exact": 1.0,
+        "paired_only": 2,
+        "single_only": 1
       },
       "error_rate": 0.0,
       "fork_fidelity_ok": 5,
@@ -1373,6 +1418,11 @@
             "pass": 4
           }
         }
+      },
+      "requirement_mcnemar": {
+        "p_exact": 0.453125,
+        "paired_only": 5,
+        "single_only": 2
       },
       "seed_stability": {
         "cells": 25,

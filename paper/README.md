@@ -5,7 +5,7 @@
 **Living source:** [`one-trace-is-not-enough.tex`](one-trace-is-not-enough.tex) (IEEEtran `conference`)  
 **Bibliography:** [`refs.bib`](refs.bib) (BibTeX / `IEEEtran.bst`)
 
-**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)
+**Authors:** Abhinav Pandey, Abhishek Pandey (Independent Researcher)
 
 **Readiness:** [`READINESS.md`](READINESS.md) (status and pre-upload checklist)  
 **Milestone log:** root [`CHANGELOG.md`](../CHANGELOG.md) (#2–#11)  

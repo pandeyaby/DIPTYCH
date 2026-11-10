@@ -7,7 +7,7 @@
 **Authoritative IEEEtran (source of truth):**
 [`paper/one-trace-is-not-enough.tex`](../paper/one-trace-is-not-enough.tex)
 
-**Authors:** Abhinav Pandey, Abhishek Pandey (Meta)  
+**Authors:** Abhinav Pandey, Abhishek Pandey (Independent Researcher)  
 **Companion stubs:** [`ieee-draft.md`](ieee-draft.md) (non-authoritative; trimmed)
 
 No AUROC / model scores; ZeroDay / AOMB product trees are pinned, not edited.
