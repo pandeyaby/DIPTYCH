@@ -9,6 +9,7 @@
 \newcommand{\sys}{\textsc{Diptych}}
 \newcommand{\Tr}{\mathrm{Tr}}
 \newcommand{\exec}{\mathrm{exec}}
+\newcommand{\tbd}[1]{\textcolor{red}{[TBD: #1]}}
 % Anonymized artifact for review (anonymous.4open.science mirror of the repository).
 \newcommand{\anonrepo}{\url{https://anonymous.4open.science/r/DIPTYCH-ISSTA27}}
 
@@ -692,172 +693,144 @@ when the reference depends on the artifact's own state.
 	axis declaration omits; axis declarations should be derived from the
 	grader, not written beside it.
 	
-	\subsection{Pilot: model-authored controllers on two tasks}
+	\subsection{Study: model-authored controllers on three tasks}
 	\label{sec:pilot}
-	
-	\textbf{Tasks.} Task~A is the concurrency controller of
-	Section~\ref{sec:motivating}; we wrote its eight requirements, one per
-	operator. Task~B is a congestion control algorithm for a simulated
-	drop-tail bottleneck. Its eight requirements paraphrase RFC~9743
-	criteria (Table~\ref{tab:audit}): three single-run (full backoff, rate
-	reduction under loss, fairness within the algorithm) and five paired
-	(throughput and latency harm to a standard Reno flow relative to a
-	Reno competitor, harm to short flows, robustness to a delay change and
-	to a path change). The RFC gives no thresholds, so those are ours, as
-	are two performance goals the standard algorithm does not meet (useful
-	throughput under random loss; a short queue), which give a reason to
-	depart from it. Task~B needed two perturbations beyond the eight
-	operators---substituting a reference algorithm for the candidate, and
-	stepping a path parameter on one arm---and the envelope pipeline took
-	both unchanged. Both simulators pre-draw their noise from a seed, so
-	paired runs share it. Probes run at several fork points and three
-	seeds; a violation at any of them fails the requirement.
-	
+
+	\textbf{Tasks.} Each task asks for a stateful controller, states eight
+	requirements in prose, and ships a deterministic simulator whose noise is
+	pre-drawn from a seed, so paired runs share it (CRN). Task~A is the
+	concurrency limiter of Section~\ref{sec:motivating}; we wrote its
+	requirements, one per operator. Task~B is a congestion control algorithm
+	for a simulated drop-tail bottleneck; its requirements paraphrase
+	RFC~9743 criteria (Table~\ref{tab:audit}): three single-run (full backoff,
+	rate reduction under loss, fairness within the algorithm) and five paired
+	(throughput and latency harm to a standard Reno flow relative to a Reno
+	competitor, harm to short flows, robustness to a delay change and to a
+	path change). Task~C is a horizontal pod autoscaler; its requirements
+	paraphrase the Kubernetes HPA documentation \cite{k8s-hpa}: three are
+	stated against the documented formula or a fixed limit and are single-run
+	(tolerance, scale-up rate, downscale stabilization), and five compare the
+	autoscaler with itself (missing metrics may only damp a decision; pods
+	still starting may not enlarge a scale-up; observations older than the
+	stabilization window may not matter; decisions depend on utilization only
+	through its ratio to the target; noisier metrics may not cause flapping).
+	Neither document gives every threshold, so the missing ones are ours, as
+	are two performance goals per task that the documented algorithm misses
+	(Task~B: throughput under random loss, a short queue; Task~C: requests
+	dropped in a flash crowd, pod cost), which give models a reason to depart
+	from it. Tasks~B and~C needed three perturbations beyond the eight
+	operators---substituting a reference algorithm, stepping a path
+	parameter, and rescaling an input together with its threshold---and the
+	envelope pipeline took all three unchanged. Probes run at several fork
+	points and three seeds; a violation at any of them fails the requirement.
+
 	\textbf{Single-trace baselines.} The \emph{basic} baseline implements,
 	per requirement, the check a harness author would write from its prose
 	on one run---for asymmetric response, the ratio of mean downward to
-	upward limit moves; for harm, the standard flow's share of the link.
-	The \emph{strong} baseline gives single-trace grading every advantage
-	we could find: two or three readings per requirement (regression
-	slopes, trend coefficients, Jain's index, queue percentiles) over every
+	upward limit moves; for harm, the standard flow's share of the link; for
+	missing metrics, whether ticks with missing metrics move the replica
+	count more than ticks without. The \emph{strong} baseline gives
+	single-trace grading every advantage we could find: two or three
+	readings per requirement (regression slopes, trend coefficients, Jain's
+	index, queue percentiles, overshoot, time above need) over every
 	applicable scenario, failing if any reading fires. Like the paired
-	probes, no reading may flag the conforming control.
-	
-	\textbf{Executable controls.} Each task has a conforming controller and
-	eight violators that change one design decision. Paired grading catches
-	all sixteen violators on their own requirement. The basic and strong
-	baselines catch one and three of eight on Task~A, and seven and eight of
-	eight on Task~B. Building the controls was instructive: two first-draft
+	probes, no reading may flag the conforming control; readings that do are
+	dropped before any controller is graded.
+
+	\textbf{Executable controls.} Each task has a conforming controller (for
+	Task~C, the documented HPA algorithm) and eight violators that change one
+	design decision. Paired grading catches all 24 violators on their own
+	requirement. The basic and strong baselines catch one and three of eight
+	on Task~A, seven and eight of eight on Task~B, and six and seven of
+	eight on Task~C. Building the controls was instructive: two first-draft
 	Task~A violators \emph{satisfied} the requirements they were meant to
-	break, because requirements interact (asymmetric gain already
-	suppresses volatility). A violator is only a violator once a probe says
-	so.
-	
-	\textbf{Artifacts.} Eighty controllers, forty per task, from four
-	conditions: five one-shot, tool-free samples from each of four Claude
-	models (Haiku~4.5, Sonnet~5, Opus~5.5, Fable~5.1); five one-shot samples
-	from OpenAI's \texttt{gpt-5.6-sol} via Codex; and ten Claude and five
-	Codex samples in an \emph{agentic} condition, where the agent works in a
-	directory with the task, the simulator (for Task~B, including the
-	standard algorithm to compete against), and its own tests, but never
-	sees our probes. All 80 load and run; forking by state copy matched
-	replay-from-scratch for every one.
-	
-	\begin{table}[t]
-		\caption{Pilot on 80 model-written controllers. \emph{single}:
-			pass every basic single-trace check; \emph{viol.}: of those, fail a
-			paired probe; \emph{clean}: pass every requirement under full
-			grading.}
-		\label{tab:pilot}
-		\centering
-		\scriptsize
-		\begin{tabular}{@{}lrrrrrrr@{}}
-			\toprule
-			& & \multicolumn{3}{c}{Task A (ours)} & \multicolumn{3}{c}{Task B (RFC 9743)} \\
-			Condition & $n$ & single & viol. & clean & single & viol. & clean \\
-			\midrule
-			One-shot, Claude & 20 & 15 & 12 & 2 &  6 & 2 & 4 \\
-			One-shot, Codex  &  5 &  4 &  3 & 1 &  0 & 0 & 0 \\
-			Agentic, Claude  & 10 & 10 &  8 & 2 &  6 & 0 & 6 \\
-			Agentic, Codex   &  5 &  5 &  5 & 0 &  4 & 1 & 3 \\
-			\midrule
-			All              & 40 & 34 & 28 & 5 & 16 & 3 & 13 \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
-	
-	\textbf{Task A: a single trace misses most violations.} 34 of 40
-	controllers pass every basic single-trace check, and 28 of those violate
-	a stated requirement under paired probing (82\%, 95\% Wilson CI
-	66--92\%). Exact McNemar tests: per controller (flags any violation),
-	28 paired-only vs.\ 0 single-only, $p<10^{-8}$; per (controller,
-	requirement), 45 vs.\ 2, $p<10^{-10}$. Trend recency dominates (23 violations, one
-	caught): most controllers add a trend term too weak to overcome their
-	estimator lag, so after improving latency the limit ends \emph{lower}
-	than after the same observations worsening. Volatility suppression
-	fails for 13, asymmetric response for 10, anti-windup and
-	setpoint-change quiet for 3 each. Because several Task~A requirements
-	are stated comparatively, a single-trace check can only approximate
-	them; the result is how often controllers violate requirements given
-	to them in plain words, not that an approximation errs.
-	
-	\textbf{Task B: a single trace is often enough.} 27 of 40 controllers
-	violate at least one requirement, but here the basic baseline finds
-	most of it: of the 16 controllers it passes, 3 fail a paired probe
-	(19\%, CI 7--43\%). Harm to a standard flow, the RFC's central
-	comparative criterion, was caught in a single run in all 15 cases. The
-	ten violations only pairing found (per requirement 10 vs.\ 0, $p=0.002$;
-	per controller only 3 vs.\ 0, $p=0.25$, not significant) are path change (5 of 5 missed), short flows (3 of 7), and delay change
-	(2 of 14). One agentic controller loses 97\% of its throughput when the
-	delay doubles at tick 350 but not at tick 250, which a single run with
-	one change point cannot see; another keeps a standing queue four times
-	larger after a capacity drop than on a path that was always slow.
-	Independent raters (below) confirmed five of the ten, including both
-	examples (the first by 3--2).
-	
-	\textbf{When is one trace enough?} The two tasks differ in where the
-	reference arm of the contrast comes from. For harm, the reference
-	outcome is a constant the harness knows in advance---a standard flow's
-	fair share is half the link---so one run against that constant
-	suffices. For Task~A's requirements and Task~B's path, delay, and
-	short-flow requirements, the reference is the same artifact from the
-	same state under a different input, or with a different history; no
-	constant stands in for it, and that is where single-trace grading
-	failed. This is Proposition~\ref{prop:confound} read as a design rule:
-	pair when the reference depends on the artifact's own state. The separation index (Section~\ref{sec:metrics}) agrees: among
-	controller pairs with identical basic single-trace verdicts, paired
-	verdicts differ for 85\% on Task~A and 35\% on Task~B.
-	
-	\textbf{Stronger baselines err differently.} On Task~A the strong
-	baseline flags 29 controllers, yet 10 of the 11 it passes violate a
-	requirement, and on asymmetric response it disagrees with the
-	fixed-state contrast on 25 of 40 (4 missed, 21 flagged that satisfy the
-	requirement at all three seeds). On Task~B its Jain's-index reading
-	flags 29 controllers for throughput harm that cause none: they take
-	\emph{less} than their share, the known objection to fairness as a
-	proxy for harm \cite{ware2019}.
-	
-	\textbf{Agents fix what they can observe.} On Task~A every agentic
-	controller passes every basic single-trace check, yet 13 of 15 violate
-	a requirement, three with integrator windup: the simulator shows one
-	run, and agents polished one run. On Task~B the simulator shows the
-	candidate beside a standard flow, and 9 of 15 agentic controllers are
-	clean against 4 of 25 one-shot. With five samples per cell we make no
-	model or vendor comparison.
-	
-	\textbf{Stability and cost.}
-	\label{sec:eval-cost}
-	3.1\% of Task~A paired verdicts are inconclusive (a branch hit a bound
-	or never saturated); none on Task~B. Forked verdicts agree across seeds
-	in 88\% (A) and 93\% (B) of cases, and 26 of the 55 paired-only
-	violations hold at all three seeds; the any-seed rule resolves the rest
-	conservatively. Counting executed controller ticks, prefix sharing
-	gives $\alpha = 3.09$ on Task~A (254{,}076 vs.\ 784{,}476) and
-	$1.45$ on Task~B (546{,}000 vs.\ 792{,}000), where reference-swap probes
-	share no candidate prefix (Definition~\ref{def:cost}).
-	\label{sec:future}
-	
-	\textbf{Independent adjudication.} To check our ground truth, five
-	model-based raters (three Claude Opus~5.5, two Sonnet)---not
-	people---each judged the same 42 (controller, requirement) items blind
-	to every verdict, from the requirement text, the code, and the
-	simulator, running their own experiments; an audit of their 185 tool
-	calls found no access outside their packets. Items covered the
-	paired-only violations (12 sampled from Task~A, all 10 from Task~B),
-	agreements, strong-only flags, and four controls. Raters agreed with
-	each other (Fleiss' $\kappa=0.62$) and got all four controls right;
+	break, because requirements interact (asymmetric gain already suppresses
+	volatility); and our first Task~C history probe failed the documented
+	algorithm itself, because the tolerance band makes the settled replica
+	count depend on history, so the probe had to hold the observations, not
+	the demand, fixed after the spike. A violator is only a violator once a
+	probe says so, and a probe is only a probe once the conforming control
+	passes it.
+
+	\textbf{Artifacts.} \tbd{N} controllers from four conditions: one-shot,
+	tool-free samples from four Claude models (Haiku~4.5, Sonnet~5,
+	Opus~5.5, Fable~5.1) and from OpenAI's \texttt{gpt-5.6-sol} via Codex;
+	and an \emph{agentic} condition (Claude Sonnet~5 and Opus~5.5, and
+	Codex), where the agent works in a directory with the task, the
+	simulator, and its own tests, but never sees our probes. \tbd{per-cell
+	counts; Fable and Codex cells smaller, see Threats.} All load and run;
+	forking by state copy matched replay from scratch for every one.
+
+	\tbd{TABLE: per task x condition: n, single, viol., clean; Wilson CI;
+	McNemar per controller and per requirement; separation index.}
+
+	\tbd{RQ1 results per task, with the "when is one trace enough" rule
+	tested on Task~C, stronger baselines, agents, stability and cost.}
+
+	\subsection{Predictive validity (RQ3)}
+	\label{sec:rq3}
+
+	Paired probes flag violations a single trace misses; do those violations
+	matter? We pre-registered the test before computing any outcome for a
+	generated controller (the registration is a commit in the artifact).
+	For each of the 15 behavioral requirements with a paired probe we wrote
+	one \emph{held-out deployment}---a scenario no probe, baseline, or
+	calibration uses, at seeds 100--102 (probes use 0--2)---and one
+	\emph{harm outcome}: what the requirement exists to prevent. Task~A
+	scores the fraction of ticks the service is overloaded (latency above
+	1.5$\times$ the setpoint) or starved (below 0.5$\times$ while rejecting
+	load) during load surges, a slow demand creep, a variance regime, a rush
+	after a long idle period, and setpoint moves. Task~B scores, on new path
+	parameters, two standard flows' shortfall from their fair share and the
+	standing queue beside the candidate, eight short flows' completion time,
+	lost utilization while the base RTT moves repeatedly, and loss, queue,
+	and utilization after repeated capacity changes. Task~C scores
+	mis-provisioning while 30\% of metrics are missing, overshoot with
+	slow-starting pods, pods kept long after short spikes, tracking error at
+	a target no probe uses, and scaling actions under noisy metrics.
+
+	The unit is a (controller, requirement) cell. The primary hypothesis
+	(H1, incremental validity) is that among cells the basic single-trace
+	check passes, paired-fail cells have worse outcomes than paired-pass
+	cells: a pooled area under the curve (AUC) above one half, stratified by
+	requirement, with a one-sided permutation test that shuffles labels
+	within requirements. H2 compares the pooled AUC of the paired, basic, and
+	strong verdicts over all cells, with bootstrap intervals over
+	controllers; H3 correlates each controller's number of paired failures
+	with its composite held-out rank.
+
+	\tbd{RQ3 results: H1 AUC, p; H2 AUCs with CIs; H3; per-requirement
+	notes; report as registered whatever the direction.}
+
+	\subsection{Validating the verdicts}
+	\label{sec:validation}
+
+	Paired verdicts are ground truth only relative to our reading of each
+	requirement, so we had them re-judged twice, blind to every verdict.
+
+	\textbf{Model adjudication.} Five model-based raters (three Claude
+	Opus~5.5, two Sonnet~5) each judged the same 42 (controller,
+	requirement) items from Tasks~A and~B, from the requirement text, the
+	code, and the simulator, running their own experiments; an audit of
+	their 185 tool calls found no access outside their packets. Items
+	covered paired-only violations (12 sampled from Task~A, all 10 from
+	Task~B), agreements, strong-only flags, and four controls. Raters agreed
+	with each other (Fleiss' $\kappa=0.62$) and got all four controls right;
 	their majority matched the paired verdict on 32 of 42 items and the
 	basic baseline on 24. They confirmed 9 of 12 Task~A and 5 of 10 Task~B
-	paired-only violations, and judged all four strong-only flags false
+	paired-only violations and judged all four strong-only flags false
 	alarms. Eight of the ten disagreements are transients or near-threshold
 	cases that our short post-change windows and any-seed rule fail and a
 	long-run reading does not (four are Task~B path-change verdicts), so
-	Task~B's paired-only count is an upper bound. In the other two, an
-	asymmetric-response split 3--2, the raters who sampled many states found
-	the violation and those who tested from rest did not. The raters share
-	a model family with some of the code they judged; this checks our
-	verdicts, not human judgment.
-	
+	Task~B's paired-only count is an upper bound.
+
+	\textbf{Human raters.} \tbd{Two human raters judged the same 42 items
+	(same ids) plus 20 Task~C items, independently, in a different order
+	each, using only the packet (no repository, results, or assistant);
+	report human--human $\kappa$, controls, majority agreement with paired
+	and basic verdicts, per category, and human--model agreement on the 42
+	shared items.}
+
 	\section{Related Work}
 	\label{sec:related}
 	
